@@ -3,17 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800B245E18B1007C756A /* AppDelegate.swift */; };
 		CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800D245E18B1007C756A /* SceneDelegate.swift */; };
-		CFC18010245E18B1007C756A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800F245E18B1007C756A /* ContentView.swift */; };
+		CFC18010245E18B1007C756A /* ContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800F245E18B1007C756A /* ContentViews.swift */; };
 		CFC18012245E18B3007C756A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFC18011245E18B3007C756A /* Assets.xcassets */; };
 		CFC18015245E18B3007C756A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFC18014245E18B3007C756A /* Preview Assets.xcassets */; };
 		CFC18018245E18B3007C756A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFC18016245E18B3007C756A /* LaunchScreen.storyboard */; };
 		CFC18023245E18B3007C756A /* BabyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18022245E18B3007C756A /* BabyTrackerTests.swift */; };
+		CFC1802E245E1A86007C756A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1802D245E1A86007C756A /* Extensions.swift */; };
+		CFC18031245E1EFF007C756A /* BabyModule in Frameworks */ = {isa = PBXBuildFile; productRef = CFC18030245E1EFF007C756A /* BabyModule */; };
+		CFC18033245E224E007C756A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18032245E224E007C756A /* Models.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,7 +33,7 @@
 		CFC18008245E18B1007C756A /* BabyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC1800B245E18B1007C756A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFC1800D245E18B1007C756A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CFC1800F245E18B1007C756A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CFC1800F245E18B1007C756A /* ContentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViews.swift; sourceTree = "<group>"; };
 		CFC18011245E18B3007C756A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CFC18014245E18B3007C756A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CFC18017245E18B3007C756A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -38,6 +41,8 @@
 		CFC1801E245E18B3007C756A /* BabyTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BabyTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC18022245E18B3007C756A /* BabyTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyTrackerTests.swift; sourceTree = "<group>"; };
 		CFC18024245E18B3007C756A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CFC1802D245E1A86007C756A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		CFC18032245E224E007C756A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFC18031245E1EFF007C756A /* BabyModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,7 +87,9 @@
 			children = (
 				CFC1800B245E18B1007C756A /* AppDelegate.swift */,
 				CFC1800D245E18B1007C756A /* SceneDelegate.swift */,
-				CFC1800F245E18B1007C756A /* ContentView.swift */,
+				CFC1800F245E18B1007C756A /* ContentViews.swift */,
+				CFC18032245E224E007C756A /* Models.swift */,
+				CFC1802D245E1A86007C756A /* Extensions.swift */,
 				CFC18011245E18B3007C756A /* Assets.xcassets */,
 				CFC18016245E18B3007C756A /* LaunchScreen.storyboard */,
 				CFC18019245E18B3007C756A /* Info.plist */,
@@ -123,6 +131,9 @@
 			dependencies = (
 			);
 			name = BabyTracker;
+			packageProductDependencies = (
+				CFC18030245E1EFF007C756A /* BabyModule */,
+			);
 			productName = BabyTracker;
 			productReference = CFC18008245E18B1007C756A /* BabyTracker.app */;
 			productType = "com.apple.product-type.application";
@@ -173,6 +184,9 @@
 				Base,
 			);
 			mainGroup = CFC17FFF245E18B0007C756A;
+			packageReferences = (
+				CFC1802F245E1EFF007C756A /* XCRemoteSwiftPackageReference "BabyChestnut" */,
+			);
 			productRefGroup = CFC18009245E18B1007C756A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -210,7 +224,9 @@
 			files = (
 				CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
-				CFC18010245E18B1007C756A /* ContentView.swift in Sources */,
+				CFC18010245E18B1007C756A /* ContentViews.swift in Sources */,
+				CFC1802E245E1A86007C756A /* Extensions.swift in Sources */,
+				CFC18033245E224E007C756A /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,6 +489,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CFC1802F245E1EFF007C756A /* XCRemoteSwiftPackageReference "BabyChestnut" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/calvinchestnut/BabyChestnut.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CFC18030245E1EFF007C756A /* BabyModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CFC1802F245E1EFF007C756A /* XCRemoteSwiftPackageReference "BabyChestnut" */;
+			productName = BabyModule;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CFC18000245E18B0007C756A /* Project object */;
 }

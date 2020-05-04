@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol BabyEventType: Identifiable {
+protocol BabyEventType: Identifiable, Equatable {
     var id: UUID { get }
     var date: Date { get }
 }
 
-enum BabyEvent: Identifiable {
+enum BabyEvent: Identifiable, Equatable {
     case feed(_: FeedEvent)
     case diaper(_: DiaperEvent)
     case nap(_: NapEvent)
@@ -43,26 +43,22 @@ enum BabyEvent: Identifiable {
 }
 
 struct FeedEvent: BabyEventType {
-    enum Source {
-        case breast(_ event: BreastFeedEvent)
-        case bottle(size: Measurement<UnitVolume>)
+    
+    enum Source: Equatable {
+        case breast(_ event: BreastSide)
+        case bottle
         
-        struct BreastFeedEvent {
-            enum Side {
-                case left
-                case right
-                case both
-            }
-            
-            var side: Side?
-            var preWeight: Measurement<UnitMass>?
-            var postWeight: Measurement<UnitMass>?
+        enum BreastSide: Equatable {
+            case left
+            case right
+            case both
         }
     }
     
     var id = UUID()
     var source: Source
     var date: Date = Date()
+    var size: Measurement<UnitVolume>
 }
 
 struct DiaperEvent: BabyEventType {

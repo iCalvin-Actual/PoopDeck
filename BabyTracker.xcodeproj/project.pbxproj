@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF6A2D36245F64F50060FA8A /* FormViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A2D35245F64F50060FA8A /* FormViews.swift */; };
 		CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800B245E18B1007C756A /* AppDelegate.swift */; };
 		CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800D245E18B1007C756A /* SceneDelegate.swift */; };
 		CFC18010245E18B1007C756A /* ContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800F245E18B1007C756A /* ContentViews.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF6A2D35245F64F50060FA8A /* FormViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViews.swift; sourceTree = "<group>"; };
 		CFC18008245E18B1007C756A /* BabyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC1800B245E18B1007C756A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFC1800D245E18B1007C756A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				CFC1800B245E18B1007C756A /* AppDelegate.swift */,
 				CFC1800D245E18B1007C756A /* SceneDelegate.swift */,
 				CFC1800F245E18B1007C756A /* ContentViews.swift */,
+				CF6A2D35245F64F50060FA8A /* FormViews.swift */,
 				CFC18032245E224E007C756A /* Models.swift */,
 				CFC1802D245E1A86007C756A /* Extensions.swift */,
 				CFC18011245E18B3007C756A /* Assets.xcassets */,
@@ -224,6 +227,7 @@
 			files = (
 				CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
+				CF6A2D36245F64F50060FA8A /* FormViews.swift in Sources */,
 				CFC18010245E18B1007C756A /* ContentViews.swift in Sources */,
 				CFC1802E245E1A86007C756A /* Extensions.swift in Sources */,
 				CFC18033245E224E007C756A /* Models.swift in Sources */,

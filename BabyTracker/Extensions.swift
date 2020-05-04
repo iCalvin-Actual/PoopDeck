@@ -29,8 +29,17 @@ extension MeasurementFormatter {
     static var weightFormatter: MeasurementFormatter {
         let formatter = MeasurementFormatter()
         formatter.unitOptions = .naturalScale
-        formatter.unitStyle = .short
-        formatter.numberFormatter.maximumFractionDigits = 2
+        formatter.unitStyle = .medium
+        formatter.numberFormatter = .weightEntryFormatter
+        return formatter
+    }
+}
+extension NumberFormatter {
+    static var weightEntryFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        formatter.numberStyle = .decimal
+        
         return formatter
     }
 }

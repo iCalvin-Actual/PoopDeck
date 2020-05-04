@@ -22,61 +22,74 @@ struct TimeDurationView: View {
 }
 
 public struct FeedView: View {
-    var feed: [BabyEvent] = {
+    @State var feed: [BabyEvent] = {
         var feed: [BabyEvent] = []
         feed.append(.fuss(FussEvent(duration: 450)))
         feed.append(.nap(NapEvent(duration: 600)))
-        feed.append(.feed(FeedEvent(source: .bottle(size: Measurement(value: 3.0, unit: UnitVolume.fluidOunces)))))
+        feed.append(.feed(FeedEvent(source: .bottle, size: Measurement(value: 3.5, unit: UnitVolume.fluidOunces))))
         
-        feed.append(.feed(FeedEvent(source: .breast(.init()))))
+        feed.append(.feed(FeedEvent.init(source: .breast(.right), size: Measurement(value: 4.2, unit: UnitVolume.fluidOunces))))
+        feed.append(.diaper(DiaperEvent(pee: false, poop: true)))
         
         feed.append(.custom(CustomEvent(event: "Smiled!")))
+        feed.append(.weight(WeightEvent(weight: .init(value: 5.42, unit: .kilograms))))
         feed.append(.tummyTime(TummyTimeEvent()))
         return feed
     }()
+    @State var showDetail: Bool = false
     public var body: some View {
         NavigationView {
             ScrollView(.vertical) {
-                VStack {
-                    ForEach(feed) { event in
-                        NavigationLink(destination: EventFormView(event: event)) {
-                            FeedCard(event: event)
-                        }
+                ForEach(feed) { event in
+                    NavigationLink(destination: EventFormView(event: event), isActive: self.$showDetail) {
+                        FeedCard(event: event) .contextMenu {
+                           Button(action: {
+                               // Delete event
+                            guard let index = self.feed.firstIndex(where: { feedEvent in
+                                switch (event, feedEvent) {
+                                case (.feed(let eventA), .feed(let eventB)):
+                                    return eventA == eventB
+                                case (.diaper(let eventA), .diaper(let eventB)):
+                                    return eventA == eventB
+                                case (.nap(let eventA), .nap(let eventB)):
+                                    return eventA == eventB
+                                case (.fuss(let eventA), .fuss(let eventB)):
+                                    return eventA == eventB
+                                case (.weight(let eventA), .weight(let eventB)):
+                                    return eventA == eventB
+                                case (.tummyTime(let eventA), .tummyTime(let eventB)):
+                                    return eventA == eventB
+                                case (.custom(let eventA), .custom(let eventB)):
+                                    return eventA == eventB
+                                default:
+                                    return false
+                                }
+                                
+                            }) else {
+                                return
+                            }
+                            self.feed.remove(at: index)
+                           }) {
+                               Text("Delete")
+                               Image(systemName: "trash.circle.fill")
+                           }
+
+                            Button(action: {
+                                // Do nothing?
+                                print(event)
+                            }) {
+                                Text("Edit")
+                                Image(systemName: "pencil.circle.fill")
+                            }
+                       }
                     }
-                    Spacer()
                 }.padding()
                     .background(Color(UIColor.systemGroupedBackground))
             }
             .navigationBarTitle(Text("Sophia Events"))
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
     public init() {
-    }
-}
-
-struct EventFormView: View {
-    @State var event: BabyEvent
-    var body: some View {
-        cardContent
-    }
-    
-    var cardContent: AnyView {
-        switch event {
-        case .fuss(let fussEvent):
-            return AnyView(FussFormView(fussEvent: fussEvent))
-        case .nap(let napEvent):
-            return AnyView(NapFormView(napEvent: napEvent))
-        case .feed(let feedEvent):
-            return AnyView(FeedingView(event: feedEvent))
-        case .weight(let weightEvent):
-            return AnyView(WeightView(event: weightEvent))
-        case .diaper(let diaperEvent):
-            return AnyView(DiaperView(event: diaperEvent))
-        case .custom(let customEvent):
-            return AnyView(CustomFormView(customEvent: customEvent))
-        case .tummyTime(let tummyEvent):
-            return AnyView(TummyTimeFormView(event: tummyEvent))
-        }
     }
 }
 
@@ -119,27 +132,6 @@ struct FussView: View {
     }
 }
 
-struct FussFormView: View {
-    @State var fussEvent: FussEvent
-    var body: some View {
-        Form {
-            Section {
-                DatePicker(selection: $fussEvent.date, displayedComponents: DatePickerComponents([.date, .hourAndMinute])) {
-                    Text("Date")
-                }
-                Stepper(value: $fussEvent.duration, in: 150.0...3600.0, step: 150.0) {
-                    Text("Duration: \(DateComponentsFormatter.durationDisplay.string(from: DateComponents(second: Int(fussEvent.duration))) ?? "0")")
-                }
-            }
-        }
-        .navigationBarTitle(Text("Fuss Event"))
-        .navigationBarItems(trailing: Button("Save", action: {
-            print("Save")
-        }
-        ))
-    }
-}
-
 struct NapView: View {
     let event: NapEvent
     var body: some View {
@@ -155,35 +147,6 @@ struct NapView: View {
     }
 }
 
-struct NapFormView: View {
-    @State var napEvent: NapEvent
-    var body: some View {
-        Form {
-            Section {
-                DatePicker(selection: $napEvent.date, displayedComponents: DatePickerComponents([.date, .hourAndMinute])) {
-                    Text("Date")
-                }
-                Stepper(value: $napEvent.duration, in: 150.0...3600.0, step: 150.0) {
-                    Text("Duration: \(DateComponentsFormatter.durationDisplay.string(from: DateComponents(second: Int(napEvent.duration))) ?? "0")")
-                }
-            }
-            Section {
-                Stepper(value: $napEvent.interruptions, in: 0...10, step: 1) {
-                    Text("Interruptions: \(napEvent.interruptions)")
-                }
-                Toggle(isOn: $napEvent.held) {
-                    Text("Held")
-                }
-            }
-        }
-        .navigationBarTitle(Text("Nap"))
-        .navigationBarItems(trailing: Button("Save", action: {
-            print("Save")
-        }
-        ))
-    }
-}
-
 struct FeedingView: View {
     let event: FeedEvent
     var body: some View {
@@ -196,10 +159,10 @@ struct FeedingView: View {
     
     var feedingView: AnyView {
         switch event.source {
-        case .bottle(size: let size):
-            return AnyView(BottleFeedingView(size: size))
-            case .breast(let breastFeed):
-            return AnyView(BreastFeedingView(feed: breastFeed))
+        case .bottle:
+            return AnyView(BottleFeedingView(size: event.size))
+            case .breast(let sides):
+                return AnyView(BreastFeedingView(size: event.size, side: sides))
         }
     }
 }
@@ -212,7 +175,8 @@ struct BottleFeedingView: View {
 }
 
 struct BreastFeedingView: View {
-    let feed: FeedEvent.Source.BreastFeedEvent
+    let size: Measurement<UnitVolume>
+    let side: FeedEvent.Source.BreastSide
     var body: some View {
         Text("Breast Feed ()")
     }
@@ -243,27 +207,6 @@ struct TummyTimeView: View {
             Spacer()
             TimeDurationView(startDate: event.date, duration: event.duration)
         }
-    }
-}
-
-struct TummyTimeFormView: View {
-    @State var event: TummyTimeEvent
-    var body: some View {
-        Form {
-            Section {
-                DatePicker(selection: $event.date, displayedComponents: DatePickerComponents([.date, .hourAndMinute])) {
-                    Text("Date")
-                }
-                Stepper(value: $event.duration, in: 150.0...3600.0, step: 150.0) {
-                    Text("Duration: \(DateComponentsFormatter.durationDisplay.string(from: DateComponents(second: Int(event.duration))) ?? "0")")
-                }
-            }
-        }
-        .navigationBarTitle(Text("Tummy Time"))
-        .navigationBarItems(trailing: Button("Save", action: {
-            print("Save")
-        }
-        ))
     }
 }
 
@@ -302,36 +245,9 @@ struct WeightView: View {
     let event: WeightEvent
     var body: some View {
         HStack {
-            Text("Weigh In: \(event.weight)")
+            Text("Weight Check -  \(MeasurementFormatter.weightFormatter.string(from: event.weight))")
             Spacer()
             TimeDurationView(startDate: event.date, duration: nil)
-        }
-    }
-}
-
-struct WeightFormView: View {
-    @State var event: WeightEvent
-    
-    var body: some View {
-        Form {
-            Section {
-                HStack {
-                    Text("Weight")
-                    WeightFieldView(weightText: Binding.constant(""))
-                }
-            }
-            Section {
-                DatePicker(selection: $event.date, displayedComponents: DatePickerComponents([DatePickerComponents.date, DatePickerComponents.hourAndMinute])) {
-                    Text("Date")
-                }
-            }
-        }
-    }
-    
-    struct WeightFieldView: View {
-        @Binding var weightText: String
-        var body: some View {
-            TextField("Weight: ", text: $weightText).keyboardType(.numberPad)
         }
     }
 }

@@ -9,29 +9,37 @@
 import SwiftUI
 
 struct EventFormView: View {
-    @State var event: BabyEvent
+    var eventType: BabyEventType
+    var eventID: UUID?
+    
     var body: some View {
         cardContent
     }
     
     var cardContent: AnyView {
-        switch event {
-        case .fuss(let fussEvent):
-            return AnyView(FussFormView(fussEvent: fussEvent))
-        case .nap(let napEvent):
-            return AnyView(NapFormView(napEvent: napEvent))
-        case .feed(let feedEvent):
-            return AnyView(FeedFormView(event: feedEvent))
-        case .weight(let weightEvent):
-            return AnyView(WeightFormView(event: weightEvent))
-        case .diaper(let diaperEvent):
-            return AnyView(DiaperFormView(event: diaperEvent))
-        case .custom(let customEvent):
-            return AnyView(CustomFormView(customEvent: customEvent))
-        case .tummyTime(let tummyEvent):
-            return AnyView(TummyTimeFormView(event: tummyEvent))
+        switch eventType {
+        case .feed:
+            return AnyView(FeedFormView(eventID))
+        default:
+            return AnyView(EmptyView())
         }
     }
+//        case .fuss:
+//            return AnyView(FussFormView(fussEvent: fussEvent))
+//        case .nap:
+//            return AnyView(NapFormView(napEvent: napEvent))
+//        case .feed:
+//            return AnyView(FeedFormView(event: feedEvent))
+//        case .weight:
+//            return AnyView(WeightFormView(event: weightEvent))
+//        case .diaper:
+//            return AnyView(DiaperFormView(event: diaperEvent))
+//        case .custom:
+//            return AnyView(CustomFormView(customEvent: customEvent))
+//        case .tummyTime:
+//            return AnyView(TummyTimeFormView(event: tummyEvent))
+//        }
+//    }
 }
 
 struct FussFormView: View {
@@ -85,25 +93,65 @@ struct NapFormView: View {
 }
 
 struct FeedFormView: View {
-    @State var event: FeedEvent
-    @State var sourceType: SourceFormViewType = .breast
-    @State var breastSide: BreastSides = .both
+    var id: UUID?
     
-    enum BreastSides: Hashable {
-        case left
-        case right
-        case both
-    }
+    @State var date: Date = Date()
+    @State var sourceType: SourceFormViewType = .breast
+    @State var breastSide: BreastSide = .both
     
     enum SourceFormViewType: Hashable {
         case bottle
         case breast
     }
     
+    init(_ event: FeedEvent) {
+        self.id = event.id
+        self.configure(with: event)
+    }
+    
+    init(_ id: UUID?) {
+        self.id = id
+        if let id = id {
+            self.fetchEvent(with: id)
+        } else {
+            // New event, do nothing?
+        }
+    }
+    
+    private func fetchEvent(with id: UUID) {
+        EventManager.shared.fetchFeedEvent(id) { event in
+            guard let event = event else {
+                // Failed to retrieve event
+                return
+            }
+//            self.id = event.id
+            self.date = event.date
+            switch event.source {
+            case .bottle:
+                self.sourceType = .bottle
+            case .breast(let side):
+                self.sourceType = .breast
+                self.breastSide = side
+            }
+        }
+    }
+    
+    private mutating func configure(with event: FeedEvent) {
+        self.id = event.id
+        self.date = event.date
+        switch event.source {
+        case .bottle:
+            sourceType = .bottle
+        case .breast(let side):
+            sourceType = .breast
+            breastSide = side
+        }
+    }
+    
     var body: some View {
         Form {
             Section {
-                DatePicker(selection: $event.date, displayedComponents: DatePickerComponents([.date, .hourAndMinute])) {
+                DatePicker(selection: $date, displayedComponents: DatePickerComponents([.date, .hourAndMinute])) {
                     Text("Date")
                 }
             }
@@ -115,19 +163,10 @@ struct FeedFormView: View {
                 
                 if sourceType == .breast {
                     Picker("Breast Sides", selection: $breastSide) {
-                        Text("👈 Left").tag(BreastSides.left)
-                        Text("Both").tag(BreastSides.both)
-                        Text("Right 👉").tag(BreastSides.right)
+                        Text("👈 Left").tag(BreastSide.left)
+                        Text("Both").tag(BreastSide.both)
+                        Text("Right 👉").tag(BreastSide.right)
                     }.pickerStyle(SegmentedPickerStyle())
-                }
-            }
-            Section {
-                HStack {
-                    Text("Amount")
-                    
-                    TextField("42.0", value: $event.size.value, formatter: NumberFormatter.weightEntryFormatter)
-                    
-                    Text(MeasurementFormatter.weightFormatter.string(from: event.size.unit))
                 }
             }
         }

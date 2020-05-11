@@ -18,6 +18,7 @@
 		CFC1802E245E1A86007C756A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1802D245E1A86007C756A /* Extensions.swift */; };
 		CFC18031245E1EFF007C756A /* BabyModule in Frameworks */ = {isa = PBXBuildFile; productRef = CFC18030245E1EFF007C756A /* BabyModule */; };
 		CFC18033245E224E007C756A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18032245E224E007C756A /* Models.swift */; };
+		CFFA0B0224639E4000EBDD87 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BabyTracker.entitlements; sourceTree = "<group>"; };
 		CF6A2D35245F64F50060FA8A /* FormViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViews.swift; sourceTree = "<group>"; };
 		CFC18008245E18B1007C756A /* BabyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC1800B245E18B1007C756A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +47,7 @@
 		CFC18024245E18B3007C756A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CFC1802D245E1A86007C756A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		CFC18032245E224E007C756A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +72,7 @@
 		CFC17FFF245E18B0007C756A = {
 			isa = PBXGroup;
 			children = (
+				CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */,
 				CFC1800A245E18B1007C756A /* BabyTracker */,
 				CFC18021245E18B3007C756A /* BabyTrackerTests */,
 				CFC18009245E18B1007C756A /* Products */,
@@ -87,6 +91,7 @@
 		CFC1800A245E18B1007C756A /* BabyTracker */ = {
 			isa = PBXGroup;
 			children = (
+				CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */,
 				CFC1800B245E18B1007C756A /* AppDelegate.swift */,
 				CFC1800D245E18B1007C756A /* SceneDelegate.swift */,
 				CFC1800F245E18B1007C756A /* ContentViews.swift */,
@@ -226,6 +231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */,
+				CFFA0B0224639E4000EBDD87 /* SwiftUIView.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
 				CF6A2D36245F64F50060FA8A /* FormViews.swift in Sources */,
 				CFC18010245E18B1007C756A /* ContentViews.swift in Sources */,
@@ -382,6 +388,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BabyTracker/BabyTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"BabyTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 6SEG2H9AQV;
@@ -393,6 +400,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chestnut.BabyTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -402,6 +410,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BabyTracker/BabyTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"BabyTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 6SEG2H9AQV;
@@ -413,6 +422,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chestnut.BabyTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

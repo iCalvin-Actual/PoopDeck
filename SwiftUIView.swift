@@ -47,22 +47,7 @@ struct FeedCard: View {
     }
     
     func color(for type: BabyEventType) -> Color {
-        switch type {
-        case .feed:
-            return .blue
-        case .diaper:
-            return .green
-        case .nap:
-            return .orange
-        case .fuss:
-            return .pink
-        case .weight:
-            return .purple
-        case .tummyTime:
-            return .red
-        case .custom:
-            return .yellow
-        }
+        return type.colorValue
     }
 }
 

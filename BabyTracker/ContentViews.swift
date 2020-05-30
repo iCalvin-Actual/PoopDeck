@@ -22,56 +22,169 @@ struct TimeDurationView: View {
 }
 
 public struct FeedView: View {
+    
+    @State var showNewEventForm: Bool = false
+    @State var newEventType: BabyEventType? = nil
+    
     @State var feed: [FeedViewModel]
     public var body: some View {
         NavigationView {
-            List {
-                ForEach(feed) { event in
-                    NavigationLink(destination: EventFormView(eventType: event.type, eventID: event.id)) {
-                        FeedCard(event: event)
-                            .background(Color(UIColor.systemGroupedBackground))
-                            .cornerRadius(8)
-                            .contextMenu {
-                                Button(action: {
-                                 print("Delete")
-                                }) {
-                                    Text("Delete")
-                                    Image(systemName: "trash.fill")
-                                }
+            VStack {
+                List {
+                    ForEach(feed) { event in
+                        NavigationLink(destination: EventFormView(eventType: event.type, eventID: event.id, didUpdate: self.reloadEvents)) {
+                            FeedCard(event: event)
+                                .cornerRadius(8)
+                                .contextMenu {
+                                    Button(action: {
+                                        EventManager.shared.delete(event.id, type: event.type, completion: {
+                                            self.reloadEvents()
+                                        })
+                                    }) {
+                                        Text("Delete")
+                                        Image(systemName: "trash.fill")
+                                    }
 
-                                Button(action: {
-                                    // Do nothing?
-                                    print(event)
-                                }) {
-                                    Text("Edit")
-                                    Image(systemName: "pencil.and.ellipsis.rectangle")
-                                }
-
-                                Button(action: {
-                                    // Do nothing?
-                                    print(event)
-                                }) {
-                                    Text("Duplicate")
-                                    Image(systemName: "doc.on.doc.fill")
-                                }
-                       }
+                                    Button(action: {
+                                        EventManager.shared.duplicate(event.id, type: event.type) {
+                                            self.reloadEvents()
+                                        }
+                                    }) {
+                                        Text("Duplicate")
+                                        Image(systemName: "doc.on.doc.fill")
+                                    }
+                           }
+                        }
                     }
+                    .padding(.trailing, 4)
+                    .frame(maxWidth: 835.0)
                 }
-                .padding(.trailing, 4)
-                .frame(maxWidth: 835.0)
+                .listStyle(GroupedListStyle())
+                .environment(\.horizontalSizeClass, .regular)
+                
+                Spacer()
+                NewEventTypeSelector(didSelect: { eventType in
+                    self.presentNewEventSheet(type: eventType)
+                })
             }
-//            .listStyle(GroupedListStyle())
             .navigationBarTitle(Text("Sophia Events"))
-        }.navigationViewStyle(StackNavigationViewStyle())
-            .onAppear {
-                EventManager.shared.fetchSummary { summary in
-                    guard let summary = summary else {
-                        return
-                    }
-                    self.feed = summary.dateSortedModels
+            .sheet(isPresented: self.$showNewEventForm) {
+                NavigationView {
+                    EventFormView(eventType: self.newEventType!,
+                                  didUpdate: self.reloadEvents)
                 }
+            }
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
+            self.reloadEvents()
+        }
+    }
+    
+    private func reloadEvents() {
+        self.showNewEventForm = false
+        EventManager.shared.fetchSummary { summary in
+            guard let summary = summary else {
+                return
+            }
+            self.feed = summary.dateSortedModels
+        }
+    }
+    
+    func presentNewEventSheet(type: BabyEventType) {
+        self.newEventType = type
+        self.showNewEventForm = true
+    }
+}
+
+struct NewEventTypeSelector: View {
+    let didSelect: ((BabyEventType) -> Void)?
+    
+    @State var selected: BabyEventType = .feed
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(alignment: .bottom, spacing: 2) {
+                NewEventButton(type: .feed, didSelect: self.didSelect)
+                NewEventButton(type: .diaper, didSelect: self.didSelect)
+                NewEventButton(type: .nap, didSelect: self.didSelect)
+                NewEventButton(type: .tummyTime, didSelect: self.didSelect)
+                NewEventButton(type: .weight, didSelect: self.didSelect)
+                NewEventButton(type: .fuss, didSelect: self.didSelect)
+                NewEventButton(type: .custom, didSelect: self.didSelect)
+            }
+            .padding()
+        }
+    }
+}
+
+struct NewEventButton: View {
+    let type: BabyEventType
+    let didSelect: ((BabyEventType) -> Void)?
+    
+    var body: some View {
+        Button(action: {
+            self.didSelect?(self.type)
+        }) {
+            ZStack {
+                Circle()
+                    .foregroundColor(type.colorValue)
+                
+                Text(type.emojiValue)
+                    .font(.largeTitle)
+            }
+            .frame(width: 88.0, height: 88.0)
+        }
+    }
+}
+
+extension BabyEventType {
+    var emojiValue: String {
+        switch self {
+        case .feed:
+            return "🤱🏻"
+        case .diaper:
+            return "🧷"
+        case .nap:
+            return "💤"
+        case .fuss:
+            return "😾"
+        case .weight:
+            return "⚖️"
+        case .tummyTime:
+            return "🚼"
+        case .custom:
+            return "👨‍👩‍👧"
+        }
+    }
+    
+    var colorValue: Color {
+        switch self {
+        case .feed:
+            return .yellow
+        case .diaper:
+            return .blue
+        case .nap:
+            return .red
+        case .fuss:
+            return .purple
+        case .weight:
+            return .orange
+        case .tummyTime:
+            return .green
+        case .custom:
+            return .pink
+//            return .black
+//            return .gray
+//            return .pink
         }
     }
 }
 
 
+
+struct ContentViews_Previews: PreviewProvider {
+    static var previews: some View {
+        FeedView(feed: [])
+    }
+}

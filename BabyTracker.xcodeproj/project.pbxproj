@@ -34,7 +34,7 @@
 /* Begin PBXFileReference section */
 		CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BabyTracker.entitlements; sourceTree = "<group>"; };
 		CF6A2D35245F64F50060FA8A /* FormViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViews.swift; sourceTree = "<group>"; };
-		CFC18008245E18B1007C756A /* BabyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFC18008245E18B1007C756A /* PoopDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoopDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC1800B245E18B1007C756A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFC1800D245E18B1007C756A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CFC1800F245E18B1007C756A /* ContentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViews.swift; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 		CFC18009245E18B1007C756A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CFC18008245E18B1007C756A /* BabyTracker.app */,
+				CFC18008245E18B1007C756A /* PoopDeck.app */,
 				CFC1801E245E18B3007C756A /* BabyTrackerTests.xctest */,
 			);
 			name = Products;
@@ -143,7 +143,7 @@
 				CFC18030245E1EFF007C756A /* BabyModule */,
 			);
 			productName = BabyTracker;
-			productReference = CFC18008245E18B1007C756A /* BabyTracker.app */;
+			productReference = CFC18008245E18B1007C756A /* PoopDeck.app */;
 			productType = "com.apple.product-type.application";
 		};
 		CFC1801D245E18B3007C756A /* BabyTrackerTests */ = {
@@ -399,7 +399,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chestnut.BabyTracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = PoopDeck;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -421,7 +421,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chestnut.BabyTracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = PoopDeck;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

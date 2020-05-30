@@ -22,10 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         
         let contentView = FeedView(feed: [])
-        var dateComponents: DateComponents = DateComponents(calendar: nil, timeZone: nil, era: nil, year: 2020, month: 5, day: 9, hour: 3, minute: 0, second: 0)
-        dateComponents.hour = 3
-        
-        let feedEvent = FeedEvent(date: dateComponents.date ?? Date(), source: .bottle, size: Measurement(value: 4.0, unit: UnitVolume.fluidOunces)).viewModel
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

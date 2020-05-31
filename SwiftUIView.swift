@@ -22,23 +22,27 @@ struct FeedViewModel: Identifiable {
 struct FeedCard: View {
     var event: FeedViewModel
     var body: some View {
-        VStack {
-            HStack {
-                Rectangle().frame(width: 10, height: 10, alignment: .center)
-                Text(event.primaryText)
-                    .font(.headline)
-                    .fontWeight(.semibold)
+        HStack {
+            VStack(alignment: .leading) {
+                HStack {
+                    Rectangle().frame(width: 10, height: 10, alignment: .center)
+                    Text(event.primaryText)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                }
                 Spacer()
-                Text(DateFormatter.timeDisplay.string(from: event.date))
-                    .foregroundColor(Color(UIColor.secondaryLabel))
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-            }
-            .foregroundColor(color(for: event.type))
-            HStack {
                 Text(event.secondaryText)
                     .font(.system(size: 22, weight: .bold, design: .rounded))
                     .foregroundColor(Color(UIColor.label))
+            }
+            .foregroundColor(color(for: event.type))
+            Spacer()
+            VStack {
+                Text(DateFormatter.shortStackDisplay.string(from: event.date))
+                    .foregroundColor(Color(UIColor.secondaryLabel))
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.trailing)
                 Spacer()
             }
             

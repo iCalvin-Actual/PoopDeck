@@ -6,6 +6,7 @@
 //  Copyright © 2020 Calvin Chestnut. All rights reserved.
 //
 
+import SwiftUI
 import Foundation
 
 extension DateFormatter {
@@ -13,6 +14,11 @@ extension DateFormatter {
         var formatter = DateFormatter()
         formatter.timeStyle = .short
         formatter.dateStyle = .none
+        return formatter
+    }()
+    static var shortStackDisplay: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateFormat = "M/d\nh:mm a"
         return formatter
     }()
 }
@@ -41,6 +47,12 @@ extension NumberFormatter {
         formatter.numberStyle = .decimal
         
         return formatter
+    }
+}
+
+extension View {
+    func anyify() -> AnyView {
+        return AnyView(self)
     }
 }
 

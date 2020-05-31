@@ -23,9 +23,10 @@ struct ActivitySummary {
 }
 
 protocol BabyEvent: Identifiable, Codable, Equatable {
-    var id: UUID { get }
-    var date: Date { get }
-    var type: BabyEventType { get }
+    static var type: BabyEventType { get }
+
+    var id: UUID { get set }
+    var date: Date { get set }
     var viewModel: FeedViewModel { get }
 }
 
@@ -88,7 +89,7 @@ extension BabyEventType {
         case .feed:
             return "feed"
         case .diaper:
-            return "feed"
+            return "diaper"
         case .nap:
             return "nap"
         case .fuss:
@@ -130,6 +131,13 @@ class EventManager {
         }.resume()
     }
     
+    func duplicate<E: BabyEvent>(_ event: E, completion: ((Result<E, BabyError>) -> Void)? = nil) {
+        var newEvent = event
+        newEvent.date = Date()
+        newEvent.id = UUID()
+        self.save(newEvent, completion: completion)
+    }
+    
     func duplicate(_ id: UUID, type: BabyEventType, completion: (() -> Void)? = nil) {
         switch type {
         case .feed:
@@ -137,45 +145,45 @@ class EventManager {
                 var newFeedEvent = feed ?? FeedEvent.new
                 newFeedEvent.date = Date()
                 newFeedEvent.id = UUID()
-                self.addFeedEvent(newFeedEvent, completion: { _ in
+                self.save(newFeedEvent) { _ in
                     completion?()
-                })
+                }
             })
         case .diaper:
             self.fetchDiaperEvent(id, completion: { feed in
                 var newFeedEvent = feed ?? DiaperEvent.new
                 newFeedEvent.date = Date()
                 newFeedEvent.id = UUID()
-                self.addDiaperEvent(newFeedEvent, completion: { _ in
+                self.save(newFeedEvent) { _ in
                     completion?()
-                })
+                }
             })
         case .nap:
             self.fetchNapEvent(id, completion: { feed in
                 var newFeedEvent = feed ?? NapEvent.new
                 newFeedEvent.date = Date()
                 newFeedEvent.id = UUID()
-                self.addNapEvent(newFeedEvent, completion: { _ in
+                self.save(newFeedEvent) { _ in
                     completion?()
-                })
+                }
             })
         case .fuss:
             self.fetchFussEvent(id, completion: { feed in
                 var newFeedEvent = feed ?? FussEvent.new
                 newFeedEvent.date = Date()
                 newFeedEvent.id = UUID()
-                self.addFussEvent(newFeedEvent, completion: { _ in
+                self.save(newFeedEvent) { _ in
                     completion?()
-                })
+                }
             })
         case .weight:
             self.fetchWeightEvent(id, completion: { feed in
                 var newFeedEvent = feed ?? WeightEvent.new
                 newFeedEvent.date = Date()
                 newFeedEvent.id = UUID()
-                self.addWeightEvent(newFeedEvent, completion: { _ in
+                self.save(newFeedEvent) { _ in
                     completion?()
-                })
+                }
             })
             
         case .tummyTime:
@@ -183,9 +191,9 @@ class EventManager {
                 var newFeedEvent = feed ?? TummyTimeEvent.new
                 newFeedEvent.date = Date()
                 newFeedEvent.id = UUID()
-                self.addTummyTimeEvent(newFeedEvent, completion: { _ in
+                self.save(newFeedEvent) { _ in
                     completion?()
-                })
+                }
             })
             
         case .custom:
@@ -193,16 +201,116 @@ class EventManager {
                 var newFeedEvent = feed ?? CustomEvent.new
                 newFeedEvent.date = Date()
                 newFeedEvent.id = UUID()
-                self.addCustomEvent(newFeedEvent, completion: { _ in
+                self.save(newFeedEvent) { _ in
                     completion?()
-                })
+                }
             })
             
         }
     }
     
+    func save<E: BabyEvent>(_ event: E, completion: ((Result<E, BabyError>) -> Void)? = nil) {
+        self.find(event.id) { (foundEvent: E?) in
+            if foundEvent == nil {
+                self.create(event: event, completion: completion)
+            } else {
+                self.update(event: event, completion: completion)
+            }
+        }
+    }
+    
+    func create<E: BabyEvent>(event: E, completion: ((Result<E, BabyError>) -> Void)? = nil) {
+        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/\(E.type.path)/")!)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder.safe.encode(event)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
+            guard let data = data else {
+                completion?(.failure(.unknown))
+                return
+            }
+            do {
+                let event = try JSONDecoder.safe.decode(E.self, from: data)
+                completion?(.success(event))
+            } catch {
+                print(error.localizedDescription)
+                completion?(.failure(.unknown))
+            }
+        }.resume()
+    }
+    
+    func update<E: BabyEvent>(event: E, completion: ((Result<E, BabyError>) -> Void)? = nil) {
+        var request = URLRequest(url: URL.Base.appendingPathComponent("/events/\(E.type.path)"))
+        request.httpMethod = "PATCH"
+        request.httpBody = try? JSONEncoder.safe.encode(event)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
+        guard let data = data else {
+            completion?(.failure(.unknown))
+            return
+        }
+        do {
+            let event = try JSONDecoder.safe.decode(E.self, from: data)
+            completion?(.success(event))
+        } catch {
+            completion?(.failure(.unknown))
+        }
+        }.resume()
+    }
+    
+    func fetch<E: BabyEvent>(_ id: UUID, completion: ((Result<E, BabyError>) -> Void)? = nil) {
+        self.find(id) { (foundEvent: E?) in
+            if let foundEvent = foundEvent { completion?(.success(foundEvent)) }
+            
+            var path: String = ""
+            if FeedEvent.new is E {
+                path = "feed"
+            } else if DiaperEvent.new is E {
+                path = "diaper"
+            } else if FussEvent.new is E {
+                path = "fuss"
+            } else if WeightEvent.new is E {
+                path = "weight"
+            } else if NapEvent.new is E {
+                path = "nap"
+            } else if TummyTimeEvent.new is E {
+                path = "tummy"
+            } else if CustomEvent.new is E {
+                path = "custom"
+            }
+
+            var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/\(path)")!)
+            request.httpMethod = "GET"
+            URLSession.shared.dataTask(with: request) { (data, resonse, error) in
+                guard let data = data else {
+                    completion?(.failure(.unknown))
+                    return
+                }
+                do {
+                    let event = try JSONDecoder.safe.decode(E.self, from: data)
+                    completion?(.success(event))
+                } catch {
+                    print(error.localizedDescription)
+                    completion?(.failure(.unknown))
+                }
+            }.resume()
+        }
+    }
+    
+    func find<E: BabyEvent>(_ id: UUID, completion: ((E?) -> Void)? = nil) {
+        if let feeding = self.summary.feedings.first(where: { $0.id == id }) as? E {        completion?(feeding)    }
+        if let nap = self.summary.naps.first(where: { $0.id == id }) as? E {                completion?(nap)        }
+        if let weight = self.summary.weighIns.first(where: { $0.id == id }) as? E {         completion?(weight)     }
+        if let custom = self.summary.customEvents.first(where: { $0.id == id }) as? E {     completion?(custom)     }
+        if let diaper = self.summary.diaperChanges.first(where: { $0.id == id }) as? E {    completion?(diaper)     }
+        if let fuss = self.summary.fussies.first(where: { $0.id == id }) as? E {            completion?(fuss)       }
+        if let tummy = self.summary.tummyTimes.first(where: { $0.id == id }) as? E {        completion?(tummy)      }
+        
+        completion?(nil)
+    }
+    
     func delete<E: BabyEvent>(_ event: E, completion: ((E?) -> Void)? = nil) {
-        var request = URLRequest(url: URL.Base.appendingPathComponent("/events/\(event.type.path)"))
+        var request = URLRequest(url: URL.Base.appendingPathComponent("/events/\(E.type.path)"))
         request.httpMethod = "DELETE"
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
         guard let data = data else {
@@ -231,7 +339,7 @@ class EventManager {
             completion?(feeding)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/feed/\(id.uuidString)")!)
+        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/feed/\(id.uuidString)")!)
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -248,8 +356,32 @@ class EventManager {
     }
     
     func fetch<E: BabyEvent>(id: UUID, type: BabyEventType, completion: ((Result<E, BabyError>) -> Void)? = nil) {
-        /// Check local cache
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/\(type.path)/\(id.uuidString)")!)
+        print("")
+        if FeedEvent.new is E, let first = self.summary.feedings.first(where: { $0.id == id }) as? E {
+            completion?(.success(first))
+            return
+        } else if DiaperEvent.new is E, let first = self.summary.diaperChanges.first(where: { $0.id == id }) as? E {
+            completion?(.success(first))
+            return
+        } else if FussEvent.new is E, let first = self.summary.fussies.first(where: { $0.id == id }) as? E {
+            completion?(.success(first))
+            return
+        } else if WeightEvent.new is E, let first = self.summary.weighIns.first(where: { $0.id == id }) as? E {
+            completion?(.success(first))
+            return
+        } else if NapEvent.new is E, let first = self.summary.naps.first(where: { $0.id == id }) as? E {
+            completion?(.success(first))
+            return
+        } else if TummyTimeEvent.new is E, let first = self.summary.tummyTimes.first(where: { $0.id == id }) as? E {
+            completion?(.success(first))
+            return
+        } else if CustomEvent.new is E, let first = self.summary.customEvents.first(where: { $0.id == id }) as? E {
+            completion?(.success(first))
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/\(type.path)/\(id.uuidString)")!)
+        request.httpMethod = "GET"
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(.failure(.unknown))
@@ -264,92 +396,12 @@ class EventManager {
         }.resume()
     }
     
-    func addFeedEvent(_ event: FeedEvent, completion: ((FeedEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/feed/")!)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(FeedEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func updateFeedEvent(_ event: FeedEvent, completion: ((FeedEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/feed/")!)
-        request.httpMethod = "PATCH"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(FeedEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
     func fetchDiaperEvent(_ id: UUID, completion: ((DiaperEvent?) -> Void)? = nil) {
         if let event = self.summary.diaperChanges.first(where: { $0.id == id }) {
             completion?(event)
             return
         }
         let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/diaper/\(id.uuidString)")!)
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(DiaperEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func addDiaperEvent(_ event: DiaperEvent, completion: ((DiaperEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/diaper/")!)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(DiaperEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func updateDiaperEvent(_ event: DiaperEvent, completion: ((DiaperEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/diaper/")!)
-        request.httpMethod = "PATCH"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -386,92 +438,12 @@ class EventManager {
         }.resume()
     }
     
-    func addNapEvent(_ event: NapEvent, completion: ((NapEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/nap/")!)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(NapEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func updateNapEvent(_ event: NapEvent, completion: ((NapEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/feed/")!)
-        request.httpMethod = "PATCH"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(NapEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
     func fetchFussEvent(_ id: UUID, completion: ((FussEvent?) -> Void)? = nil) {
         if let event = self.summary.fussies.first(where: { $0.id == id }) {
             completion?(event)
             return
         }
         let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/fuss/\(id.uuidString)")!)
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(FussEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func addFussEvent(_ event: FussEvent, completion: ((FussEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/fuss/")!)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(FussEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func updateFussEvent(_ event: FussEvent, completion: ((FussEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/fuss/")!)
-        request.httpMethod = "PATCH"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -508,92 +480,12 @@ class EventManager {
         }.resume()
     }
     
-    func addWeightEvent(_ event: WeightEvent, completion: ((WeightEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/weight/")!)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(WeightEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func updateWeightEvent(_ event: WeightEvent, completion: ((WeightEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/weight/")!)
-        request.httpMethod = "PATCH"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(WeightEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
     func fetchTummyTimeEvent(_ id: UUID, completion: ((TummyTimeEvent?) -> Void)? = nil) {
         if let event = self.summary.tummyTimes.first(where: { $0.id == id }) {
             completion?(event)
             return
         }
         let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/feed/\(id.uuidString)")!)
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(TummyTimeEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func addTummyTimeEvent(_ event: TummyTimeEvent, completion: ((TummyTimeEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/tummy/")!)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(TummyTimeEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func updateTummyTimeEvent(_ event: TummyTimeEvent, completion: ((TummyTimeEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/tummy/")!)
-        request.httpMethod = "PATCH"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -629,66 +521,31 @@ class EventManager {
             }
         }.resume()
     }
-    
-    func addCustomEvent(_ event: CustomEvent, completion: ((CustomEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/custom/")!)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(CustomEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
-    
-    func updateCustomEvent(_ event: CustomEvent, completion: ((CustomEvent?) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/custom/")!)
-        request.httpMethod = "PATCH"
-        request.httpBody = try? JSONEncoder.safe.encode(event)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        URLSession.shared.dataTask(with: request) { (data, resonse, error) in
-            guard let data = data else {
-                completion?(nil)
-                return
-            }
-            do {
-                let event = try JSONDecoder.safe.decode(CustomEvent.self, from: data)
-                completion?(event)
-            } catch {
-                print(error.localizedDescription)
-                completion?(nil)
-            }
-        }.resume()
-    }
 }
 
 typealias BreastSide = FeedEvent.Source.BreastSide
 
 struct FeedEvent: BabyEvent {
+    static var type: BabyEventType { return FeedEvent.new.type }
+    var type: BabyEventType = .feed
     static var new: FeedEvent {
         return FeedEvent(source: .breast(.both))
     }
     
     var id = UUID()
     var date: Date = Date()
-    var type: BabyEventType = .feed
+    var icon: Data? { return nil }
+    var primaryText: String { return self.source.title }
+    var secondaryText: String { return self.size != nil ? MeasurementFormatter.weightFormatter.string(from: self.size!) : "" }
+    var infoStack: [String] { return [] }
     var viewModel: FeedViewModel {
         return FeedViewModel(
             id: self.id,
             date: self.date,
-            type: self.type,
-            icon: nil,
-            primaryText: self.source.title,
-            secondaryText: self.size != nil ? MeasurementFormatter.weightFormatter.string(from: self.size!) : "",
+            type: FeedEvent.type,
+            icon: self.icon,
+            primaryText: self.primaryText,
+            secondaryText: self.secondaryText,
             infoStack: []
         )
     }
@@ -754,20 +611,25 @@ struct FeedEvent: BabyEvent {
 }
 
 struct DiaperEvent: BabyEvent {
+    static var type: BabyEventType { return DiaperEvent.new.type }
+    var type: BabyEventType = .diaper
     static var new: DiaperEvent {
         return DiaperEvent()
     }
     var id = UUID()
     var date: Date = Date()
-    var type: BabyEventType = .diaper
+    var icon: Data? { return nil }
+    var primaryText: String { return "Fresh Diaper" }
+    var secondaryText: String { return emojiStatus }
+    var infoStack: [String] { return [] }
     var viewModel: FeedViewModel {
         return FeedViewModel(
             id: self.id,
             date: self.date,
-            type: self.type,
-            icon: nil,
-            primaryText: "Fresh Diaper",
-            secondaryText: emojiStatus,
+            type: DiaperEvent.type,
+            icon: self.icon,
+            primaryText: self.primaryText,
+            secondaryText: self.secondaryText,
             infoStack: []
         )
     }
@@ -787,25 +649,30 @@ struct DiaperEvent: BabyEvent {
 }
 
 struct NapEvent: BabyEvent {
+    static var type: BabyEventType { return NapEvent.new.type }
+    var type: BabyEventType = .nap
     static var new: NapEvent {
         return NapEvent()
     }
     var id = UUID()
     var date: Date = Date()
-    var type: BabyEventType = .nap
+    var icon: Data? { return nil }
+    var primaryText: String { return "Nap Time" }
+    var secondaryText: String { return DateComponentsFormatter.durationDisplay.string(from: duration) ?? "" }
+    var infoStack: [String] { return [] }
     var viewModel: FeedViewModel {
         return FeedViewModel(
             id: self.id,
             date: self.date,
-            type: self.type,
-            icon: nil,
-            primaryText: "Nap Time",
-            secondaryText: DateComponentsFormatter.durationDisplay.string(from: duration) ?? "",
+            type: NapEvent.type,
+            icon: self.icon,
+            primaryText: self.primaryText,
+            secondaryText: self.secondaryText,
             infoStack: []
         )
     }
     
-    var duration: TimeInterval = 300
+    var duration: TimeInterval = 3600
     
     var held: Bool = false
     var interruptions: Int = 0
@@ -813,21 +680,26 @@ struct NapEvent: BabyEvent {
 }
 
 struct FussEvent: BabyEvent {
+    static var type: BabyEventType { return FussEvent.new.type }
+    var type: BabyEventType = .fuss
     static var new: FussEvent {
         return FussEvent()
     }
     
     var id = UUID()
     var date: Date = Date()
-    var type: BabyEventType = .fuss
+    var icon: Data? { return nil }
+    var primaryText: String { return "Fussy Times" }
+    var secondaryText: String { return DateComponentsFormatter.durationDisplay.string(from: duration) ?? "" }
+    var infoStack: [String] { return [] }
     var viewModel: FeedViewModel {
         return FeedViewModel(
             id: self.id,
             date: self.date,
-            type: self.type,
-            icon: nil,
-            primaryText: "Fussy Times",
-            secondaryText: DateComponentsFormatter.durationDisplay.string(from: duration) ?? "",
+            type: FussEvent.type,
+            icon: self.icon,
+            primaryText: self.primaryText,
+            secondaryText: self.secondaryText,
             infoStack: []
         )
     }
@@ -836,20 +708,25 @@ struct FussEvent: BabyEvent {
 }
 
 struct TummyTimeEvent: BabyEvent {
+    static var type: BabyEventType { return TummyTimeEvent.new.type }
+    var type: BabyEventType = .tummyTime
     static var new: TummyTimeEvent {
         return TummyTimeEvent()
     }
     var id = UUID()
     var date: Date = Date()
-    var type: BabyEventType = .tummyTime
+    var icon: Data? { return nil }
+    var primaryText: String { return "Tummy Time" }
+    var secondaryText: String { return DateComponentsFormatter.durationDisplay.string(from: duration) ?? "" }
+    var infoStack: [String] { return [] }
     var viewModel: FeedViewModel {
         return FeedViewModel(
             id: self.id,
             date: self.date,
-            type: self.type,
-            icon: nil,
-            primaryText: "Tummy Time",
-            secondaryText: DateComponentsFormatter.durationDisplay.string(from: duration) ?? "",
+            type: TummyTimeEvent.type,
+            icon: self.icon,
+            primaryText: self.primaryText,
+            secondaryText: self.secondaryText,
             infoStack: []
         )
     }
@@ -858,47 +735,56 @@ struct TummyTimeEvent: BabyEvent {
 }
 
 struct WeightEvent: BabyEvent {
+    static var type: BabyEventType { return WeightEvent.new.type }
+    var type: BabyEventType = .weight
     static var new: WeightEvent {
-        return WeightEvent(weight: Measurement.init(value: 0, unit: .kilograms))
+        return WeightEvent(weight: Measurement.init(value: 4.20, unit: .kilograms))
     }
     var id = UUID()
     var date: Date = Date()
-    var type: BabyEventType = .weight
+    var icon: Data? { return nil }
+    var primaryText: String { return "Weight Check" }
+    var secondaryText: String { return MeasurementFormatter.weightFormatter.string(from: self.weight) }
+    var infoStack: [String] { return [] }
     var viewModel: FeedViewModel {
         return FeedViewModel(
             id: self.id,
             date: self.date,
-            type: self.type,
-            icon: nil,
-            primaryText: "Weight Check",
-            secondaryText: MeasurementFormatter.weightFormatter.string(from: self.weight),
+            type: WeightEvent.type,
+            icon: self.icon,
+            primaryText: self.primaryText,
+            secondaryText: self.secondaryText,
             infoStack: []
         )
     }
     
     var weight: Measurement<UnitMass>
-    var clothed: Bool = false
 }
 
 struct CustomEvent: BabyEvent {
+    static var type: BabyEventType { return CustomEvent.new.type }
+    var type: BabyEventType = .custom
     static var new: CustomEvent {
         return CustomEvent(event: "")
     }
     var id = UUID()
     var date: Date = Date()
-    var type: BabyEventType = .custom
+    var icon: Data? { return nil }
+    var primaryText: String { return event }
+    var secondaryText: String { return "" }
+    var infoStack: [String] { return [] }
     var viewModel: FeedViewModel {
         return FeedViewModel(
             id: self.id,
             date: self.date,
-            type: self.type,
-            icon: nil,
-            primaryText: event,
-            secondaryText: "",
+            type: CustomEvent.type,
+            icon: self.icon,
+            primaryText: self.primaryText,
+            secondaryText: self.secondaryText,
             infoStack: []
         )
     }
     
     var event: String
-    var details: String = ""
+//    var description: String
 }

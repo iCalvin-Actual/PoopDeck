@@ -32,7 +32,7 @@ public struct FeedView: View {
             VStack {
                 List {
                     ForEach(feed) { event in
-                        NavigationLink(destination: EventFormView(eventType: event.type, eventID: event.id, didUpdate: self.reloadEvents)) {
+                        NavigationLink(destination: EventFormView(eventID: event.id, eventType: event.type, didUpdate: self.reloadEvents)) {
                             FeedCard(event: event)
                                 .cornerRadius(8)
                                 .contextMenu {
@@ -67,7 +67,9 @@ public struct FeedView: View {
                     self.presentNewEventSheet(type: eventType)
                 })
             }
-            .navigationBarTitle(Text("Sophia Events"))
+            .navigationBarTitle(
+                Text("Sophia Events")
+            )
             .sheet(isPresented: self.$showNewEventForm) {
                 NavigationView {
                     EventFormView(eventType: self.newEventType!,
@@ -174,9 +176,6 @@ extension BabyEventType {
             return .green
         case .custom:
             return .pink
-//            return .black
-//            return .gray
-//            return .pink
         }
     }
 }

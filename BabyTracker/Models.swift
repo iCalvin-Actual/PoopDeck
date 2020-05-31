@@ -77,12 +77,6 @@ extension JSONEncoder {
     }()
 }
 
-extension URL {
-    static var Base: URL {
-        return URL(string: "http://192.168.7.39:8080")!
-    }
-}
-
 extension BabyEventType {
     var path: String {
         switch self {
@@ -114,7 +108,7 @@ class EventManager {
     }
     
     func fetchSummary(_ completion: ((ActivitySummary?) -> Void)? = nil) {
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/events"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -220,7 +214,7 @@ class EventManager {
     }
     
     func create<E: BabyEvent>(event: E, completion: ((Result<E, BabyError>) -> Void)? = nil) {
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/\(E.type.path)/")!)
+        var request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/events/\(E.type.path)/"))
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder.safe.encode(event)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -240,7 +234,7 @@ class EventManager {
     }
     
     func update<E: BabyEvent>(event: E, completion: ((Result<E, BabyError>) -> Void)? = nil) {
-        var request = URLRequest(url: URL.Base.appendingPathComponent("/events/\(E.type.path)"))
+        var request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/events/\(E.type.path)"))
         request.httpMethod = "PATCH"
         request.httpBody = try? JSONEncoder.safe.encode(event)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -279,7 +273,7 @@ class EventManager {
                 path = "custom"
             }
 
-            var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/\(path)")!)
+            var request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/events/\(path)"))
             request.httpMethod = "GET"
             URLSession.shared.dataTask(with: request) { (data, resonse, error) in
                 guard let data = data else {
@@ -310,7 +304,7 @@ class EventManager {
     }
     
     func delete<E: BabyEvent>(_ event: E, completion: ((E?) -> Void)? = nil) {
-        var request = URLRequest(url: URL.Base.appendingPathComponent("/events/\(E.type.path)"))
+        var request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/events/\(E.type.path)"))
         request.httpMethod = "DELETE"
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
         guard let data = data else {
@@ -327,7 +321,7 @@ class EventManager {
         }.resume()
     }
     func delete(_ id: UUID, type: BabyEventType, completion: (() -> Void)? = nil) {
-        var request = URLRequest(url: URL.Base.appendingPathComponent("/events/\(type.path)/\(id.uuidString)"))
+        var request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/events/\(type.path)/\(id.uuidString)"))
         request.httpMethod = "DELETE"
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             completion?()
@@ -339,7 +333,7 @@ class EventManager {
             completion?(feeding)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/feed/\(id.uuidString)")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("events/feed/\(id.uuidString)"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -380,7 +374,7 @@ class EventManager {
             return
         }
         
-        var request = URLRequest(url: URL(string: "http://192.168.7.39:8080/events/\(type.path)/\(id.uuidString)")!)
+        var request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/events/\(type.path)/\(id.uuidString)"))
         request.httpMethod = "GET"
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
@@ -401,7 +395,7 @@ class EventManager {
             completion?(event)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/diaper/\(id.uuidString)")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/event/diaper/\(id.uuidString)"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -422,7 +416,7 @@ class EventManager {
             completion?(event)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/nap/\(id.uuidString)")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/event/nap/\(id.uuidString)"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -443,7 +437,7 @@ class EventManager {
             completion?(event)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/fuss/\(id.uuidString)")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/event/fuss/\(id.uuidString)"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -464,7 +458,7 @@ class EventManager {
             completion?(event)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/weight/\(id.uuidString)")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/event/weight/\(id.uuidString)"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -485,7 +479,7 @@ class EventManager {
             completion?(event)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/feed/\(id.uuidString)")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/event/tummyTime/\(id.uuidString)"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)
@@ -506,7 +500,7 @@ class EventManager {
             completion?(event)
             return
         }
-        let request = URLRequest(url: URL(string: "http://192.168.7.39:8080/event/feed/\(id.uuidString)")!)
+        let request = URLRequest(url: URL.BabyServerBase.appendingPathComponent("/event/custom/\(id.uuidString)"))
         URLSession.shared.dataTask(with: request) { (data, resonse, error) in
             guard let data = data else {
                 completion?(nil)

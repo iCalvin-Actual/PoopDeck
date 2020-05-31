@@ -18,6 +18,8 @@
 		CFC1802E245E1A86007C756A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1802D245E1A86007C756A /* Extensions.swift */; };
 		CFC18031245E1EFF007C756A /* BabyModule in Frameworks */ = {isa = PBXBuildFile; productRef = CFC18030245E1EFF007C756A /* BabyModule */; };
 		CFC18033245E224E007C756A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18032245E224E007C756A /* Models.swift */; };
+		CFCF4FEB2484653A0027CB98 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = CFCF4FEA2484653A0027CB98 /* readme.md */; };
+		CFCF4FED248469DB0027CB98 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCF4FEC248469DB0027CB98 /* Environment.swift */; };
 		CFFA0B0224639E4000EBDD87 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,8 @@
 		CFC18024245E18B3007C756A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CFC1802D245E1A86007C756A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		CFC18032245E224E007C756A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		CFCF4FEA2484653A0027CB98 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		CFCF4FEC248469DB0027CB98 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */,
+				CFCF4FEA2484653A0027CB98 /* readme.md */,
 				CFC1800A245E18B1007C756A /* BabyTracker */,
 				CFC18021245E18B3007C756A /* BabyTrackerTests */,
 				CFC18009245E18B1007C756A /* Products */,
@@ -93,6 +98,7 @@
 			children = (
 				CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */,
 				CFC1800B245E18B1007C756A /* AppDelegate.swift */,
+				CFCF4FEC248469DB0027CB98 /* Environment.swift */,
 				CFC1800D245E18B1007C756A /* SceneDelegate.swift */,
 				CFC1800F245E18B1007C756A /* ContentViews.swift */,
 				CF6A2D35245F64F50060FA8A /* FormViews.swift */,
@@ -212,6 +218,7 @@
 			files = (
 				CFC18018245E18B3007C756A /* LaunchScreen.storyboard in Resources */,
 				CFC18015245E18B3007C756A /* Preview Assets.xcassets in Resources */,
+				CFCF4FEB2484653A0027CB98 /* readme.md in Resources */,
 				CFC18012245E18B3007C756A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */,
+				CFCF4FED248469DB0027CB98 /* Environment.swift in Sources */,
 				CFFA0B0224639E4000EBDD87 /* SwiftUIView.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
 				CF6A2D36245F64F50060FA8A /* FormViews.swift in Sources */,
@@ -404,9 +412,9 @@
 				PRODUCT_NAME = PoopDeck;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -430,9 +438,9 @@
 				PRODUCT_NAME = PoopDeck;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

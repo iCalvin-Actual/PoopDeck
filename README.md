@@ -2,6 +2,13 @@
 
 Baby activity data tracking and visualization. HealthKit for Babies, synced between parents phones for $0.99/m|$9.99/yr. Timeline of baby events and milestones, visualize averages, predict nap times. 
 
+<details>
+<summary>PoopDeck on iPhone 11</summary>
+
+![iPhone 11 Screenshot](iPhone11Screenshot.png)
+
+</details>
+
 ## Getting Started
 
 ### Prerequisites

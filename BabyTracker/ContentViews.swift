@@ -30,42 +30,41 @@ public struct FeedView: View {
     public var body: some View {
         NavigationView {
             VStack {
+                NewEventTypeSelector(didSelect: { eventType in
+                    self.presentNewEventSheet(type: eventType)
+                }).padding()
                 List {
-                    ForEach(feed) { event in
-                        NavigationLink(destination: EventFormView(eventID: event.id, eventType: event.type, didUpdate: self.reloadEvents)) {
-                            FeedCard(event: event)
-                                .cornerRadius(8)
-                                .contextMenu {
-                                    Button(action: {
-                                        EventManager.shared.delete(event.id, type: event.type, completion: {
-                                            self.reloadEvents()
-                                        })
-                                    }) {
-                                        Text("Delete")
-                                        Image(systemName: "trash.fill")
-                                    }
-
-                                    Button(action: {
-                                        EventManager.shared.duplicate(event.id, type: event.type) {
-                                            self.reloadEvents()
+                    Section {
+                        ForEach(feed) { event in
+                            NavigationLink(destination: EventFormView(eventID: event.id, eventType: event.type, didUpdate: self.reloadEvents)) {
+                                FeedCard(event: event)
+                                    .cornerRadius(8)
+                                    .contextMenu {
+                                        Button(action: {
+                                            EventManager.shared.delete(event.id, type: event.type, completion: {
+                                                self.reloadEvents()
+                                            })
+                                        }) {
+                                            Text("Delete")
+                                            Image(systemName: "trash.fill")
                                         }
-                                    }) {
-                                        Text("Duplicate")
-                                        Image(systemName: "doc.on.doc.fill")
-                                    }
-                           }
+
+                                        Button(action: {
+                                            EventManager.shared.duplicate(event.id, type: event.type) {
+                                                self.reloadEvents()
+                                            }
+                                        }) {
+                                            Text("Duplicate")
+                                            Image(systemName: "doc.on.doc.fill")
+                                        }
+                               }
+                            }
                         }
                     }
-                    .padding(.trailing, 4)
                     .frame(maxWidth: 835.0)
                 }
                 .listStyle(GroupedListStyle())
                 .environment(\.horizontalSizeClass, .regular)
-                
-                Spacer()
-                NewEventTypeSelector(didSelect: { eventType in
-                    self.presentNewEventSheet(type: eventType)
-                })
             }
             .navigationBarTitle(
                 Text("Sophia Events")
@@ -115,7 +114,6 @@ struct NewEventTypeSelector: View {
                 NewEventButton(type: .fuss, didSelect: self.didSelect)
                 NewEventButton(type: .custom, didSelect: self.didSelect)
             }
-            .padding()
         }
     }
 }

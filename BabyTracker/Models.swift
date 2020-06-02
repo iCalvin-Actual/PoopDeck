@@ -53,7 +53,7 @@ extension ActivitySummary {
         models.append(contentsOf: self.tummyTimes.map({ $0.viewModel }))
         models.append(contentsOf: self.customEvents.map({ $0.viewModel }))
         
-        models.sort(by: { $0.date < $1.date })
+        models.sort(by: { $0.date > $1.date })
         
         return models
     }

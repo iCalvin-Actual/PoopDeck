@@ -26,29 +26,33 @@ public struct FeedView: View {
     @State var showNewEventForm: Bool = false
     @State var newEventType: BabyEventType? = nil
     
-    @State var feed: [FeedViewModel]
+    @State var recordManager: BabyEventRecordsManager
     public var body: some View {
         NavigationView {
             VStack {
                 List {
-                    ForEach(feed) { event in
-                        NavigationLink(destination: EventFormView(eventID: event.id, eventType: event.type, didUpdate: self.reloadEvents)) {
+                    ForEach(recordManager.dateSortedModels) { event in
+                        NavigationLink(destination: EventFormView(
+                            eventID: event.id,
+                            eventType: event.type,
+                            recordManager: self.recordManager,
+                            didUpdate: self.reloadEvents)) {
                             FeedCard(event: event)
                                 .cornerRadius(8)
                                 .contextMenu {
                                     Button(action: {
-                                        EventManager.shared.delete(event.id, type: event.type, completion: {
-                                            self.reloadEvents()
-                                        })
+//                                        self.recordManager.delete(event.id) { result in
+//                                            self.reloadEvents()
+//                                        }
                                     }) {
                                         Text("Delete")
                                         Image(systemName: "trash.fill")
                                     }
 
                                     Button(action: {
-                                        EventManager.shared.duplicate(event.id, type: event.type) {
-                                            self.reloadEvents()
-                                        }
+//                                        self.recordManager.duplicate(event.id) { result in
+//                                            self.reloadEvents()
+//                                        }
                                     }) {
                                         Text("Duplicate")
                                         Image(systemName: "doc.on.doc.fill")
@@ -73,24 +77,22 @@ public struct FeedView: View {
             .sheet(isPresented: self.$showNewEventForm) {
                 NavigationView {
                     EventFormView(eventType: self.newEventType!,
+                                  recordManager: self.recordManager,
                                   didUpdate: self.reloadEvents)
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear {
-            self.reloadEvents()
-        }
     }
     
     private func reloadEvents() {
         self.showNewEventForm = false
-        EventManager.shared.fetchSummary { summary in
-            guard let summary = summary else {
-                return
-            }
-            self.feed = summary.dateSortedModels
-        }
+//        EventManager.shared.fetchSummary { summary in
+//            guard let summary = summary else {
+//                return
+//            }
+//            self.feed = summary.dateSortedModels
+//        }
     }
     
     func presentNewEventSheet(type: BabyEventType) {
@@ -184,6 +186,6 @@ extension BabyEventType {
 
 struct ContentViews_Previews: PreviewProvider {
     static var previews: some View {
-        FeedView(feed: [])
+        Text("Hello World")
     }
 }

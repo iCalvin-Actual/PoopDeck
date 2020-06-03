@@ -9,9 +9,12 @@
 import Combine
 import SwiftUI
 
+
+
 struct EventFormView: View {
     var eventID: UUID?
     var eventType: BabyEventType
+    var recordManager: BabyEventRecordsManager
     var didUpdate: (() -> Void)
     
     var body: some View {
@@ -29,30 +32,37 @@ struct EventFormView: View {
         case .feed:
             return BabyEventFormView<FeedEvent>(
                 event: FeedEvent.new,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .fuss:
             return BabyEventFormView<FussEvent>(
                 event: FussEvent.new,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .nap:
             return BabyEventFormView<NapEvent>(
                 event: NapEvent.new,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .diaper:
             return BabyEventFormView<DiaperEvent>(
                 event: DiaperEvent.new,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .weight:
             return BabyEventFormView<WeightEvent>(
                 event: WeightEvent.new,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .tummyTime:
             return BabyEventFormView<TummyTimeEvent>(
                 event: TummyTimeEvent.new,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .custom:
             return BabyEventFormView<CustomEvent>(
                 event: CustomEvent.new,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         }
     }
@@ -62,30 +72,37 @@ struct EventFormView: View {
         case .feed:
             return BabyEventFormView<FeedEvent>(
                 eventID: self.eventID,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .fuss:
             return BabyEventFormView<FussEvent>(
                 eventID: self.eventID,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .nap:
             return BabyEventFormView<NapEvent>(
                 eventID: self.eventID,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .diaper:
             return BabyEventFormView<DiaperEvent>(
                 eventID: self.eventID,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .weight:
             return BabyEventFormView<WeightEvent>(
                 eventID: self.eventID,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .tummyTime:
             return BabyEventFormView<TummyTimeEvent>(
                 eventID: self.eventID,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         case .custom:
             return BabyEventFormView<CustomEvent>(
                 eventID: self.eventID,
+                recordManager: recordManager,
                 didUpdate: self.didUpdate).anyify()
         }
     }
@@ -93,8 +110,10 @@ struct EventFormView: View {
 
 struct BabyEventFormView<E: BabyEvent>: View {
     var eventID: UUID?
-    
     @State var event: E?
+    
+    var recordManager: BabyEventRecordsManager
+    
     @State var savedEvent: Bool = false
     
     @State var activeError: BabyError? = nil
@@ -231,7 +250,7 @@ struct BabyEventFormView<E: BabyEvent>: View {
     }
     
     private func apply(_ event: E) {
-        EventManager.shared.save(event) { result in
+        recordManager.save(event) { result in
             switch result {
             case .success(let newEvent):
                 self.event = newEvent
@@ -244,7 +263,7 @@ struct BabyEventFormView<E: BabyEvent>: View {
     
     private func fetchEvent() {
         guard let id = self.eventID else { return }
-        EventManager.shared.fetch(id: id, type: E.type) { (result: Result<E, BabyError>) in
+        recordManager.fetch(id) { (result: Result<E, BabyError>) in
             guard case let .success(event) = result else {
                 // Failed to retrieve event
                 return
@@ -627,6 +646,6 @@ struct StaticCustomFormView: View {
 
 struct FormViews_Previews: PreviewProvider {
     static var previews: some View {
-        BabyEventFormView(event: FussEvent.new, didUpdate: { })
+        Text("Hello World")
     }
 }

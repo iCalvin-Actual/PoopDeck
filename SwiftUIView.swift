@@ -87,6 +87,6 @@ struct FeedCardView_Previews: PreviewProvider {
         return feed
     }()
     static var previews: some View {
-        FeedView(feed: feed)
+        Text("Hello World")
     }
 }

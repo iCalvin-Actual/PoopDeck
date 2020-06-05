@@ -8,24 +8,29 @@
 
 import SwiftUI
 
+enum DocumentAction {
+    case save(_ log: BabyLog)
+    case close(_ log: BabyLog)
+    case resolve(_ log: BabyLog)
+}
+
 struct DocumentsView: View {
     var logs: [BabyLog] = []
     
     @State var selected: BabyLog
     
-    var onSave: ((BabyLog) -> Void)?
-    var onClose: ((BabyLog) -> Void)?
+    var onAction: ((DocumentAction) -> Void)?
     
     var body: some View {
         VStack {
-            BabyPickerView(babies: logs.map({ $0.baby }), onSelect: { (baby: Baby) in
-                if let selectedLog =  self.logs.first(where: { $0.baby == baby }) {
-//                    self.selected = selectedLog
-                    self.onClose?(selectedLog)
-                }
-            })
-            Spacer()
-            LogView(log: selected, onSave: self.onSave)
+//            BabyPickerView(babies: logs.map({ $0.baby }), onSelect: { (baby: Baby) in
+//                if let selectedLog =  self.logs.first(where: { $0.baby == baby }) {
+////                    self.selected = selectedLog
+//                    self.onAction?(.close(selectedLog))
+//                }
+//            })
+//            Spacer()
+            LogView(log: selected, onAction: self.onAction)
         }
     }
 }
@@ -43,7 +48,7 @@ struct BabyPickerView: View {
                 Button(action: {
                     print("New baby form")
                 }) {
-                    Image("person.crop.circle.badge.plus")
+                    Image(systemName: "person.crop.circle.badge.plus")
                 }
             }
         }
@@ -55,17 +60,29 @@ struct LogView: View {
     @Environment(\.editMode) var editMode
     
     @State private var allowChanges: Bool = true
-    var onSave: ((BabyLog) -> Void)?
+    @State private var resolvingConflict: Bool = false
+    
+    var onAction: ((DocumentAction) -> Void)?
     
     var body: some View {
         VStack {
-            TextField("Baby Name", text: $log.baby.name, onCommit: {
-                self.onSave?(self.log)
-            })
-            .disabled(!allowChanges)
+//            TextField("Baby Name", text: $log.baby.name, onCommit: {
+//                self.onAction?(.save(self.log))
+//            })
+//            .font(.system(.largeTitle, design: .rounded))
+//            .disabled(!allowChanges)
+//            .onAppear(perform: {
+//                EventManager().fetchSummary { summary in
+//                    guard let summary = summary else { return }
+//                    DispatchQueue.main.async {
+//                        self.log.importSummary(summary)
+//                    }
+//                }
+//            })
             
             
-            FeedSummaryView(manager: $log.recordManager, allowChanges: self.allowChanges)
+//            FeedSummaryView(manager: $log.recordManager, allowChanges: self.allowChanges)
+            FeedView(babyLog: log)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIDocument.stateChangedNotification, object: log), perform: self.handleStateChange)
     }
@@ -76,35 +93,21 @@ struct LogView: View {
             self.allowChanges = false
             print("Pause changes")
         case .inConflict:
-            guard let versions = NSFileVersion.unresolvedConflictVersionsOfItem(at: log.fileURL) else {
-                self.allowChanges = false
-                return
-            }
-            let dateSorted = versions.sorted(by: { ($0.modificationDate ?? Date()) < ($1.modificationDate ?? Date()) })
-            if let last = dateSorted.last {
-                do {
-                    try last.replaceItem(at: self.log.fileURL, options: .byMoving)
-                } catch {
-                    print("🚨 Failed to resolve conflict")
-                }
-            }
-            self.log.revert(toContentsOf: self.log.fileURL, completionHandler: { success in
-                do {
-                    try NSFileVersion.removeOtherVersionsOfItem(at: self.log.fileURL)
-                    versions.forEach({ $0.isResolved = true })
-                    
-                    versions.forEach({ v in
-                        try? v.remove()
-                    })
-                } catch {
-                    print("🚨 Failed to resolve conflict")
-                }
-            })
+            /// Already in conflict mode
+            guard !self.resolvingConflict else { return }
+            self.resolvingConflict = true
+            self.onAction?(.resolve(self.log))
         case .savingError:
             print("Error saving")
-        default:
+        case .closed:
+            print("Do something?")
+        case .progressAvailable:
+            print("Show progress?")
+        case .normal:
             self.allowChanges = true
-            print("No conflict")
+            print("Normal?")
+        default:
+            print("Unknown Value? \(log.documentState)")
         }
     }
 }

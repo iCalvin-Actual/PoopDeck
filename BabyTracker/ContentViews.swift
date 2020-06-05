@@ -26,16 +26,17 @@ public struct FeedView: View {
     @State var showNewEventForm: Bool = false
     @State var newEventType: BabyEventType? = nil
     
-    @State var recordManager: BabyEventRecordsManager
+    @State var babyLog: BabyLog
+    
     public var body: some View {
         NavigationView {
             VStack {
                 List {
-                    ForEach(recordManager.dateSortedModels) { event in
+                    ForEach(babyLog.dateSortedModels ?? []) { event in
                         NavigationLink(destination: EventFormView(
                             eventID: event.id,
                             eventType: event.type,
-                            recordManager: self.recordManager,
+                            babyLog: self.babyLog,
                             didUpdate: self.reloadEvents)) {
                             FeedCard(event: event)
                                 .cornerRadius(8)
@@ -61,8 +62,8 @@ public struct FeedView: View {
                         }
                     }
                     .padding(.trailing, 4)
-                    .frame(maxWidth: 835.0)
                 }
+                .frame(maxWidth: 835.0)
                 .listStyle(GroupedListStyle())
                 .environment(\.horizontalSizeClass, .regular)
                 
@@ -72,15 +73,16 @@ public struct FeedView: View {
                 })
             }
             .navigationBarTitle(
-                Text("Sophia Events")
+                Text("BBLG")
             )
             .sheet(isPresented: self.$showNewEventForm) {
                 NavigationView {
                     EventFormView(eventType: self.newEventType!,
-                                  recordManager: self.recordManager,
+                                  babyLog: self.babyLog,
                                   didUpdate: self.reloadEvents)
                 }
             }
+            
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

@@ -60,7 +60,7 @@ struct BabyLogView: View {
     var dismiss: () -> Void
 
     var body: some View {
-        FeedView(recordManager: document.recordManager)
+        FeedView(babyLog: document)
         .onReceive(NotificationCenter.default.publisher(for: UIDocument.stateChangedNotification, object: document), perform: self.handleStateChange)
     }
     
@@ -101,7 +101,7 @@ struct BabySelectionButton: View {
 struct BabyLogView_Previews: PreviewProvider {
     static var baby: Baby {
         let baby: Baby = .new
-        baby.name = "Sophia"
+        baby.name = "NewBaby1"
         return baby
     }
     static var previews: some View {

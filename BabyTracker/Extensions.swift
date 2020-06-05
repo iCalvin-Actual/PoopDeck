@@ -16,6 +16,12 @@ extension DateFormatter {
         formatter.dateStyle = .none
         return formatter
     }()
+    static var shortDisplay: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        return formatter
+    }()
     static var shortStackDisplay: DateFormatter = {
         var formatter = DateFormatter()
         formatter.dateFormat = "M/d\nh:mm a"
@@ -53,6 +59,24 @@ extension NumberFormatter {
 extension View {
     func anyify() -> AnyView {
         return AnyView(self)
+    }
+}
+
+extension PersonNameComponentsFormatter {
+    static var shortNameFormatter: PersonNameComponentsFormatter {
+        let formatter = PersonNameComponentsFormatter()
+        formatter.style = .short
+        return formatter
+    }
+}
+
+extension NSFileVersion {
+    var personDisplayName: String? {
+        guard let components = self.originatorNameComponents else { return nil }
+        return PersonNameComponentsFormatter.shortNameFormatter.string(from: components)
+    }
+    var deviceDisplayName: String? {
+        return self.localizedNameOfSavingComputer
     }
 }
 

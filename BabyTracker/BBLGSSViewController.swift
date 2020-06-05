@@ -70,19 +70,7 @@ class BBLGSSViewController: UIViewController {
             let docsView = DocumentsView(
                 logs: self.docsInView,
                 selected: first,
-                onSave: { document in
-                    self.saveDocument(document, completion: { (result: Result<BabyLog, BabyError>) in
-                        switch result {
-                        case .failure(let error):
-                            self.handle(error)
-                        case .success:
-                            print("Did Save Doc")
-                        }
-                    })
-                },
-                onClose: { document in
-                    self.closeDocument(document)
-                })
+                onAction: self.onAction)
             self.hostController = UIHostingController(rootView: docsView)
         }
         
@@ -117,7 +105,7 @@ class BBLGSSViewController: UIViewController {
     }
     
     func createViewingDocsActivity() -> NSUserActivity? {
-        guard !docsInView.isEmpty else { return nil }
+        guard !docsInView.filter({ !$0.fileURL.pathComponents.contains(".Trash") }).isEmpty else { return nil }
         var urlData: [Data] = []
         docsInView.map({ $0.fileURL }).forEach { (presentedFileURL) in
             do {
@@ -160,6 +148,25 @@ class BBLGSSViewController: UIViewController {
 }
 
 extension BBLGSSViewController: LogPresenter { }
+extension BBLGSSViewController {
+    func onAction(_ action: DocumentAction) {
+        switch action {
+        case .save(let log):
+            self.saveDocument(log, completion: { (result: Result<BabyLog, BabyError>) in
+                switch result {
+                case .failure(let error):
+                    self.handle(error)
+                case .success:
+                    print("Did Save Doc")
+                }
+            })
+        case .close(let log):
+            self.closeDocument(log)
+        case .resolve(let log):
+            self.resolveConflict(in: log)
+        }
+    }
+}
 
 // MARK: - Error Handling
 
@@ -233,8 +240,8 @@ extension BBLGSSViewController {
             case .failure(let error):
                 self.handle(error)
             case .success:
-                if let docIndex = self.presentedFileURLs.firstIndex(of: document.fileURL) {
-                    self.presentedFileURLs.remove(at: docIndex)
+                if let docIndex = self.docsInView.firstIndex(of: document) {
+                    self.docsInView.remove(at: docIndex)
                 }
             /// Update presented views (If necessary?)
             }
@@ -243,50 +250,195 @@ extension BBLGSSViewController {
 }
 
 
-// MARK: - State Restoration
+struct LogConflict {
+    let babyLog: BabyLog
+    var versions: [NSFileVersion]
+}
 
-//extension BBLGSSViewController {
-//    override func encodeRestorableState(with coder: NSCoder) {
-//        let dataArray: [Data] = self.presentedFileURLs.map { (url) -> Data in
-//            do {
-//                let didStart = url.startAccessingSecurityScopedResource()
-//                defer {
-//                    if didStart {
-//                        url.stopAccessingSecurityScopedResource()
-//                    }
-//                }
-//                if didStart {
-//                    return try url.bookmarkData()
-//                }
-//            } catch {
-//                print("STOP")
-//            }
-//            return Data()
-//        }
-//        coder.encode(dataArray, forKey: "PresentedFileURLS")
-//        super.encodeRestorableState(with: coder)
-//    }
-//
-//    override func decodeRestorableState(with coder: NSCoder) {
-//        if let presentedURLData = coder.decodeObject(forKey: "PresentedFileURLS") as? [Data] {
-//            let urls = presentedURLData.map({ data -> URL in
-//                do {
-//                    var isStale = false
-//                    return try URL(resolvingBookmarkData: data, bookmarkDataIsStale: &isStale)
-//                } catch {
-//                    print("🚨 Decoding Root VC State:  \(error.localizedDescription)")
-//                }
-//                return URL(fileURLWithPath: "")
-//            })
-//            self.presentedFileURLs = urls
-//        }
-//
-//        super.decodeRestorableState(with: coder)
-//    }
-//}
+// MARK: - Conflict Resolution
 
-struct BBLGSSViewController_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+extension BBLGSSViewController {
+    func resolveConflict(in log: BabyLog, with completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
+        guard let versions = NSFileVersion.unresolvedConflictVersionsOfItem(at: log.fileURL) else {
+            /// No conflicts?
+            completion?(.success(log))
+            return
+        }
+        let dateSorted = versions.sorted(by: { ($0.modificationDate ?? Date()) < ($1.modificationDate ?? Date()) })
+        self.displayConflictResolution(for: log, with: dateSorted, onResolve: { log in
+            do {
+                try NSFileVersion.removeOtherVersionsOfItem(at: log.fileURL)
+                versions.forEach({ $0.isResolved = true })
+                
+                versions.forEach({ v in
+                    try? v.remove()
+                })
+            } catch {
+                print("🚨 Failed to resolve conflict")
+            }
+            self.presentedViewController?.dismiss(animated: true, completion: {
+                print("Do a thing?")
+            })
+        })
+    }
+    
+    private func displayConflictResolution(for log: BabyLog, with versions: [NSFileVersion], onResolve: ((BabyLog) -> Void)? = nil) {
+        let conflict = LogConflict(babyLog: log, versions: versions)
+        let resolveView = ConflictResolutionView(
+            conflict: conflict,
+            revert: { (log) in
+                log.revert(toContentsOf: log.fileURL, completionHandler: { success in
+                    print("Reverted? \(success)")
+                    onResolve?(log)
+                })
+            },
+            replace: { version in
+                do {
+                    try version.replaceItem(at: log.fileURL, options: .byMoving)
+                    onResolve?(log)
+                } catch {
+                    // Show error?
+                    print(error.localizedDescription)
+                }
+            })
+
+        let hostController = UIHostingController(rootView: resolveView)
+        self.present(hostController, animated: true)
+    }
+}
+
+
+
+struct ConflictResolutionView: View {
+    var conflict: LogConflict
+    
+    var revert: ((BabyLog) -> Void)
+    var replace: ((NSFileVersion) -> Void)
+    
+    @State var previewLog: Bool = false
+    
+    var body: some View {
+        NavigationView {
+            List {
+                Section {
+                    HStack {
+                        Text("Local Copy")
+                            .padding(.horizontal)
+                        Spacer()
+                        Text(DateFormatter.shortDisplay.string(from: conflict.babyLog.fileModificationDate ?? Date()))
+                            .multilineTextAlignment(.trailing)
+                            .lineLimit(0)
+                            .padding(.horizontal)
+                    }
+                    .onTapGesture {
+                        self.revert(self.conflict.babyLog)
+                    }.onLongPressGesture {
+                        self.previewLog = true
+                    }
+                    .sheet(isPresented: $previewLog, content: {
+                        LogView(log: self.conflict.babyLog)
+                    })
+                }
+                Section(header: Text("Version modified by")) {
+                    createConflictSection()
+                }
+            }
+            .listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
+        }
+        .navigationBarTitle(
+            Text("Resolve Conflict")
+        )
+    }
+    
+    func createConflictSection() -> AnyView {
+        let groupedVersions =  self.conflict.versions.reduce([:]) { (reduction, version) -> [String: [NSFileVersion]] in
+            var reduction = reduction
+            var key = version.deviceDisplayName ?? version.personDisplayName ?? "Unknown"
+            if key == UIDevice.current.name {
+                key = "This Device"
+            }
+            var arr = reduction[key] ?? []
+            arr.append(version)
+            reduction[key] = arr
+            return reduction
+        }
+        let keys = groupedVersions.keys.sorted()
+        return ForEach(keys, id: \.self) { key in
+            self.versionInfoOrLink(key, groupedVersions[key] ?? [])
+        }
+        .anyify()
+    }
+    
+    func versionInfoOrLink(_ key: String, _ versions: [NSFileVersion]) -> AnyView {
+        switch versions.count {
+        case 0:
+            return EmptyView().anyify()
+        case 1:
+            return VersionInfoStack(version: versions.first!)
+                .onTapGesture {
+                    self.replace(versions.first!)
+                }
+                .anyify()
+        default:
+            return VersionGroupSummary(name: key, versions: versions, onSelect: self.replace).anyify()
+        }
+    }
+}
+
+struct VersionGroupSummary: View {
+    var name: String
+    var versions: [NSFileVersion]
+    var onSelect: ((NSFileVersion) -> Void)?
+    var body: some View {
+        NavigationLink(destination: VersionList(versions: versions, onSelect: onSelect)) {
+            HStack {
+                Text(name)
+                    .bold()
+                Spacer()
+                Text("\(versions.count) versions")
+            }
+        }
+    }
+}
+
+struct VersionList: View {
+    var versions: [NSFileVersion]
+    var onSelect: ((NSFileVersion) -> Void)?
+    var body: some View {
+        List {
+            Section {
+                ForEach(versions, id: \.self) { version in
+                    VersionInfoStack(version: version, showName: false)
+                }
+            }
+        }
+        .navigationBarTitle(
+            Text("Versions")
+        )
+    }
+}
+
+struct VersionInfoStack: View {
+    var version: NSFileVersion
+    var showName: Bool = true
+    var nameString: String? {
+        return version.personDisplayName
+    }
+    var deviceString: String? {
+        return version.deviceDisplayName
+    }
+    var body: some View {
+        HStack {
+            if showName {
+                Text("\(deviceString ?? nameString ?? "Unknown")")
+                    .bold()
+            } else {
+                Text("Modified at")
+                    .bold()
+            }
+            Spacer()
+            Text(DateFormatter.shortDisplay.string(from: version.modificationDate ?? Date()))
+        }
     }
 }

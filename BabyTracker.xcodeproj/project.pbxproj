@@ -10,7 +10,7 @@
 		CF6A2D36245F64F50060FA8A /* FormViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A2D35245F64F50060FA8A /* FormViews.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
-		CF9015122486AC0300343F5C /* New.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* New.bblg */; };
+		CF9015122486AC0300343F5C /* NewBaby.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* NewBaby.bblg */; };
 		CF9015142486AC3700343F5C /* BabyLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9015132486AC3700343F5C /* BabyLogView.swift */; };
 		CF9015162486ACED00343F5C /* icons8-babys_room.png in Resources */ = {isa = PBXBuildFile; fileRef = CF9015152486ACED00343F5C /* icons8-babys_room.png */; };
 		CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800B245E18B1007C756A /* AppDelegate.swift */; };
@@ -46,7 +46,7 @@
 		CF6A2D35245F64F50060FA8A /* FormViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViews.swift; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
-		CF9015112486AC0300343F5C /* New.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = New.bblg; sourceTree = "<group>"; };
+		CF9015112486AC0300343F5C /* NewBaby.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NewBaby.bblg; sourceTree = "<group>"; };
 		CF9015132486AC3700343F5C /* BabyLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLogView.swift; sourceTree = "<group>"; };
 		CF9015152486ACED00343F5C /* icons8-babys_room.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-babys_room.png"; sourceTree = "<group>"; };
 		CFC18008245E18B1007C756A /* PoopDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoopDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,7 +130,7 @@
 				CFC18011245E18B3007C756A /* Assets.xcassets */,
 				CFC18016245E18B3007C756A /* LaunchScreen.storyboard */,
 				CFC18019245E18B3007C756A /* Info.plist */,
-				CF9015112486AC0300343F5C /* New.bblg */,
+				CF9015112486AC0300343F5C /* NewBaby.bblg */,
 				CFC18013245E18B3007C756A /* Preview Content */,
 			);
 			path = BabyTracker;
@@ -245,7 +245,7 @@
 				CFC18015245E18B3007C756A /* Preview Assets.xcassets in Resources */,
 				CFCF4FEB2484653A0027CB98 /* readme.md in Resources */,
 				CFC18012245E18B3007C756A /* Assets.xcassets in Resources */,
-				CF9015122486AC0300343F5C /* New.bblg in Resources */,
+				CF9015122486AC0300343F5C /* NewBaby.bblg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -92,6 +92,9 @@ public struct FeedView: View {
                               babyLog: self.babyLog,
                               didUpdate: self.reloadEvents)
             }
+            .onDisappear {
+                self.reloadEvents()
+            }
         }
     }
     

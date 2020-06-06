@@ -18,6 +18,7 @@ class BBLGSSViewController: UIViewController {
         }
         didSet {
             guard let newController = hostController else { return }
+            newController.view.backgroundColor = .clear
             self.addChild(newController)
             self.view.addSubview(newController.view)
             newController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -38,17 +39,16 @@ class BBLGSSViewController: UIViewController {
         }
     }
     
+    @Published
     var docsInView: [BabyLog] = [] {
         didSet {
-            buildSwiftUIView()
             updateCurrentActivity()
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .red
-        self.documentBrowser.logPresenter = self
+        self.view.backgroundColor = .secondarySystemBackground
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,34 +57,65 @@ class BBLGSSViewController: UIViewController {
     }
     
     func buildSwiftUIView(animated: Bool = false) {
-        guard let first = docsInView.first else {
-            /// Welcome view?
-            let welcomeView = NewWindowView(
-                onCreate: self.createNewLog,
-                onImport: self.importLog)
-            let hostController = UIHostingController(rootView: welcomeView)
-            self.present(hostController, animated: animated)
-            return
-        }
-        dismissPresented(animated: animated) {
-            let docsView = DocumentsView(
+        let hostController: UIViewController
+        if self.docsInView.count > 0 {
+            let view = DocumentsView(
                 logs: self.docsInView,
-                selected: first,
                 onAction: self.onAction)
-            self.hostController = UIHostingController(rootView: docsView)
+            hostController = UIHostingController(rootView: view)
+        } else {
+            let view = NewWindowView(
+                onCreate: self.createNewLog)
+            hostController = UIHostingController(rootView: view)
         }
-        
+        self.hostController = hostController
+    }
+    
+    func rebuildSwiftUIView(animated: Bool = false) {
+        dismissPresented(animated: animated) {
+            self.buildSwiftUIView(animated: animated)
+        }
     }
     
     func createNewLog() {
-        // Create new document and save?
+        self.presentDocumentBrowser()
     }
     
-    func importLog() {
-        // Show document browser
-        self.dismissPresented {
-            self.present(self.documentBrowser, animated: true, completion: nil)
+    enum BrowserContext {
+        case selectOne
+        case selectMany
+        case view(_ url: URL)
+    }
+    
+    func presentDocumentBrowser(_ context: BrowserContext = .selectMany, animated: Bool = true, completion: ((UIDocumentBrowserViewController) -> Void)? = nil) {
+        /// Switch and configure
+        let documentBrowser: DocumentBrowserViewController = DocumentBrowserViewController()
+        documentBrowser.logPresenter = self
+        documentBrowser.allowsDocumentCreation = false
+        
+        var fileDestination: URL? = nil
+        
+        switch context {
+        case .view(let url):
+            fileDestination = url
+        case .selectOne:
+            documentBrowser.allowsPickingMultipleItems = false
+        default:
+            documentBrowser.allowsPickingMultipleItems = true
         }
+        
+        self.present(documentBrowser, animated: true, completion: {
+            if let url = fileDestination {
+                documentBrowser.revealDocument(at: url, importIfNeeded: true) { (url, error) in
+                    guard error == nil else {
+                        documentBrowser.dismiss(animated: true, completion: nil)
+                        self.handle(.unknown)
+                        return
+                    }
+                }
+            }
+            completion?(documentBrowser)
+        })
     }
     
     func dismissPresented(animated: Bool = false, _ completion: (() -> Void)? = nil) {
@@ -97,11 +128,19 @@ class BBLGSSViewController: UIViewController {
     
     func updateCurrentActivity() {
         guard let window = view.window else { return }
+        let currentActivity =
+            self.createViewingDocsActivity() ??
+            self.createNewDocActivity()
         
-        if let activity = self.createViewingDocsActivity() {
-            window.windowScene?.userActivity = activity
-            activity.becomeCurrent()
+        window.windowScene?.userActivity = currentActivity
+        currentActivity.becomeCurrent()
+    }
+    
+    override func restoreUserActivityState(_ activity: NSUserActivity) {
+        if activity.activityType == ActivityType.viewLogs {
+            self.restoreViewingDocsActivity(activity)
         }
+        self.restoreNewDocActivity(activity)
     }
     
     func createViewingDocsActivity() -> NSUserActivity? {
@@ -125,13 +164,13 @@ class BBLGSSViewController: UIViewController {
         }
         let activity = NSUserActivity(activityType: ActivityType.viewLogs)
         activity.userInfo?["URLBookmarks"] = urlData
-        activity.title = "View babylogs"
+        activity.title = "Viewing \(urlData.count) BabyLogs"
         activity.isEligibleForHandoff = true
         activity.isEligibleForPrediction = true
         return activity
     }
     
-    func restore(_ activity: NSUserActivity) {
+    func restoreViewingDocsActivity(_ activity: NSUserActivity) {
         guard let urlData = activity.userInfo?["URLBookmarks"] as? [Data] else { return }
         var retrievedURLs: [URL] = []
         urlData.forEach { (presentedURLData) in
@@ -145,25 +184,42 @@ class BBLGSSViewController: UIViewController {
         }
         self.presentDocuments(at: retrievedURLs)
     }
+    
+    func createNewDocActivity() -> NSUserActivity {
+        let activity = NSUserActivity(activityType: ActivityType.newWindow)
+        activity.title = "Open BBLG"
+        activity.isEligibleForHandoff = true
+        activity.isEligibleForPrediction = true
+        return activity
+    }
+    
+    func restoreNewDocActivity(_ activity: NSUserActivity) {
+        self.docsInView = []
+    }
 }
 
 extension BBLGSSViewController: LogPresenter { }
 extension BBLGSSViewController {
     func onAction(_ action: DocumentAction) {
         switch action {
+        case .createNew:
+            self.dismissPresented(animated: true) {
+                self.createNewLog()
+            }
         case .save(let log):
             self.saveDocument(log, completion: { (result: Result<BabyLog, BabyError>) in
-                switch result {
-                case .failure(let error):
+                if case let .failure(error) = result {
                     self.handle(error)
-                case .success:
-                    print("Did Save Doc")
                 }
             })
         case .close(let log):
             self.closeDocument(log)
         case .resolve(let log):
             self.resolveConflict(in: log)
+        case .show(let log):
+            self.presentDocumentBrowser(.view(log.fileURL))
+        case .delete(let log):
+            self.deleteDocument(log)
         }
     }
 }
@@ -219,7 +275,26 @@ extension BBLGSSViewController {
         }
         
         openGroup.notify(queue: .main) {
-            self.docsInView = openedDocs
+            self.docsInView = self.docsInView.filter({ !openedDocs.contains($0) }) + openedDocs
+            self.rebuildSwiftUIView()
+        }
+    }
+    
+    func createDocument(at documentURL: URL, completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
+        dismissPresented(animated: true) {
+            let newBabyView = NewBabyForm(
+                onApply: { baby in
+                self.createNewDocument(with: baby, at: documentURL) { (result) in
+                    switch result {
+                    case .failure(let error):
+                        self.handle(error)
+                    case .success(let log):
+                        self.presentDocuments(at: [log.fileURL])
+                    }
+                }
+            })
+            let hostingController = UIHostingController(rootView: newBabyView)
+            self.present(hostingController, animated: true, completion: nil)
         }
     }
     
@@ -234,16 +309,61 @@ extension BBLGSSViewController {
         }
     }
 
-    func closeDocument(_ document: BabyLog) {
+    func closeDocument(_ document: BabyLog, completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
         self.saveDocument(document) { (saveResult) in
-            switch saveResult {
-            case .failure(let error):
-                self.handle(error)
-            case .success:
-                if let docIndex = self.docsInView.firstIndex(of: document) {
-                    self.docsInView.remove(at: docIndex)
+            if case .success = saveResult, let docIndex = self.docsInView.firstIndex(of: document) {
+                self.docsInView.remove(at: docIndex)
+            }
+            self.rebuildSwiftUIView()
+            completion?(saveResult)
+        }
+    }
+    
+    func deleteDocument(_ document: BabyLog, completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
+        let confirmAlert = UIAlertController(title: "Delete BabyLog", message: "Are you sure you want to delete this baby log?", preferredStyle: .alert)
+        confirmAlert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { action in
+            self.closeDocument(document) { closeResult in
+                switch closeResult {
+                case .success(let closedDoc):
+                    do {
+                        try FileManager().removeItem(at: closedDoc.fileURL)
+                    } catch {
+                        completion?(.failure(.unknown))
+                    }
+                default:
+                    completion?(closeResult)
                 }
-            /// Update presented views (If necessary?)
+            }
+        }))
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(confirmAlert, animated: true, completion: nil)
+    }
+}
+
+extension BBLGSSViewController {
+    func createNewDocument(with baby: Baby, at url: URL?, completion: @escaping ((Result<BabyLog, BabyError>) -> Void)) {
+        let saveURL: URL?
+        if var importURL = url {
+            importURL.deleteLastPathComponent()
+            importURL.appendPathComponent("\(baby.name).bblg")
+            saveURL = importURL
+        } else {
+            saveURL = FileManager().url(forUbiquityContainerIdentifier: "iCloud.com.chestnut.BabyTracker")?.appendingPathComponent("\(baby.name).bblg")
+        }
+        guard let url = saveURL else {
+            completion(.failure(.unknown))
+            return
+        }
+        dismissPresented(animated: true) {
+            let babyLog = BabyLog(fileURL: url)
+            babyLog.baby = baby
+            self.saveDocument(babyLog) { saveResult in
+                switch saveResult {
+                case .success(let log):
+                    completion(.success(log))
+                case .failure(let error):
+                    self.handle(error)
+                }
             }
         }
     }
@@ -303,6 +423,7 @@ extension BBLGSSViewController {
             })
 
         let hostController = UIHostingController(rootView: resolveView)
+        hostController.view.backgroundColor = .secondarySystemGroupedBackground
         self.present(hostController, animated: true)
     }
 }

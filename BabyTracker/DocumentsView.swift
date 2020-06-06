@@ -9,49 +9,221 @@
 import SwiftUI
 
 enum DocumentAction {
+    case createNew
+    case show(_ log: BabyLog)
     case save(_ log: BabyLog)
     case close(_ log: BabyLog)
+    case delete(_ log: BabyLog)
     case resolve(_ log: BabyLog)
 }
 
 struct DocumentsView: View {
-    var logs: [BabyLog] = []
+    @State var logs: [BabyLog] = []
     
-    @State var selected: BabyLog
+    @State var selected: BabyLog?
     
     var onAction: ((DocumentAction) -> Void)?
     
     var body: some View {
         VStack {
-//            BabyPickerView(babies: logs.map({ $0.baby }), onSelect: { (baby: Baby) in
-//                if let selectedLog =  self.logs.first(where: { $0.baby == baby }) {
-////                    self.selected = selectedLog
-//                    self.onAction?(.close(selectedLog))
-//                }
-//            })
-//            Spacer()
-            LogView(log: selected, onAction: self.onAction)
+            BabyPickerView(babies: logs.map({ $0.baby }), onAction: self.onBabyAction)
+                .background(Color(.secondarySystemBackground))
+    
+            Divider()
+            self.selectedOrEmpty
+            
+        }
+        .background(Color(.secondarySystemBackground))
+        .onAppear {
+            if self.selected == nil, let first = self.logs.first {
+                self.selected = first
+            }
         }
     }
+    
+    func onBabyAction(_ babyAction: BabyAction) {
+        switch babyAction {
+        case .show(let baby):
+            guard let actionDoc = self.log(for: baby) else { return }
+            self.onAction?(.show(actionDoc))
+        case .select(let baby):
+            guard let baby = baby else {
+                self.onAction?(.createNew)
+                return
+            }
+            self.selected = self.log(for: baby)
+        case .save(let baby):
+            guard let actionDoc = self.log(for: baby) else { return }
+            self.onAction?(.save(actionDoc))
+        case .close(let baby):
+            guard let actionDoc = self.log(for: baby) else { return }
+            self.onAction?(.close(actionDoc))
+        case .delete(let baby):
+            guard let actionDoc = self.log(for: baby) else { return }
+            self.onAction?(.delete(actionDoc))
+        }
+    }
+    
+    func log(for baby: Baby) -> BabyLog? {
+        return logs.first(where: { $0.baby == baby })
+    }
+    
+    var selectedOrEmpty: AnyView {
+        if let selected = self.selected {
+            return LogView(log: selected, onAction: self.onAction).anyify()
+        }
+        /// Better no open docs view?
+        return EmptyView().anyify()
+    }
+}
+
+enum BabyAction {
+    case select(_ baby: Baby?)
+    case show(_ baby: Baby)
+    case save(_ baby: Baby)
+    case close(_ baby: Baby)
+    case delete(_ baby: Baby)
 }
 
 struct BabyPickerView: View {
     var babies: [Baby] = []
+    var selected: Baby?
+    
+    var onAction: ((BabyAction) -> Void)?
+    
+    var body: some View {
+        HStack {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(babies, id: \.self) { baby in
+                        BabyIconView(baby: baby, onSelect: { baby in
+                            self.onAction?(.select(baby))
+                        })
+                        .contextMenu {
+                            
+                            Button(action: {
+                                self.onAction?(.show(baby))
+                            }) {
+                                Text("Show File")
+                                Image(systemName: "doc.text.magnifyingglass")
+                            }
+                            
+                            Button(action: {
+                                self.onAction?(.save(baby))
+                            }) {
+                                Text("Save Now")
+                                Image(systemName: "doc.append")
+                            }
+                            
+                            Button(action: {
+                                self.onAction?(.close(baby))
+                            }) {
+                                Text("Close")
+                                Image(systemName: "xmark.square")
+                            }
+                            
+                            Button(action: {
+                                self.onAction?(.delete(baby))
+                            }) {
+                                Text("Delete")
+                                Image(systemName: "trash")
+                            }
+                        }
+                    }
+                }
+                .frame(height: 44.0, alignment: .top)
+                .padding(2)
+            }
+            
+            Spacer()
+            Button(action: {
+                self.onAction?(.select(nil))
+            }) {
+                Image(systemName: "plus.square.on.square.fill")
+                .padding(8)
+                    .background(Color(.secondarySystemBackground))
+            }
+            .padding(.trailing, 8)
+        }
+        .padding(.horizontal)
+    }
+}
+
+struct BabyIconView: View {
+    @ObservedObject var baby: Baby
+    var selected = false
     
     var onSelect: ((Baby) -> Void)?
     
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                Text("BabyA")
-                Spacer()
-                Button(action: {
-                    print("New baby form")
-                }) {
-                    Image(systemName: "person.crop.circle.badge.plus")
-                }
+        Button(action: {
+            self.onSelect?(self.baby)
+        }) {
+            ZStack {
+                ColoredCircle(color: baby.color ?? .random)
+                    
+                Circle()
+                    .stroke(selected ? Color.black : Color(.secondarySystemBackground), lineWidth: 2)
+                
+                Text(baby.displayInitial)
+                    .font(.headline)
+                    .foregroundColor(.primary)
             }
         }
+        .frame(width: 44, height: 44, alignment: .center)
+    }
+}
+
+struct ColoredCircle: View {
+    let color: PreferredColor
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .foregroundColor(Color(red: color.r, green: color.g, blue: color.b))
+            
+            Circle()
+                .foregroundColor(Color(UIColor.tertiarySystemBackground.withAlphaComponent(0.75)))
+        }
+    }
+}
+
+struct AgeView: View {
+    var birthday: Date?
+    var body: some View {
+        self.birthdayInfoIfNeeded()
+    }
+    
+    @State var ageStyle: DateView = .days
+    
+    enum DateView {
+        case days
+        case weeks
+        case months
+        case full
+        
+        var dateFormatter: DateFormatter {
+            switch self {
+            case .days:
+                return DateFormatter()
+            case .weeks:
+                return DateFormatter()
+            case .months:
+                return DateFormatter()
+            case .full:
+                return DateFormatter()
+            }
+        }
+    }
+    
+    func birthdayInfoIfNeeded() -> AnyView {
+        guard let birthday = birthday else {
+            return EmptyView().anyify()
+        }
+        
+        return Text(self.ageStyle.dateFormatter.string(from: birthday))
+            .font(.headline)
+            .anyify()
     }
 }
 
@@ -61,29 +233,54 @@ struct LogView: View {
     
     @State private var allowChanges: Bool = true
     @State private var resolvingConflict: Bool = false
+    @State private var editBaby: Bool = false
     
     var onAction: ((DocumentAction) -> Void)?
     
+    var emojiLabel: AnyView {
+        guard let emoji = log.baby.emoji, !emoji.isEmpty else { return EmptyView().anyify() }
+        return Text(emoji).anyify()
+    }
+    
     var body: some View {
         VStack {
-//            TextField("Baby Name", text: $log.baby.name, onCommit: {
-//                self.onAction?(.save(self.log))
-//            })
-//            .font(.system(.largeTitle, design: .rounded))
-//            .disabled(!allowChanges)
-//            .onAppear(perform: {
-//                EventManager().fetchSummary { summary in
-//                    guard let summary = summary else { return }
-//                    DispatchQueue.main.async {
-//                        self.log.importSummary(summary)
-//                    }
-//                }
-//            })
+            HStack {
+                emojiLabel
+                VStack(alignment: .leading) {
+                    Text(log.baby.displayName)
+                        .font(.system(size: 42.0, weight: .heavy, design: .rounded))
+                        .foregroundColor(log.baby.color?.color ?? .primary)
+                    AgeView(birthday: nil)
+                }
+                Spacer()
+                Button(action: {
+                    self.editBaby = true
+                }) {
+                    Image(systemName: "arrowtriangle.right.circle.fill")
+                }
+                .sheet(isPresented: $editBaby, content: {
+                    NewBabyForm(
+                        onApply: { (babyToApply) in
+                        self.log.baby = babyToApply
+                        self.editBaby = false
+                    },
+                        babyTextName: self.log.baby.nameComponents != nil ? self.log.baby.name : "",
+                        babyEmojiName: self.log.baby.emoji ?? "",
+                        color: self.log.baby.color ?? .random,
+                        birthday: self.log.baby.birthday ?? Date(),
+                        useEmoji: self.log.baby.nameComponents == nil,
+                        useBirthday: self.log.baby.birthday != nil)
+                })
+            }
+            .padding()
+            .background(Color(.tertiarySystemBackground))
+            .cornerRadius(22)
+            .padding(.horizontal)
+            .padding(.bottom)
             
-            
-//            FeedSummaryView(manager: $log.recordManager, allowChanges: self.allowChanges)
             FeedView(babyLog: log)
         }
+        .background(Color(.secondarySystemBackground))
         .onReceive(NotificationCenter.default.publisher(for: UIDocument.stateChangedNotification, object: log), perform: self.handleStateChange)
     }
     
@@ -156,8 +353,19 @@ struct FeedSummaryView: View {
     }
 }
 
-//struct DocumentsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DocumentsView(logs: [], selected: .constant(0))
-//    }
-//}
+struct BabyIconView_Preview: PreviewProvider {
+    static var babyLog: BabyLog {
+        let log = BabyLog(fileURL: Bundle.main.url(forResource: "NewBaby", withExtension: "bblg")!)
+        log.baby = baby
+        return log
+    }
+    static var baby: Baby {
+        let baby = Baby()
+        baby.name = "Sophia"
+        baby.color = PreferredColor.prebuiltSet.randomElement()!
+        return baby
+    }
+    static var previews: some View {
+        DocumentsView(logs: [babyLog])
+    }
+}

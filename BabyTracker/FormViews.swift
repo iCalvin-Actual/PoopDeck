@@ -126,7 +126,7 @@ struct BabyEventFormView<E: BabyEvent>: View {
                 self.fetchEvent()
             })
             .onDisappear {
-                self.didUpdate()
+//                self.didUpdate()
             }
 //            .onTapGesture {
 //                self.savedEvent = false

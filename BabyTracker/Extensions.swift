@@ -63,9 +63,18 @@ extension View {
 }
 
 extension PersonNameComponentsFormatter {
+    static var decodingFormatter: PersonNameComponentsFormatter {
+        let formatter = PersonNameComponentsFormatter()
+        return formatter
+    }
     static var shortNameFormatter: PersonNameComponentsFormatter {
         let formatter = PersonNameComponentsFormatter()
         formatter.style = .short
+        return formatter
+    }
+    static var initialFormatter: PersonNameComponentsFormatter {
+        let formatter = PersonNameComponentsFormatter()
+        formatter.style = .abbreviated
         return formatter
     }
 }

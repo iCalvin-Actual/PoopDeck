@@ -77,34 +77,3 @@ struct BabyLogView: View {
         }
     }
 }
-
-struct BabySelectionButton: View {
-    let baby: Baby
-    let action: (() -> Void) = { }
-    
-    var body: some View {
-        Button(action: {
-            self.action()
-        }, label: {
-            VStack {
-                Circle()
-                    .foregroundColor(baby.preferredColor)
-                
-                Text(baby.displayInitial)
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
-            }
-        })
-    }
-}
-
-struct BabyLogView_Previews: PreviewProvider {
-    static var baby: Baby {
-        let baby: Baby = .new
-        baby.name = "NewBaby1"
-        return baby
-    }
-    static var previews: some View {
-        BabySelectionButton(baby: baby)
-    }
-}

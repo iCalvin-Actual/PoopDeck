@@ -25,11 +25,53 @@ import SwiftUI
  
  */
 
-struct PreferredColor {
-    let r, g, b, a: Double
+struct PreferredColor: Hashable {
+    let r, g, b: Double
+    
+    init(r: Double, g: Double, b: Double) {
+        self.r = r
+        self.g = g
+        self.b = b
+    }
+    init(uicolor: UIColor) {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        uicolor.getRed(&r, green: &g, blue: &b, alpha: &a)
+        self.r = Double(r)
+        self.g = Double(g)
+        self.b = Double(b)
+    }
+    
+    var color: Color {
+        return Color(red: r, green: g, blue: b)
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(r)
+        hasher.combine(g)
+        hasher.combine(b)
+    }}
+
+extension PreferredColor {
+    static var prebuiltSet: [PreferredColor] {
+        return [
+            PreferredColor(r: 0, g: 0, b: 0),
+            PreferredColor(r: 0, g: 0, b: 1),
+            PreferredColor(r: 0, g: 1, b: 0),
+            PreferredColor(r: 0, g: 1, b: 1),
+            PreferredColor(r: 1, g: 0, b: 0),
+            PreferredColor(r: 1, g: 0, b: 1),
+            PreferredColor(r: 1, g: 1, b: 0)
+        ]
+    }
+    static var random: PreferredColor {
+        return prebuiltSet.randomElement()!
+    }
 }
 
-class Baby: Codable, Equatable {
+class Baby: Codable, Equatable, Hashable {
     static func == (lhs: Baby, rhs: Baby) -> Bool {
         return lhs.id == rhs.id
     }
@@ -41,11 +83,19 @@ class Baby: Codable, Equatable {
     }
     
     var name: String = ""
-    var birthday: Date?
+    var emoji: String? = ""
+    var birthday: Date? = Date()
     
     private var imageData: Data?
     
-    private var color: PreferredColor?
+    var color: PreferredColor? = .random
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id.uuidString)
+        hasher.combine(name)
+        hasher.combine(color)
+        hasher.combine(birthday)
+    }
 }
 
 extension PreferredColor: Codable { }
@@ -55,22 +105,21 @@ extension Baby {
     }
 }
 extension Baby {
+    var nameComponents: PersonNameComponents? {
+        return PersonNameComponentsFormatter.decodingFormatter.personNameComponents(from: name)
+    }
     var displayName: String {
-        guard !name.isEmpty else {
-            return "Little Baby"
+        guard let components = nameComponents else {
+            return name
         }
-        return name
+        return PersonNameComponentsFormatter.shortNameFormatter.string(from: components)
     }
     
     var displayInitial: String {
-        return String(displayName.first!)
-    }
-    
-    var preferredColor: Color? {
-        get {
-            guard let color = self.color else { return nil }
-            return Color(red: color.r, green: color.g, blue: color.b)
+        guard let components = nameComponents else {
+            return name
         }
+        return PersonNameComponentsFormatter.initialFormatter.string(from: components)
     }
 }
 
@@ -470,6 +519,20 @@ extension BabyLog {
         models.sort(by: { $0.date > $1.date })
         
         return models
+    }
+}
+
+
+extension Baby {
+    static var emojiSet: [String] {
+        return [
+        "👶🏿",
+        "👶🏾",
+        "👶🏽",
+        "👶🏼",
+        "👶🏻",
+        "👶"
+        ]
     }
 }
 

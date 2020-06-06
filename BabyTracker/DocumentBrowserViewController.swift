@@ -11,6 +11,7 @@ import SwiftUI
 
 protocol LogPresenter {
     func presentDocuments(at documentURLs: [URL])
+    func createDocument(at documentURL: URL, completion: ((Result<BabyLog, BabyError>) -> Void)?)
 }
 
 class DocumentBrowserViewController: UIDocumentBrowserViewController {
@@ -52,7 +53,7 @@ extension DocumentBrowserViewController: UIDocumentBrowserViewControllerDelegate
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didImportDocumentAt sourceURL: URL, toDestinationURL destinationURL: URL) {
-        self.presentedFileURLs.append(destinationURL)
+        self.logPresenter?.createDocument(at: destinationURL, completion: nil)
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, failedToImportDocumentAt documentURL: URL, error: Error?) {

@@ -65,14 +65,13 @@ extension SceneDelegate {
         return scene.userActivity
     }
     override func restoreUserActivityState(_ activity: NSUserActivity) {
-        if activity.activityType == ActivityType.viewLogs {
-            self.rootView.restore(activity)
-        }
+        self.rootView.restoreUserActivityState(activity)
         super.restoreUserActivityState(activity)
     }
 }
 
 struct ActivityType {
     static var viewLogs: String = "com.chestnut.BabyTracker.viewLogs"
+    static var newWindow: String = "com.chestnut.BabyTracker.newWindow"
 }
 

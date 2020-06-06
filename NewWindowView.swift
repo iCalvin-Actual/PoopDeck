@@ -7,11 +7,11 @@
 //
 
 import SwiftUI
+import Combine
 
 struct NewWindowView: View {
     
     var onCreate: (() -> Void)?
-    var onImport: (() -> Void)?
     
     var body: some View {
         VStack {
@@ -28,21 +28,10 @@ struct NewWindowView: View {
                 }) {
                     VStack {
                         Image(systemName: "plus.square.fill")
-                        Text("Create new BabyLog")
+                        Text("New")
                     }
                 }
                 
-                
-                Spacer()
-                
-                Button(action: {
-                    self.onImport?()
-                }) {
-                    VStack {
-                        Image(systemName: "plus.square.fill")
-                        Text("Import")
-                    }
-                }
                 
                 Spacer()
             }
@@ -52,17 +41,119 @@ struct NewWindowView: View {
 }
 
 struct NewBabyForm: View {
-    var onApply: (() -> Void)?
+    var onApply: ((Baby) -> Void)?
     
-    @State var babyName: String = ""
-    @State var birthday: Date = Date()
+    @State var babyTextName: String = ""
+    @State var babyEmojiName: String = Baby.emojiSet.randomElement() ?? ""
+    var babyName: String {
+        if useEmoji { return babyEmojiName }
+        return babyTextName
+    }
+    @State var color: PreferredColor = PreferredColor.prebuiltSet.randomElement()!
+    @State var birthday: Date = Date(timeIntervalSinceNow: -10080)
+    
+    @State var useEmoji: Bool = true
+    @State var useBirthday: Bool = false
+    
+    var invalidName: Bool {
+        return babyTextName.isEmpty
+    }
+    
+    var baby: Baby {
+        let baby = Baby()
+        baby.name = babyName
+        if self.useBirthday {
+            baby.birthday = birthday
+        }
+        baby.emoji = babyEmojiName
+        baby.color = color
+        
+        return baby
+    }
+    
+//    var emojiFormSet: [
     
     var body: some View {
-        NavigationView {
-            Form {
-                TextField("Name", text: $babyName)
+        VStack {
+            ZStack {
+                HStack {
+                    Spacer()
+                    BabyIconView(baby: self.baby)
+                    Spacer()
+                }
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        self.validateAndApply()
+                    }) {
+                        HStack {
+                            Text("Save")
+                            Image(systemName: "arrow.down.circle.fill")
+                                .resizable()
+                                .frame(width: 22, height: 22)
+                        }
+                    }
+                }
+            }
+            .padding()
+            NavigationView {
+                Form {
+                    Section(header: Text("Name")) {
+                        TextField("Name", text: $babyTextName)
+                            .autocapitalization(.words)
+                            .textContentType(.name)
+                        Picker("Emoji", selection: $babyEmojiName) {
+                            ForEach(Baby.emojiSet + [""], id: \.self) { Text($0) }
+                        }
+                        
+                        Toggle(isOn: $useEmoji, label: {
+                            Text("Use Emoji as 'Name'")
+                        })
+                        .onAppear {
+                            if self.babyEmojiName.isEmpty && self.useEmoji {
+                                self.useEmoji = false
+                            }
+                        }
+                    }
+                    
+                    Section {
+                        DatePicker("Birthday", selection: $birthday, displayedComponents: .date)
+                        Toggle(isOn: $useBirthday, label: {
+                            Text("Save birthday")
+                        })
+                    }
+                    
+                    Section(footer: Text("Theme color to use for this BabyLog")) {
+                        Picker("Color", selection: $color) {
+                            ForEach(PreferredColor.prebuiltSet, id: \.self) { color in
+                                ColoredCircle(color: color)
+                                    .frame(width: 44, height: 44, alignment: .trailing)
+                            }
+                        }
+                    }
+                    
+                }
+                .listStyle(GroupedListStyle())
+                .environment(\.horizontalSizeClass, .regular)
+                .navigationBarTitle("")
+                .navigationBarHidden(true)
             }
         }
+        .background(Color(.systemGroupedBackground))
+    }
+    
+    func borderIfNeeded(_ text: String) -> AnyView {
+        if text == babyName {
+            return RoundedRectangle(cornerRadius: 22.0, style: .circular)
+                .stroke(Color(.tertiarySystemBackground), lineWidth: 1)
+                .anyify()
+        }
+        return EmptyView().anyify()
+    }
+    
+    func validateAndApply() {
+        guard !self.invalidName else { return }
+        onApply?(self.baby)
     }
 }
 

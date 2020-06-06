@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct FeedViewModel: Identifiable {
+struct FeedViewModel: Identifiable, Equatable {
     var id: UUID
     var date: Date
     var type: BabyEventType

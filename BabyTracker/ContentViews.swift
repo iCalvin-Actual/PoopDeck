@@ -28,73 +28,76 @@ public struct FeedView: View {
     
     @State var babyLog: BabyLog
     
+    @State var selectedID: UUID?
+    
+    func showForm(for eventModel: FeedViewModel) {
+        let formView = EventFormView(
+            eventID: eventModel.id,
+            eventType: eventModel.type,
+            babyLog: self.babyLog,
+            didUpdate: self.reloadEvents)
+    }
+    
     public var body: some View {
-        NavigationView {
-            VStack {
-                List {
-                    ForEach(babyLog.dateSortedModels ?? []) { event in
-                        NavigationLink(destination: EventFormView(
-                            eventID: event.id,
-                            eventType: event.type,
-                            babyLog: self.babyLog,
-                            didUpdate: self.reloadEvents)) {
-                            FeedCard(event: event)
-                                .cornerRadius(8)
-                                .contextMenu {
-                                    Button(action: {
-//                                        self.recordManager.delete(event.id) { result in
-//                                            self.reloadEvents()
-//                                        }
-                                    }) {
-                                        Text("Delete")
-                                        Image(systemName: "trash.fill")
-                                    }
-
-                                    Button(action: {
-//                                        self.recordManager.duplicate(event.id) { result in
-//                                            self.reloadEvents()
-//                                        }
-                                    }) {
-                                        Text("Duplicate")
-                                        Image(systemName: "doc.on.doc.fill")
-                                    }
-                           }
-                        }
-                    }
-                    .padding(.trailing, 4)
+        VStack {
+            List {
+                ForEach(babyLog.dateSortedModels) { event in
+                    Button(action: {
+                        self.selectedID = event.id
+                        self.newEventType = event.type
+                        self.showNewEventForm = true
+                    }) {
+                        FeedCard(event: event)
+                            .cornerRadius(8)
+//                            .contextMenu {
+//                                Button(action: {
+//                                    self.recordManager.delete(event.id) { result in
+//                                        self.reloadEvents()
+//                                    }
+//                                }) {
+//                                    Text("Delete")
+//                                    Image(systemName: "trash.fill")
+//                                }
+//
+//                                Button(action: {
+//                                    self.recordManager.duplicate(event.id) { result in
+//                                        self.reloadEvents()
+//                                    }
+//                                }) {
+//                                    Text("Duplicate")
+//                                    Image(systemName: "doc.on.doc.fill")
+//                                }
+//                            }
+                   }
                 }
-                .frame(maxWidth: 835.0)
-                .listStyle(GroupedListStyle())
-                .environment(\.horizontalSizeClass, .regular)
-                
-                Spacer()
-                NewEventTypeSelector(didSelect: { eventType in
-                    self.presentNewEventSheet(type: eventType)
-                })
+                .padding(.trailing, 4)
             }
-            .navigationBarTitle(
-                Text("BBLG")
-            )
-            .sheet(isPresented: self.$showNewEventForm) {
-                NavigationView {
-                    EventFormView(eventType: self.newEventType!,
-                                  babyLog: self.babyLog,
-                                  didUpdate: self.reloadEvents)
-                }
-            }
+            .frame(maxWidth: 835.0)
+            .listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
             
+            Spacer()
+            NewEventTypeSelector(didSelect: { eventType in
+                self.presentNewEventSheet(type: eventType)
+            })
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationBarTitle(
+            Text("BBLG")
+        )
+        .navigationBarHidden(true)
+        .sheet(isPresented: self.$showNewEventForm) {
+            NavigationView {
+                EventFormView(eventID: self.selectedID,
+                              eventType: self.newEventType!,
+                              babyLog: self.babyLog,
+                              didUpdate: self.reloadEvents)
+            }
+        }
     }
     
     private func reloadEvents() {
         self.showNewEventForm = false
-//        EventManager.shared.fetchSummary { summary in
-//            guard let summary = summary else {
-//                return
-//            }
-//            self.feed = summary.dateSortedModels
-//        }
+        self.selectedID = nil
     }
     
     func presentNewEventSheet(type: BabyEventType) {

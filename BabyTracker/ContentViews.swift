@@ -30,14 +30,6 @@ public struct FeedView: View {
     
     @State var selectedID: UUID?
     
-    func showForm(for eventModel: FeedViewModel) {
-        let formView = EventFormView(
-            eventID: eventModel.id,
-            eventType: eventModel.type,
-            babyLog: self.babyLog,
-            didUpdate: self.reloadEvents)
-    }
-    
     public var body: some View {
         VStack {
             List {
@@ -47,27 +39,7 @@ public struct FeedView: View {
                         self.newEventType = event.type
                         self.showNewEventForm = true
                     }) {
-                        FeedCard(event: event)
-                            .cornerRadius(8)
-//                            .contextMenu {
-//                                Button(action: {
-//                                    self.recordManager.delete(event.id) { result in
-//                                        self.reloadEvents()
-//                                    }
-//                                }) {
-//                                    Text("Delete")
-//                                    Image(systemName: "trash.fill")
-//                                }
-//
-//                                Button(action: {
-//                                    self.recordManager.duplicate(event.id) { result in
-//                                        self.reloadEvents()
-//                                    }
-//                                }) {
-//                                    Text("Duplicate")
-//                                    Image(systemName: "doc.on.doc.fill")
-//                                }
-//                            }
+                        FeedCard(event: event).cornerRadius(8)
                    }
                 }
                 .padding(.trailing, 4)
@@ -82,7 +54,7 @@ public struct FeedView: View {
             })
         }
         .navigationBarTitle(
-            Text("BBLG")
+            Text("")
         )
         .navigationBarHidden(true)
         .sheet(isPresented: self.$showNewEventForm) {

@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftUI
+import Combine
 
 /*
  Baby
@@ -83,8 +84,8 @@ class Baby: Codable, Equatable, Hashable {
     }
     
     var name: String = ""
-    var emoji: String? = ""
-    var birthday: Date? = Date()
+    var emoji: String = ""
+    var birthday: Date?
     
     private var imageData: Data?
     
@@ -254,6 +255,10 @@ extension BabyLog {
         } else if let customEvent = eventStore.customEvents[id] as? E {
             completion(.success(customEvent))
         }
+    }
+    
+    func delete<E: BabyEvent>(_ event: E, completion: ((Result<E?, BabyError>) -> Void)) {
+        self.delete(event.id, completion: completion)
     }
     
     func delete<E: BabyEvent>(_ id: UUID, completion: ((Result<E?, BabyError>) -> Void)) {

@@ -40,6 +40,12 @@ struct NewWindowView: View {
     }
 }
 
+extension Baby {
+    var invalidName: Bool {
+        return name.isEmpty && emoji.isEmpty
+    }
+}
+
 struct NewBabyForm: View {
     var onApply: ((Baby) -> Void)?
     
@@ -54,10 +60,6 @@ struct NewBabyForm: View {
     
     @State var useEmoji: Bool = true
     @State var useBirthday: Bool = false
-    
-    var invalidName: Bool {
-        return babyTextName.isEmpty
-    }
     
     var baby: Baby {
         let baby = Baby()
@@ -152,8 +154,9 @@ struct NewBabyForm: View {
     }
     
     func validateAndApply() {
-        guard !self.invalidName else { return }
-        onApply?(self.baby)
+        let baby = self.baby
+        guard !baby.invalidName else { return }
+        onApply?(baby)
     }
 }
 

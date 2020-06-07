@@ -7,13 +7,34 @@
 //
 
 import SwiftUI
-import Foundation
+import Combine
 
 extension DateFormatter {
     static var timeDisplay: DateFormatter = {
         var formatter = DateFormatter()
         formatter.timeStyle = .short
         formatter.dateStyle = .none
+        return formatter
+    }()
+    static var shortDateDisplay: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.timeStyle = .none
+        formatter.dateStyle = .short
+        return formatter
+    }()
+    static var hourFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateFormat = "h"
+        return formatter
+    }()
+    static var minuteFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateFormat = "mm"
+        return formatter
+    }()
+    static var ampmFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateFormat = "a"
         return formatter
     }()
     static var shortDisplay: DateFormatter = {
@@ -27,6 +48,18 @@ extension DateFormatter {
         formatter.dateFormat = "M/d\nh:mm a"
         return formatter
     }()
+}
+class TickPublisher {
+    let currentTimePublisher = Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default)
+    let cancellable: AnyCancellable?
+
+    init() {
+        self.cancellable = currentTimePublisher.connect() as? AnyCancellable
+    }
+
+    deinit {
+        self.cancellable?.cancel()
+    }
 }
 extension DateComponentsFormatter {
     static var durationDisplay: DateComponentsFormatter {

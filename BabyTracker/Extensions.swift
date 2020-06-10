@@ -71,6 +71,13 @@ extension DateComponentsFormatter {
     }
 }
 extension MeasurementFormatter {
+    static var defaultFormatter: MeasurementFormatter {
+        let measurementFormatter = MeasurementFormatter()
+        measurementFormatter.locale = .autoupdatingCurrent
+        measurementFormatter.unitOptions = [.providedUnit]
+        measurementFormatter.unitStyle = .short
+        return measurementFormatter
+    }
     static var weightFormatter: MeasurementFormatter {
         let formatter = MeasurementFormatter()
         formatter.unitOptions = .naturalScale
@@ -119,6 +126,72 @@ extension NSFileVersion {
     }
     var deviceDisplayName: String? {
         return self.localizedNameOfSavingComputer
+    }
+}
+
+extension Unit {
+    var defaultValue: Double? {
+        switch symbol {
+        case "mL":
+            return 120.0
+        case "fl oz":
+            return 3.0
+        case "s":
+            return 60
+        case "min":
+            return 5
+        case "h":
+            return 1
+        case "lb":
+            return 10
+        default:
+            return nil
+        }
+    }
+    var modifier: Double? {
+        switch symbol {
+        case "mL":
+            return 10.0
+        case "fl oz":
+            return 0.25
+        case "s":
+            return 60
+        case "min":
+            return 5
+        case "h":
+            return 0.25
+        case "lb":
+            return 0.10
+        default:
+            return nil
+        }
+    }
+}
+
+extension UnitVolume {
+    static var supported: [UnitVolume] {
+        return [
+            .milliliters,
+            .fluidOunces
+        ]
+    }
+}
+
+extension UnitMass {
+    static var supported: [UnitMass] {
+        return [
+            .kilograms,
+            .pounds
+        ]
+    }
+}
+
+extension UnitDuration {
+    static var supported: [UnitDuration] {
+        return [
+            .hours,
+            .minutes
+        ]
     }
 }
 

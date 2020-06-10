@@ -194,22 +194,24 @@ struct BabyEventStore: Codable {
 }
 
 extension BabyLog {
+
     func groupOfType<E: BabyEvent>(completion: ((Result<[UUID: E], BabyError>) -> Void)) {
-        if let feedings = eventStore.feedings as? [UUID: E] {
+        if FeedEvent.self == E.self, let feedings = eventStore.feedings as? [UUID: E] {
             completion(.success(feedings))
-        } else if let changes = eventStore.changes as? [UUID: E] {
-            completion(.success(changes))
-        } else if let naps = eventStore.naps as? [UUID: E] {
+        } else if NapEvent.self == E.self, let naps = eventStore.naps as? [UUID: E] {
             completion(.success(naps))
-        } else if let fussies = eventStore.fussies as? [UUID: E] {
+        } else if DiaperEvent.self == E.self, let changes = eventStore.changes as? [UUID: E] {
+            completion(.success(changes))
+        } else if FussEvent.self == E.self, let fussies = eventStore.fussies as? [UUID: E] {
             completion(.success(fussies))
-        } else if let weighIns = eventStore.weighIns as? [UUID: E] {
+        } else if WeightEvent.self == E.self, let weighIns = eventStore.weighIns as? [UUID: E] {
             completion(.success(weighIns))
-        } else if let tummyTimes = eventStore.tummyTimes as? [UUID: E] {
+        } else if TummyTimeEvent.self == E.self, let tummyTimes = eventStore.tummyTimes as? [UUID: E] {
             completion(.success(tummyTimes))
-        } else if let customEvents = eventStore.customEvents as? [UUID: E] {
+        } else if FeedEvent.self == E.self, let customEvents = eventStore.customEvents as? [UUID: E] {
             completion(.success(customEvents))
         }
+    
         completion(.failure(.unknown))
     }
     
@@ -266,7 +268,7 @@ extension BabyLog {
             eventStore.feedings[id] = nil
             completion(.success(nil))
         } else if let _ = eventStore.changes[id] as? E {
-            eventStore.feedings[id] = nil
+            eventStore.changes[id] = nil
            completion(.success(nil))
         } else if let _ = eventStore.naps[id] as? E {
             eventStore.naps[id] = nil
@@ -544,6 +546,12 @@ extension Baby {
 
 extension BabyLog: ObservableObject { }
 extension Baby: ObservableObject { }
+class ObservableDate: ObservableObject {
+    var date: Date
+    init(_ date: Date = .init()) {
+        self.date = date
+    }
+}
 
 
 struct BabyLog_Previews: PreviewProvider {

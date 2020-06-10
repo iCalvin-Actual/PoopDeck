@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct FeedViewModel: Identifiable {
+struct FeedViewModel: Identifiable, Equatable {
     var id: UUID
     var date: Date
     var type: BabyEventType
@@ -87,6 +87,6 @@ struct FeedCardView_Previews: PreviewProvider {
         return feed
     }()
     static var previews: some View {
-        FeedView(feed: feed)
+        Text("Hello World")
     }
 }

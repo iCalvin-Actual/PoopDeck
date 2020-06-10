@@ -24,10 +24,60 @@ struct ActivitySummary {
 
 protocol BabyEvent: Identifiable, Codable, Equatable {
     static var type: BabyEventType { get }
+    static var new: Self { get }
 
     var id: UUID { get set }
     var date: Date { get set }
     var viewModel: FeedViewModel { get }
+}
+
+//protocol Event: Identifiable, Codable, Equatable {
+//    static var type: BabyEventType { get }
+//    
+//    var id: UUID { get set }
+//    var date: Date { get set }
+//}
+//
+//extension Event {
+//    var type: BabyEventType { return Self.type }
+//}
+//
+//struct TrackedEvent: Event {
+//    static let type: BabyEventType = .diaper
+//}
+//
+//struct MeasureEvent: Event {
+//    static let type: BabyEventType = .feed
+//    static var new: MeasureEvent {
+//        /// Remove this
+//        return MeasureEvent(type: .feed)
+//    }
+//    
+//    var id: UUID = .init()
+//    var date: Date = .init()
+//    
+//    var viewModel: FeedViewModel {
+//        return FeedViewModel(id: self.id, date: self.date, type: self.type, primaryText: "", secondaryText: "", infoStack: [])
+//    }
+//}
+
+protocol MeasuredBabyEvent: BabyEvent {
+    var measurementValue: Double? { get set }
+    var measurementUnit: String? { get set }
+    var measurement: Measurement<Unit>? { get set }
+}
+
+extension MeasuredBabyEvent {
+    var measurement: Measurement<Unit>? {
+        get {
+            guard let unitSymbol = measurementUnit, let value = measurementValue else { return nil }
+            return Measurement(value: value, unit: Unit(symbol: unitSymbol))
+        }
+        set {
+            self.measurementValue = newValue?.value
+            self.measurementUnit = newValue?.unit.symbol
+        }
+    }
 }
 
 enum BabyEventType: String, Equatable, Codable, CaseIterable {
@@ -519,11 +569,15 @@ class EventManager {
 
 typealias BreastSide = FeedEvent.Source.BreastSide
 
-struct FeedEvent: BabyEvent {
+struct FeedEvent: MeasuredBabyEvent {
     static var type: BabyEventType { return FeedEvent.new.type }
     var type: BabyEventType = .feed
     static var new: FeedEvent {
         return FeedEvent(source: .breast(.both))
+    }
+    
+    var measurement: Measurement<UnitVolume>? {
+        return self.size
     }
     
     var id = UUID()
@@ -602,6 +656,27 @@ struct FeedEvent: BabyEvent {
     
     var source: Source
     var size: Measurement<UnitVolume>?
+    var measurementUnit: String? {
+        get {
+            return size?.unit.symbol
+        }
+        set {
+            guard let newSymbol = newValue, let newUnit = Unit(symbol: newSymbol) as? UnitVolume else { return }
+            self.size = self.size?.converted(to: newUnit)
+        }
+    }
+    var measurementValue: Double? {
+        get {
+           return size?.value
+        }
+        set {
+            guard let newValue = newValue else {
+                self.size = nil
+                return
+            }
+            self.size?.value = newValue
+        }
+    }
 }
 
 struct DiaperEvent: BabyEvent {
@@ -640,9 +715,10 @@ struct DiaperEvent: BabyEvent {
     
     var pee: Bool = false
     var poop: Bool = false
+    var measurement: Measurement<Unit>? = nil
 }
 
-struct NapEvent: BabyEvent {
+struct NapEvent: MeasuredBabyEvent {
     static var type: BabyEventType { return NapEvent.new.type }
     var type: BabyEventType = .nap
     static var new: NapEvent {
@@ -670,10 +746,27 @@ struct NapEvent: BabyEvent {
     
     var held: Bool = false
     var interruptions: Int = 0
-    
+    var measurementUnit: String? {
+        get {
+            return UnitDuration.minutes.symbol
+        }
+        set {
+            // Do nothing
+        }
+    }
+    var measurementValue: Double?
+    var measurement: Measurement<UnitDuration>? {
+        get {
+            return Measurement(value: duration, unit: UnitDuration.seconds).converted(to: .minutes)
+        }
+        set {
+            let seconds = newValue?.converted(to: .seconds).value ?? UnitDuration.seconds.defaultValue ?? 0
+            self.duration = seconds
+        }
+    }
 }
 
-struct FussEvent: BabyEvent {
+struct FussEvent: MeasuredBabyEvent {
     static var type: BabyEventType { return FussEvent.new.type }
     var type: BabyEventType = .fuss
     static var new: FussEvent {
@@ -699,9 +792,34 @@ struct FussEvent: BabyEvent {
     }
     
     var duration: TimeInterval = 300
+    var measurementUnit: String? {
+        get {
+            return UnitDuration.minutes.symbol
+        }
+        set {
+            // Do nothing
+        }
+    }
+    var measurementValue: Double? {
+        get {
+            return duration
+        }
+        set {
+            duration = newValue ?? 0
+        }
+    }
+    var measurement: Measurement<UnitDuration>? {
+        get {
+            return Measurement(value: duration, unit: UnitDuration.seconds).converted(to: .minutes)
+        }
+        set {
+            let seconds = newValue?.converted(to: .seconds).value ?? UnitDuration.seconds.defaultValue ?? 0
+            self.duration = seconds
+        }
+    }
 }
 
-struct TummyTimeEvent: BabyEvent {
+struct TummyTimeEvent: MeasuredBabyEvent {
     static var type: BabyEventType { return TummyTimeEvent.new.type }
     var type: BabyEventType = .tummyTime
     static var new: TummyTimeEvent {
@@ -726,9 +844,25 @@ struct TummyTimeEvent: BabyEvent {
     }
     
     var duration: TimeInterval = 300
+    var measurementUnit: String? {
+        get {
+            return UnitDuration.minutes.symbol
+        }
+        set {
+            // Do nothing
+        }
+    }
+    var measurementValue: Double? {
+        get {
+            return duration
+        }
+        set {
+            duration = newValue ?? 0
+        }
+    }
 }
 
-struct WeightEvent: BabyEvent {
+struct WeightEvent: MeasuredBabyEvent {
     static var type: BabyEventType { return WeightEvent.new.type }
     var type: BabyEventType = .weight
     static var new: WeightEvent {
@@ -752,7 +886,38 @@ struct WeightEvent: BabyEvent {
         )
     }
     
+    
+    var measurement: Measurement<UnitMass>? {
+        get {
+            return self.weight
+        }
+        set {
+            guard let newWeight = newValue else { return }
+            self.weight = newWeight
+        }
+    }
+    
     var weight: Measurement<UnitMass>
+    var measurementUnit: String? {
+        get {
+            return weight.unit.symbol
+        }
+        set {
+            guard let newSymbol = newValue, let newUnit = Unit(symbol: newSymbol) as? UnitMass else { return }
+            self.weight = self.weight.converted(to: newUnit)
+        }
+    }
+    var measurementValue: Double? {
+        get {
+           return weight.value
+        }
+        set {
+            guard let newValue = newValue else {
+                return
+            }
+            self.weight.value = newValue
+        }
+    }
 }
 
 struct CustomEvent: BabyEvent {
@@ -781,4 +946,6 @@ struct CustomEvent: BabyEvent {
     
     var event: String
 //    var description: String
+    
+//    var measurement: Measurement<Unit>? = nil
 }

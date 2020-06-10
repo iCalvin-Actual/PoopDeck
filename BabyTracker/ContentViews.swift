@@ -26,70 +26,53 @@ public struct FeedView: View {
     @State var showNewEventForm: Bool = false
     @State var newEventType: BabyEventType? = nil
     
-    @State var feed: [FeedViewModel]
+    @State var babyLog: BabyLog
+    
+    @State var selectedID: UUID?
+    
     public var body: some View {
-        NavigationView {
-            VStack {
-                NewEventTypeSelector(didSelect: { eventType in
-                    self.presentNewEventSheet(type: eventType)
-                }).padding()
-                List {
-                    Section {
-                        ForEach(feed) { event in
-                            NavigationLink(destination: EventFormView(eventID: event.id, eventType: event.type, didUpdate: self.reloadEvents)) {
-                                FeedCard(event: event)
-                                    .cornerRadius(8)
-                                    .contextMenu {
-                                        Button(action: {
-                                            EventManager.shared.delete(event.id, type: event.type, completion: {
-                                                self.reloadEvents()
-                                            })
-                                        }) {
-                                            Text("Delete")
-                                            Image(systemName: "trash.fill")
-                                        }
-
-                                        Button(action: {
-                                            EventManager.shared.duplicate(event.id, type: event.type) {
-                                                self.reloadEvents()
-                                            }
-                                        }) {
-                                            Text("Duplicate")
-                                            Image(systemName: "doc.on.doc.fill")
-                                        }
-                               }
-                            }
-                        }
-                    }
-                    .frame(maxWidth: 835.0)
+        VStack {
+            List {
+                ForEach(babyLog.dateSortedModels) { event in
+                    Button(action: {
+                        self.selectedID = event.id
+                        self.newEventType = event.type
+                        self.showNewEventForm = true
+                    }) {
+                        FeedCard(event: event).cornerRadius(8)
+                   }
                 }
-                .listStyle(GroupedListStyle())
-                .environment(\.horizontalSizeClass, .regular)
+                .padding(.trailing, 4)
             }
-            .navigationBarTitle(
-                Text("Sophia Events")
-            )
-            .sheet(isPresented: self.$showNewEventForm) {
-                NavigationView {
-                    EventFormView(eventType: self.newEventType!,
-                                  didUpdate: self.reloadEvents)
-                }
-            }
+            .frame(maxWidth: 835.0)
+            .listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
+            
+            Spacer()
+            NewEventTypeSelector(didSelect: { eventType in
+                self.presentNewEventSheet(type: eventType)
+            })
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear {
-            self.reloadEvents()
+        .navigationBarTitle(
+            Text("")
+        )
+        .navigationBarHidden(true)
+        .sheet(isPresented: self.$showNewEventForm) {
+            NavigationView {
+                EventFormView(eventID: self.selectedID,
+                              eventType: self.newEventType!,
+                              babyLog: self.babyLog,
+                              didUpdate: self.reloadEvents)
+            }
+            .onDisappear {
+                self.reloadEvents()
+            }
         }
     }
     
     private func reloadEvents() {
         self.showNewEventForm = false
-        EventManager.shared.fetchSummary { summary in
-            guard let summary = summary else {
-                return
-            }
-            self.feed = summary.dateSortedModels
-        }
+        self.selectedID = nil
     }
     
     func presentNewEventSheet(type: BabyEventType) {
@@ -182,6 +165,6 @@ extension BabyEventType {
 
 struct ContentViews_Previews: PreviewProvider {
     static var previews: some View {
-        FeedView(feed: [])
+        Text("Hello World")
     }
 }

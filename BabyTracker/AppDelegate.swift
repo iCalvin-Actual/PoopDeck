@@ -32,6 +32,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        guard url.scheme == "file://", url.pathExtension == "bblg" else {
+            return false
+        }
+        return true
+    }
 
 }
+
+//extension AppDelegate {
+//    func application(_ application: UIApplication, shouldSaveSecureApplicationState coder: NSCoder) -> Bool {
+//        return true
+//    }
+//    
+//    func application(_ application: UIApplication, shouldRestoreSecureApplicationState coder: NSCoder) -> Bool {
+//        return true
+//    }
+//}
 

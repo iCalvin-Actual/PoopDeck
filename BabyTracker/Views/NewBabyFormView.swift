@@ -85,9 +85,9 @@ struct NewBabyForm: View {
             HStack {
                 Text("Save")
                 Image(systemName: "arrow.down.circle.fill")
-                    .resizable()
-                    .frame(width: 22, height: 22)
             }
+            .padding(2)
+            .raisedButtonPlease(padding: 4)
         }
     }
     

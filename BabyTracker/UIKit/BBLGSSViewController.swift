@@ -49,7 +49,7 @@ class BBLGSSViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -80,6 +80,7 @@ extension BBLGSSViewController {
         if self.docsInView.count > 0 {
             let view = DocumentsView(
                 logs: docsInView,
+                selected: docsInView.first!,
                 onAction: onAction)
             hostController = UIHostingController(rootView: view)
         } else {

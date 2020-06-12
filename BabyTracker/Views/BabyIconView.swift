@@ -14,19 +14,25 @@ struct BabyIconView: View {
     
     var onSelect: ((Baby) -> Void)?
     
+    var activeColor: PreferredColor {
+        return baby.themeColor ?? .random
+    }
+    
     var body: some View {
         Button(action: {
             self.onSelect?(self.baby)
         }) {
             ZStack {
-                ColoredCircle(color: baby.themeColor ?? .random)
-                    
                 Circle()
-                    .stroke(selected ? Color.black : Color(.secondarySystemBackground), lineWidth: 2)
+                    .stroke(selected ? .secondary : activeColor.color, lineWidth: 2)
+                
+                ColoredCircle(color: activeColor)
                 
                 Text(baby.displayInitial)
+                    .fontWeight(.heavy)
                     .foregroundColor(.primary)
             }
+            .withShadowPlease(selected, radius: 4)
         }
         .frame(width: 44, height: 44, alignment: .center)
     }
@@ -49,6 +55,6 @@ struct BabyIconView_Previews: PreviewProvider {
         return baby
     }
     static var previews: some View {
-        BabyIconView(baby: baby)
+        BabyIconView(baby: baby, selected: true)
     }
 }

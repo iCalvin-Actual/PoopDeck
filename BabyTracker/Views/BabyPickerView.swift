@@ -8,21 +8,21 @@
 
 import SwiftUI
 
-// MARK: - Baby Actions
-enum BabyAction {
-    case select(_ baby: Baby?)
-    case show(_ baby: Baby)
-    case save(_ baby: Baby)
-    case close(_ baby: Baby)
-    case delete(_ baby: Baby)
+// MARK: - Log Picker Actions
+enum LogPickerAction {
+    case select(_ baby: BabyLog?)
+    case show(_ baby: BabyLog)
+    case save(_ baby: BabyLog)
+    case close(_ baby: BabyLog)
+    case delete(_ baby: BabyLog)
 }
 
 // MARK: - Baby Picker
 struct BabyPickerView: View {
-    var babies: [Baby] = []
-    var selected: Baby?
+    var logs: [BabyLog] = []
+    @ObservedObject var selected: BabyLog
     
-    var onAction: ((BabyAction) -> Void)?
+    var onAction: ((LogPickerAction) -> Void)?
     
     // MARK: - Views
     
@@ -35,62 +35,65 @@ struct BabyPickerView: View {
             newDocButton()
         }
         .padding(.horizontal)
+        .padding(.vertical, 4)
     }
     
     private func openDocsView() -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(babies, id: \.self) { baby in
-                    BabyIconView(baby: baby, onSelect: { baby in
-                        self.onAction?(.select(baby))
+                ForEach(logs, id: \.self) { log in
+                    BabyIconView(baby: log.baby, selected: log == self.selected, onSelect: { baby in
+                        withAnimation {
+                            self.onAction?(.select(log))
+                        }
                     })
                     .contextMenu {
                         
-                        self.revealButton(baby)
-                        self.saveButton(baby)
-                        self.closeButton(baby)
-                        self.deleteButton(baby)
+                        self.revealButton(log)
+                        self.saveButton(log)
+                        self.closeButton(log)
+                        self.deleteButton(log)
                         
                     }
                 }
+                .padding(6)
             }
-            .frame(height: 44.0, alignment: .top)
-            .padding(2)
+            .frame(height: 56.0, alignment: .top)
         }
     }
     
     // MARK: - Buttons
     
-    private func revealButton(_ baby: Baby) -> some View {
+    private func revealButton(_ babyLog: BabyLog) -> some View {
         Button(action: {
-            self.onAction?(.show(baby))
+            self.onAction?(.show(babyLog))
         }) {
             Text("Show File")
             Image(systemName: "doc.text.magnifyingglass")
         }
     }
     
-    private func saveButton(_ baby: Baby) -> some View {
+    private func saveButton(_ babyLog: BabyLog) -> some View {
         Button(action: {
-            self.onAction?(.save(baby))
+            self.onAction?(.save(babyLog))
         }) {
             Text("Save Now")
             Image(systemName: "doc.append")
         }
     }
     
-    private func closeButton(_ baby: Baby) -> some View {
+    private func closeButton(_ babyLog: BabyLog) -> some View {
         Button(action: {
-            self.onAction?(.save(baby))
+            self.onAction?(.save(babyLog))
         }) {
             Text("Close")
             Image(systemName: "xmark.square")
         }
     }
     
-    private func deleteButton(_ baby: Baby) -> some View {
+    private func deleteButton(_ babyLog: BabyLog) -> some View {
         Button(action: {
-            self.onAction?(.save(baby))
+            self.onAction?(.save(babyLog))
         }) {
             Text("Delete")
             Image(systemName: "trash")
@@ -102,9 +105,9 @@ struct BabyPickerView: View {
             self.onAction?(.select(nil))
         }) {
             Image(systemName: "plus.square.on.square.fill")
-            .padding(8)
         }
-        .padding(.trailing, 8)
+        .font(.system(size: 20.0, weight: .semibold))
+        .raisedButtonPlease()
     }
 }
 
@@ -131,6 +134,10 @@ struct BabyPickerView_Previews: PreviewProvider {
         return baby
     }
     static var previews: some View {
-        BabyPickerView(babies: [baby], selected: baby, onAction: nil)
+        VStack {
+            BabyPickerView(logs: [babyLog, babyLog], selected: babyLog, onAction: nil)
+            Spacer()
+        }
+        .background(Color(.secondarySystemBackground))
     }
 }

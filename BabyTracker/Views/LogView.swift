@@ -11,8 +11,6 @@ import Combine
 
 // MARK: - LogView
 struct LogView: View {
-    @Environment(\.editMode) var editMode
-    
     @ObservedObject var log: BabyLog
     
     @State private var resolvingConflict: Bool = false
@@ -339,7 +337,12 @@ extension LogView {
         case .closed:
             print("Do something?")
         case .progressAvailable:
-            print("Show progress?")
+            guard let progress = log.progress else {
+                // No progress to handle
+                return
+            }
+            let percentage = progress.completedUnitCount / progress.totalUnitCount
+            print("Show Progress: \(percentage)")
         case .normal:
             self.allowChanges = true
             print("Normal?")

@@ -36,6 +36,48 @@ extension View {
     }
 }
 
+struct ShadowModifier: ViewModifier {
+    var show: Bool = true
+    var radius: CGFloat = 8.0
+    
+    func body(content: Content) -> some View {
+        addShadowIfNeeded(content)
+    }
+    
+    func addShadowIfNeeded(_ content: Content) -> AnyView {
+        guard show else { return content.anyPlease() }
+        return content.shadow(radius: radius).anyPlease()
+    }
+}
+extension View {
+    func withShadowPlease(_ show: Bool = true, radius: CGFloat = 8.0) -> some View {
+        return self.modifier(ShadowModifier(show: show, radius: radius))
+    }
+}
+
+struct RaisedButtonStyleModifier: ViewModifier {
+    var color: Color
+    var padding: CGFloat
+    func body(content: Content) -> some View {
+        content
+        .padding(padding)
+        .background(color)
+        .accentColor(.white)
+        .cornerRadius(21)
+        .withShadowPlease()
+    }
+}
+extension View {
+    func raisedButtonPlease(_ overrideColor: Color? = nil, padding: CGFloat = 14.0) -> some View {
+        return self.modifier(
+            RaisedButtonStyleModifier(
+                color: overrideColor ?? Color(UIColor(named: "PDSecondary") ?? .tertiarySystemBackground),
+                padding: padding
+            )
+        )
+    }
+}
+
 extension View {
     func anyPlease() -> AnyView  {
         AnyView(self)

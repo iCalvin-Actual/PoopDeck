@@ -24,19 +24,20 @@ struct AgeView: View {
     
     var body: some View {
         Button(action: {
-            switch self.ageStyle {
-            case .days:
-                self.ageStyle = .weeks
-            case .weeks:
-                self.ageStyle = .months
-            case .months:
-                self.ageStyle = .full
-            case .full:
-                self.ageStyle = .days
+            withAnimation {
+                switch self.ageStyle {
+                case .days:
+                    self.ageStyle = .weeks
+                case .weeks:
+                    self.ageStyle = .months
+                case .months:
+                    self.ageStyle = .full
+                case .full:
+                    self.ageStyle = .days
+                }
             }
         }) {
             Text(ageString)
-            .foregroundColor(.primary)
         }
     }
     

@@ -40,13 +40,11 @@ struct PreferredColor: Hashable {
 extension PreferredColor {
     static var prebuiltSet: [PreferredColor] {
         return [
-            PreferredColor(r: 0, g: 0, b: 0),
-            PreferredColor(r: 0, g: 0, b: 1),
-            PreferredColor(r: 0, g: 1, b: 0),
-            PreferredColor(r: 0, g: 1, b: 1),
-            PreferredColor(r: 1, g: 0, b: 0),
-            PreferredColor(r: 1, g: 0, b: 1),
-            PreferredColor(r: 1, g: 1, b: 0)
+            PreferredColor(r: 0.537, g: 0.820, b: 0.863),
+            PreferredColor(r: 0.973, g: 0.612, b: 0.980),
+            PreferredColor(r: 0.765, g: 0.525, b: 0.945),
+            PreferredColor(r: 0.941, g: 0.839, b: 0.537),
+            PreferredColor(r: 0.686, g: 0.949, b: 0.545)
         ]
     }
     static var random: PreferredColor {
@@ -64,7 +62,7 @@ struct ColoredCircle: View {
                 .foregroundColor(Color(red: color.r, green: color.g, blue: color.b))
             
             Circle()
-                .foregroundColor(Color(UIColor.tertiarySystemBackground.withAlphaComponent(0.75)))
+                .foregroundColor(Color(UIColor.tertiarySystemBackground.withAlphaComponent(0.4)))
         }
     }
 }
@@ -77,12 +75,16 @@ struct ColoredCircle_Previews: PreviewProvider {
                     ColoredCircle(color: color)
                 }
             }
+            .padding()
+            .background(Color(.systemBackground))
             .environment(\.colorScheme, .light)
             VStack {
                 ForEach(PreferredColor.prebuiltSet, id: \.self) { color in
                     ColoredCircle(color: color)
                 }
             }
+            .padding()
+            .background(Color(.systemBackground))
             .environment(\.colorScheme, .dark)
         }
     }

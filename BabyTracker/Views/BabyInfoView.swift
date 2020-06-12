@@ -15,34 +15,32 @@ struct BabyInfoView: View {
     
     // MARK: - Views
     var body: some View {
-        HStack(spacing: 8) {
-            babyInfoStack()
-            
-            Spacer()
-                
-            editButton()
-            .sheet(
-                isPresented: $editBaby,
-                content: editingForm)
-        }
-        .padding()
-        .cornerRadius(22)
-        .padding(.horizontal)
-    }
-    
-    func babyInfoStack() -> some View {
-        VStack(alignment: .leading) {
+        HStack(alignment: .center, spacing: 4) {
             if !log.baby.emoji.isEmpty {
                 emojiLabel()
             }
-            
             if !log.baby.name.isEmpty {
                 nameLabel()
+                .font(.largeTitle)
             }
+            editButton()
+                .accentColor(log.baby.themeColor?.color)
+                .font(.title)
+                .sheet(
+                    isPresented: $editBaby,
+                    content: editingForm)
+            
+            Spacer()
+            
             if log.baby.birthday != nil {
                 AgeView(birthday: log.baby.birthday)
+                    .raisedButtonPlease(padding: 8)
             }
         }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(22)
+        .padding(.horizontal)
     }
     
     func emojiLabel() -> AnyView {
@@ -53,6 +51,7 @@ struct BabyInfoView: View {
     
     func nameLabel() -> some View {
         Text(log.baby.displayName)
+            .fontWeight(.heavy)
             .foregroundColor(log.baby.themeColor?.color ?? .primary)
     }
     

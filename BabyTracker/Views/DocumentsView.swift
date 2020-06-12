@@ -22,7 +22,7 @@ enum DocumentAction {
 // MARK: - Documents View
 struct DocumentsView: View {
     @State var logs: [BabyLog] = []
-    @State var selected: BabyLog?
+    @State var selected: BabyLog
     
     var onAction: ((DocumentAction) -> Void)?
     
@@ -30,59 +30,39 @@ struct DocumentsView: View {
     var body: some View {
         VStack {
             BabyPickerView(
-                babies: logs.map({ $0.baby }),
+                logs: logs,
+                selected: selected,
                 onAction: onBabyAction)
-    
-            Divider()
             
-            selectedLogView()
-            
-        }
-        .onAppear {
-            if self.selected == nil, let first = self.logs.first {
-                self.selected = first
-            }
-        }
-    }
-    
-    func selectedLogView() -> AnyView {
-        if let selected = self.selected {
-            return LogView(
+            LogView(
                 log: selected,
-                onAction: self.onAction)
-            .anyPlease()
+                onAction: onAction)
+                .background(Color(.systemGroupedBackground))
+                .padding(.top, 0)
+            
         }
-        return EmptyView().anyPlease()
     }
 }
 
 // MARK: - Baby Action Handler
 extension DocumentsView {
-    func onBabyAction(_ babyAction: BabyAction) {
-        switch babyAction {
-        case .show(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.show(actionDoc))
-        case .select(let baby):
-            guard let baby = baby else {
+    func onBabyAction(_ logPickerAction: LogPickerAction) {
+        switch logPickerAction {
+        case .show(let log):
+            self.onAction?(.show(log))
+        case .select(let log):
+            guard let log = log else {
                 self.onAction?(.createNew)
                 return
             }
-            self.selected = self.log(for: baby)
-        case .save(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.save(actionDoc))
-        case .close(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.close(actionDoc))
-        case .delete(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.delete(actionDoc))
+            self.selected = log
+        case .save(let log):
+            self.onAction?(.save(log))
+        case .close(let log):
+            self.onAction?(.close(log))
+        case .delete(let log):
+            self.onAction?(.delete(log))
         }
-    }
-    
-    func log(for baby: Baby) -> BabyLog? {
-        return logs.first(where: { $0.baby == baby })
     }
 }
 
@@ -109,6 +89,6 @@ struct BabyIconView_Preview: PreviewProvider {
         return baby
     }
     static var previews: some View {
-        DocumentsView(logs: [babyLog])
+        DocumentsView(logs: [babyLog], selected: babyLog)
     }
 }

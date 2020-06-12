@@ -32,6 +32,11 @@
 		CFAE0FEA2493198800B52BF1 /* TickPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE92493198800B52BF1 /* TickPublisher.swift */; };
 		CFAE0FEC24931A3800B52BF1 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FEB24931A3800B52BF1 /* Formatters.swift */; };
 		CFAE0FF424931FD200B52BF1 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */; };
+		CFAE0FFA24932B3E00B52BF1 /* DateStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FF924932B3E00B52BF1 /* DateStepperView.swift */; };
+		CFAE0FFC24932E8200B52BF1 /* CustomEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FFB24932E8200B52BF1 /* CustomEventView.swift */; };
+		CFAE0FFE249332DC00B52BF1 /* DiaperSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FFD249332DC00B52BF1 /* DiaperSummaryView.swift */; };
+		CFAE1000249336A800B52BF1 /* BabyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */; };
+		CFAE10022493387C00B52BF1 /* MeasuredEventSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE10012493387C00B52BF1 /* MeasuredEventSummaryView.swift */; };
 		CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800B245E18B1007C756A /* AppDelegate.swift */; };
 		CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800D245E18B1007C756A /* SceneDelegate.swift */; };
 		CFC18010245E18B1007C756A /* NewEventTypeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800F245E18B1007C756A /* NewEventTypeSelectorView.swift */; };
@@ -85,6 +90,11 @@
 		CFAE0FE92493198800B52BF1 /* TickPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickPublisher.swift; sourceTree = "<group>"; };
 		CFAE0FEB24931A3800B52BF1 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
+		CFAE0FF924932B3E00B52BF1 /* DateStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateStepperView.swift; sourceTree = "<group>"; };
+		CFAE0FFB24932E8200B52BF1 /* CustomEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEventView.swift; sourceTree = "<group>"; };
+		CFAE0FFD249332DC00B52BF1 /* DiaperSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaperSummaryView.swift; sourceTree = "<group>"; };
+		CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyInfoView.swift; sourceTree = "<group>"; };
+		CFAE10012493387C00B52BF1 /* MeasuredEventSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredEventSummaryView.swift; sourceTree = "<group>"; };
 		CFC18008245E18B1007C756A /* PoopDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoopDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC1800B245E18B1007C756A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFC1800D245E18B1007C756A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -155,6 +165,12 @@
 				CFAE0FD52493067300B52BF1 /* BabyIconView.swift */,
 				CFC1800F245E18B1007C756A /* NewEventTypeSelectorView.swift */,
 				CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */,
+				CFAE0FD92493076700B52BF1 /* LogView.swift */,
+				CFAE0FF924932B3E00B52BF1 /* DateStepperView.swift */,
+				CFAE0FFB24932E8200B52BF1 /* CustomEventView.swift */,
+				CFAE0FFD249332DC00B52BF1 /* DiaperSummaryView.swift */,
+				CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */,
+				CFAE10012493387C00B52BF1 /* MeasuredEventSummaryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -243,7 +259,6 @@
 				CFAE0FED24931E0900B52BF1 /* UIApplication */,
 				CFAE0FEE24931E1A00B52BF1 /* UIKit */,
 				CFAE0FEF24931E2500B52BF1 /* Views */,
-				CFAE0FD92493076700B52BF1 /* LogView.swift */,
 				CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */,
 				CFAE0FF524931FED00B52BF1 /* Templates */,
 				CFC18013245E18B3007C756A /* Preview Content */,
@@ -380,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFAE0FEA2493198800B52BF1 /* TickPublisher.swift in Sources */,
+				CFAE10022493387C00B52BF1 /* MeasuredEventSummaryView.swift in Sources */,
 				CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */,
 				CFAE0FE4249315DD00B52BF1 /* FussEvent.swift in Sources */,
 				CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */,
@@ -387,20 +403,24 @@
 				CF125D65249246B800E2908C /* NewBabyFormView.swift in Sources */,
 				CFAE0FD62493067300B52BF1 /* BabyIconView.swift in Sources */,
 				CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */,
+				CFAE0FFC24932E8200B52BF1 /* CustomEventView.swift in Sources */,
 				CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
 				CF125D6B249270BA00E2908C /* ConflictResolutionViews.swift in Sources */,
+				CFAE1000249336A800B52BF1 /* BabyInfoView.swift in Sources */,
 				CFAE0FDE249315BE00B52BF1 /* DiaperEvent.swift in Sources */,
 				CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */,
 				CFC18010245E18B1007C756A /* NewEventTypeSelectorView.swift in Sources */,
 				CF125D6924926FEB00E2908C /* Errors.swift in Sources */,
 				CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */,
+				CFAE0FFA24932B3E00B52BF1 /* DateStepperView.swift in Sources */,
 				CFD6F421248706A900E7DAAD /* BBLGSSViewController.swift in Sources */,
 				CFAE0FE6249315E700B52BF1 /* TummyTimeEvent.swift in Sources */,
 				CFAE0FEC24931A3800B52BF1 /* Formatters.swift in Sources */,
 				CFD6F41F2487068200E7DAAD /* NewWindowView.swift in Sources */,
 				CF125D6724924E3C00E2908C /* ViewModifiers.swift in Sources */,
 				CFC1802E245E1A86007C756A /* Extensions.swift in Sources */,
+				CFAE0FFE249332DC00B52BF1 /* DiaperSummaryView.swift in Sources */,
 				CFAE0FE0249315C900B52BF1 /* NapEvent.swift in Sources */,
 				CFAE0FE82493178800B52BF1 /* CustomEvent.swift in Sources */,
 				CFAE0FE2249315D300B52BF1 /* WeightEvent.swift in Sources */,

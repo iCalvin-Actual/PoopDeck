@@ -7,28 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CF6A2D36245F64F50060FA8A /* FormViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A2D35245F64F50060FA8A /* FormViews.swift */; };
+		CF125D65249246B800E2908C /* NewBabyFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D64249246B800E2908C /* NewBabyFormView.swift */; };
+		CF125D6724924E3C00E2908C /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6624924E3C00E2908C /* ViewModifiers.swift */; };
+		CF125D6924926FEB00E2908C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6824926FEB00E2908C /* Errors.swift */; };
+		CF125D6B249270BA00E2908C /* ConflictResolutionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
-		CF9015122486AC0300343F5C /* NewBaby.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* NewBaby.bblg */; };
-		CF9015142486AC3700343F5C /* BabyLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9015132486AC3700343F5C /* BabyLogView.swift */; };
-		CF9015162486ACED00343F5C /* icons8-babys_room.png in Resources */ = {isa = PBXBuildFile; fileRef = CF9015152486ACED00343F5C /* icons8-babys_room.png */; };
+		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
+		CF9015162486ACED00343F5C /* bblg_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CF9015152486ACED00343F5C /* bblg_icon.png */; };
+		CFAE0FCE2492C93400B52BF1 /* PreferredColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */; };
+		CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCF2492CC2600B52BF1 /* Baby.swift */; };
+		CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD12493016100B52BF1 /* ObservableDate.swift */; };
+		CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */; };
+		CFAE0FD62493067300B52BF1 /* BabyIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD52493067300B52BF1 /* BabyIconView.swift */; };
+		CFAE0FD8249306B400B52BF1 /* AgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD7249306B400B52BF1 /* AgeView.swift */; };
+		CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD92493076700B52BF1 /* LogView.swift */; };
+		CFAE0FDC2493159000B52BF1 /* FeedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FDB2493159000B52BF1 /* FeedEvent.swift */; };
+		CFAE0FDE249315BE00B52BF1 /* DiaperEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */; };
+		CFAE0FE0249315C900B52BF1 /* NapEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FDF249315C900B52BF1 /* NapEvent.swift */; };
+		CFAE0FE2249315D300B52BF1 /* WeightEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */; };
+		CFAE0FE4249315DD00B52BF1 /* FussEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE3249315DD00B52BF1 /* FussEvent.swift */; };
+		CFAE0FE6249315E700B52BF1 /* TummyTimeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE5249315E700B52BF1 /* TummyTimeEvent.swift */; };
+		CFAE0FE82493178800B52BF1 /* CustomEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE72493178800B52BF1 /* CustomEvent.swift */; };
+		CFAE0FEA2493198800B52BF1 /* TickPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE92493198800B52BF1 /* TickPublisher.swift */; };
+		CFAE0FEC24931A3800B52BF1 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FEB24931A3800B52BF1 /* Formatters.swift */; };
+		CFAE0FF424931FD200B52BF1 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */; };
 		CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800B245E18B1007C756A /* AppDelegate.swift */; };
 		CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800D245E18B1007C756A /* SceneDelegate.swift */; };
-		CFC18010245E18B1007C756A /* ContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800F245E18B1007C756A /* ContentViews.swift */; };
+		CFC18010245E18B1007C756A /* NewEventTypeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1800F245E18B1007C756A /* NewEventTypeSelectorView.swift */; };
 		CFC18012245E18B3007C756A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFC18011245E18B3007C756A /* Assets.xcassets */; };
 		CFC18015245E18B3007C756A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFC18014245E18B3007C756A /* Preview Assets.xcassets */; };
 		CFC18018245E18B3007C756A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFC18016245E18B3007C756A /* LaunchScreen.storyboard */; };
 		CFC18023245E18B3007C756A /* BabyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18022245E18B3007C756A /* BabyTrackerTests.swift */; };
 		CFC1802E245E1A86007C756A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC1802D245E1A86007C756A /* Extensions.swift */; };
 		CFC18031245E1EFF007C756A /* BabyModule in Frameworks */ = {isa = PBXBuildFile; productRef = CFC18030245E1EFF007C756A /* BabyModule */; };
-		CFC18033245E224E007C756A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18032245E224E007C756A /* Models.swift */; };
+		CFC18033245E224E007C756A /* BabyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18032245E224E007C756A /* BabyEvent.swift */; };
 		CFCF4FEB2484653A0027CB98 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = CFCF4FEA2484653A0027CB98 /* readme.md */; };
-		CFCF4FED248469DB0027CB98 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCF4FEC248469DB0027CB98 /* Environment.swift */; };
 		CFD6F41F2487068200E7DAAD /* NewWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD6F41E2487068200E7DAAD /* NewWindowView.swift */; };
 		CFD6F421248706A900E7DAAD /* BBLGSSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD6F420248706A900E7DAAD /* BBLGSSViewController.swift */; };
 		CFD6F42324870E6C00E7DAAD /* DocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD6F42224870E6C00E7DAAD /* DocumentsView.swift */; };
-		CFFA0B0224639E4000EBDD87 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,17 +59,36 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF125D64249246B800E2908C /* NewBabyFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBabyFormView.swift; sourceTree = "<group>"; };
+		CF125D6624924E3C00E2908C /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
+		CF125D6824926FEB00E2908C /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConflictResolutionViews.swift; sourceTree = "<group>"; };
 		CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BabyTracker.entitlements; sourceTree = "<group>"; };
-		CF6A2D35245F64F50060FA8A /* FormViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViews.swift; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
-		CF9015112486AC0300343F5C /* NewBaby.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NewBaby.bblg; sourceTree = "<group>"; };
-		CF9015132486AC3700343F5C /* BabyLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLogView.swift; sourceTree = "<group>"; };
-		CF9015152486ACED00343F5C /* icons8-babys_room.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-babys_room.png"; sourceTree = "<group>"; };
+		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
+		CF9015152486ACED00343F5C /* bblg_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bblg_icon.png; sourceTree = "<group>"; };
+		CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredColor.swift; sourceTree = "<group>"; };
+		CFAE0FCF2492CC2600B52BF1 /* Baby.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Baby.swift; sourceTree = "<group>"; };
+		CFAE0FD12493016100B52BF1 /* ObservableDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableDate.swift; sourceTree = "<group>"; };
+		CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyPickerView.swift; sourceTree = "<group>"; };
+		CFAE0FD52493067300B52BF1 /* BabyIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyIconView.swift; sourceTree = "<group>"; };
+		CFAE0FD7249306B400B52BF1 /* AgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeView.swift; sourceTree = "<group>"; };
+		CFAE0FD92493076700B52BF1 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
+		CFAE0FDB2493159000B52BF1 /* FeedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEvent.swift; sourceTree = "<group>"; };
+		CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaperEvent.swift; sourceTree = "<group>"; };
+		CFAE0FDF249315C900B52BF1 /* NapEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NapEvent.swift; sourceTree = "<group>"; };
+		CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEvent.swift; sourceTree = "<group>"; };
+		CFAE0FE3249315DD00B52BF1 /* FussEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FussEvent.swift; sourceTree = "<group>"; };
+		CFAE0FE5249315E700B52BF1 /* TummyTimeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TummyTimeEvent.swift; sourceTree = "<group>"; };
+		CFAE0FE72493178800B52BF1 /* CustomEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEvent.swift; sourceTree = "<group>"; };
+		CFAE0FE92493198800B52BF1 /* TickPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickPublisher.swift; sourceTree = "<group>"; };
+		CFAE0FEB24931A3800B52BF1 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
 		CFC18008245E18B1007C756A /* PoopDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoopDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC1800B245E18B1007C756A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFC1800D245E18B1007C756A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CFC1800F245E18B1007C756A /* ContentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViews.swift; sourceTree = "<group>"; };
+		CFC1800F245E18B1007C756A /* NewEventTypeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventTypeSelectorView.swift; sourceTree = "<group>"; };
 		CFC18011245E18B3007C756A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CFC18014245E18B3007C756A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CFC18017245E18B3007C756A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -61,13 +97,11 @@
 		CFC18022245E18B3007C756A /* BabyTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyTrackerTests.swift; sourceTree = "<group>"; };
 		CFC18024245E18B3007C756A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CFC1802D245E1A86007C756A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		CFC18032245E224E007C756A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		CFC18032245E224E007C756A /* BabyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyEvent.swift; sourceTree = "<group>"; };
 		CFCF4FEA2484653A0027CB98 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
-		CFCF4FEC248469DB0027CB98 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		CFD6F41E2487068200E7DAAD /* NewWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWindowView.swift; sourceTree = "<group>"; };
 		CFD6F420248706A900E7DAAD /* BBLGSSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBLGSSViewController.swift; sourceTree = "<group>"; };
 		CFD6F42224870E6C00E7DAAD /* DocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentsView.swift; sourceTree = "<group>"; };
-		CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,13 +123,102 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CFAE0FED24931E0900B52BF1 /* UIApplication */ = {
+			isa = PBXGroup;
+			children = (
+				CFC18016245E18B3007C756A /* LaunchScreen.storyboard */,
+				CFC18019245E18B3007C756A /* Info.plist */,
+				CFC18011245E18B3007C756A /* Assets.xcassets */,
+				CFC1800B245E18B1007C756A /* AppDelegate.swift */,
+				CFC1800D245E18B1007C756A /* SceneDelegate.swift */,
+			);
+			path = UIApplication;
+			sourceTree = "<group>";
+		};
+		CFAE0FEE24931E1A00B52BF1 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				CFD6F420248706A900E7DAAD /* BBLGSSViewController.swift */,
+				CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		CFAE0FEF24931E2500B52BF1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CF125D64249246B800E2908C /* NewBabyFormView.swift */,
+				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
+				CFAE0FD7249306B400B52BF1 /* AgeView.swift */,
+				CFD6F42224870E6C00E7DAAD /* DocumentsView.swift */,
+				CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */,
+				CFAE0FD52493067300B52BF1 /* BabyIconView.swift */,
+				CFC1800F245E18B1007C756A /* NewEventTypeSelectorView.swift */,
+				CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CFAE0FF024931E3000B52BF1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CFAE0FF224931F2B00B52BF1 /* EventTypes */,
+				CFC18032245E224E007C756A /* BabyEvent.swift */,
+				CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */,
+				CFAE0FCF2492CC2600B52BF1 /* Baby.swift */,
+				CF90150F2486ABF000343F5C /* BabyLog.swift */,
+				CF125D6824926FEB00E2908C /* Errors.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		CFAE0FF124931EB900B52BF1 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				CFC1802D245E1A86007C756A /* Extensions.swift */,
+				CFAE0FEB24931A3800B52BF1 /* Formatters.swift */,
+				CFAE0FD12493016100B52BF1 /* ObservableDate.swift */,
+				CFAE0FE92493198800B52BF1 /* TickPublisher.swift */,
+				CF125D6624924E3C00E2908C /* ViewModifiers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		CFAE0FF224931F2B00B52BF1 /* EventTypes */ = {
+			isa = PBXGroup;
+			children = (
+				CFAE0FDB2493159000B52BF1 /* FeedEvent.swift */,
+				CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */,
+				CFAE0FDF249315C900B52BF1 /* NapEvent.swift */,
+				CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */,
+				CFAE0FE3249315DD00B52BF1 /* FussEvent.swift */,
+				CFAE0FE5249315E700B52BF1 /* TummyTimeEvent.swift */,
+				CFAE0FE72493178800B52BF1 /* CustomEvent.swift */,
+			);
+			path = EventTypes;
+			sourceTree = "<group>";
+		};
+		CFAE0FF524931FED00B52BF1 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				CF9015112486AC0300343F5C /* MyBabyLog.bblg */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
+		CFAE0FF62493201C00B52BF1 /* ProjectAssets */ = {
+			isa = PBXGroup;
+			children = (
+				CF9015152486ACED00343F5C /* bblg_icon.png */,
+			);
+			path = ProjectAssets;
+			sourceTree = "<group>";
+		};
 		CFC17FFF245E18B0007C756A = {
 			isa = PBXGroup;
 			children = (
-				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
-				CFFA0B0124639E4000EBDD87 /* SwiftUIView.swift */,
 				CFCF4FEA2484653A0027CB98 /* readme.md */,
-				CF9015152486ACED00343F5C /* icons8-babys_room.png */,
+				CFAE0FF62493201C00B52BF1 /* ProjectAssets */,
 				CFC1800A245E18B1007C756A /* BabyTracker */,
 				CFC18021245E18B3007C756A /* BabyTrackerTests */,
 				CFC18009245E18B1007C756A /* Products */,
@@ -115,22 +238,14 @@
 			isa = PBXGroup;
 			children = (
 				CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */,
-				CFC1800B245E18B1007C756A /* AppDelegate.swift */,
-				CFCF4FEC248469DB0027CB98 /* Environment.swift */,
-				CFC1800D245E18B1007C756A /* SceneDelegate.swift */,
-				CFD6F420248706A900E7DAAD /* BBLGSSViewController.swift */,
-				CFC1800F245E18B1007C756A /* ContentViews.swift */,
-				CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */,
-				CF90150F2486ABF000343F5C /* BabyLog.swift */,
-				CF9015132486AC3700343F5C /* BabyLogView.swift */,
-				CFD6F42224870E6C00E7DAAD /* DocumentsView.swift */,
-				CF6A2D35245F64F50060FA8A /* FormViews.swift */,
-				CFC18032245E224E007C756A /* Models.swift */,
-				CFC1802D245E1A86007C756A /* Extensions.swift */,
-				CFC18011245E18B3007C756A /* Assets.xcassets */,
-				CFC18016245E18B3007C756A /* LaunchScreen.storyboard */,
-				CFC18019245E18B3007C756A /* Info.plist */,
-				CF9015112486AC0300343F5C /* NewBaby.bblg */,
+				CFAE0FF124931EB900B52BF1 /* Helpers */,
+				CFAE0FF024931E3000B52BF1 /* Models */,
+				CFAE0FED24931E0900B52BF1 /* UIApplication */,
+				CFAE0FEE24931E1A00B52BF1 /* UIKit */,
+				CFAE0FEF24931E2500B52BF1 /* Views */,
+				CFAE0FD92493076700B52BF1 /* LogView.swift */,
+				CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */,
+				CFAE0FF524931FED00B52BF1 /* Templates */,
 				CFC18013245E18B3007C756A /* Preview Content */,
 			);
 			path = BabyTracker;
@@ -240,12 +355,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF9015162486ACED00343F5C /* icons8-babys_room.png in Resources */,
+				CF9015162486ACED00343F5C /* bblg_icon.png in Resources */,
 				CFC18018245E18B3007C756A /* LaunchScreen.storyboard in Resources */,
 				CFC18015245E18B3007C756A /* Preview Assets.xcassets in Resources */,
 				CFCF4FEB2484653A0027CB98 /* readme.md in Resources */,
+				CFAE0FF424931FD200B52BF1 /* SharedAssets.xcassets in Resources */,
 				CFC18012245E18B3007C756A /* Assets.xcassets in Resources */,
-				CF9015122486AC0300343F5C /* NewBaby.bblg in Resources */,
+				CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,20 +379,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFAE0FEA2493198800B52BF1 /* TickPublisher.swift in Sources */,
+				CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */,
+				CFAE0FE4249315DD00B52BF1 /* FussEvent.swift in Sources */,
 				CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */,
+				CFAE0FDC2493159000B52BF1 /* FeedEvent.swift in Sources */,
+				CF125D65249246B800E2908C /* NewBabyFormView.swift in Sources */,
+				CFAE0FD62493067300B52BF1 /* BabyIconView.swift in Sources */,
 				CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */,
-				CFCF4FED248469DB0027CB98 /* Environment.swift in Sources */,
-				CFFA0B0224639E4000EBDD87 /* SwiftUIView.swift in Sources */,
+				CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
-				CF6A2D36245F64F50060FA8A /* FormViews.swift in Sources */,
-				CFC18010245E18B1007C756A /* ContentViews.swift in Sources */,
+				CF125D6B249270BA00E2908C /* ConflictResolutionViews.swift in Sources */,
+				CFAE0FDE249315BE00B52BF1 /* DiaperEvent.swift in Sources */,
+				CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */,
+				CFC18010245E18B1007C756A /* NewEventTypeSelectorView.swift in Sources */,
+				CF125D6924926FEB00E2908C /* Errors.swift in Sources */,
+				CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */,
 				CFD6F421248706A900E7DAAD /* BBLGSSViewController.swift in Sources */,
+				CFAE0FE6249315E700B52BF1 /* TummyTimeEvent.swift in Sources */,
+				CFAE0FEC24931A3800B52BF1 /* Formatters.swift in Sources */,
 				CFD6F41F2487068200E7DAAD /* NewWindowView.swift in Sources */,
-				CF9015142486AC3700343F5C /* BabyLogView.swift in Sources */,
+				CF125D6724924E3C00E2908C /* ViewModifiers.swift in Sources */,
 				CFC1802E245E1A86007C756A /* Extensions.swift in Sources */,
+				CFAE0FE0249315C900B52BF1 /* NapEvent.swift in Sources */,
+				CFAE0FE82493178800B52BF1 /* CustomEvent.swift in Sources */,
+				CFAE0FE2249315D300B52BF1 /* WeightEvent.swift in Sources */,
 				CFD6F42324870E6C00E7DAAD /* DocumentsView.swift in Sources */,
+				CFAE0FCE2492C93400B52BF1 /* PreferredColor.swift in Sources */,
 				CF9015102486ABF100343F5C /* BabyLog.swift in Sources */,
-				CFC18033245E224E007C756A /* Models.swift in Sources */,
+				CFC18033245E224E007C756A /* BabyEvent.swift in Sources */,
+				CFAE0FD8249306B400B52BF1 /* AgeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,7 +567,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"BabyTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 6SEG2H9AQV;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = BabyTracker/Info.plist;
+				INFOPLIST_FILE = BabyTracker/UIApplication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,7 +593,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"BabyTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 6SEG2H9AQV;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = BabyTracker/Info.plist;
+				INFOPLIST_FILE = BabyTracker/UIApplication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

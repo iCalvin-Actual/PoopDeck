@@ -1,244 +1,13 @@
 //
-//  DocumentsView.swift
+//  LogView.swift
 //  BabyTracker
 //
-//  Created by Calvin Chestnut on 6/2/20.
+//  Created by Calvin Chestnut on 6/11/20.
 //  Copyright © 2020 Calvin Chestnut. All rights reserved.
 //
 
 import SwiftUI
 import Combine
-
-enum DocumentAction {
-    case createNew
-    case show(_ log: BabyLog)
-    case save(_ log: BabyLog)
-    case close(_ log: BabyLog)
-    case delete(_ log: BabyLog)
-    case resolve(_ log: BabyLog)
-}
-
-struct DocumentsView: View {
-    @State var logs: [BabyLog] = []
-    
-    @State var selected: BabyLog?
-    
-    var onAction: ((DocumentAction) -> Void)?
-    
-    var body: some View {
-        VStack {
-            BabyPickerView(babies: logs.map({ $0.baby }), onAction: self.onBabyAction)
-                .background(Color(.secondarySystemBackground))
-    
-            Divider()
-            self.selectedOrEmpty
-            
-        }
-        .background(Color(.secondarySystemBackground))
-        .onAppear {
-            if self.selected == nil, let first = self.logs.first {
-                self.selected = first
-            }
-        }
-    }
-    
-    func onBabyAction(_ babyAction: BabyAction) {
-        switch babyAction {
-        case .show(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.show(actionDoc))
-        case .select(let baby):
-            guard let baby = baby else {
-                self.onAction?(.createNew)
-                return
-            }
-            self.selected = self.log(for: baby)
-        case .save(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.save(actionDoc))
-        case .close(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.close(actionDoc))
-        case .delete(let baby):
-            guard let actionDoc = self.log(for: baby) else { return }
-            self.onAction?(.delete(actionDoc))
-        }
-    }
-    
-    func log(for baby: Baby) -> BabyLog? {
-        return logs.first(where: { $0.baby == baby })
-    }
-    
-    var selectedOrEmpty: AnyView {
-        if let selected = self.selected {
-            return LogView(log: selected, onAction: self.onAction).anyify()
-        }
-        /// Better no open docs view?
-        return EmptyView().anyify()
-    }
-}
-
-enum BabyAction {
-    case select(_ baby: Baby?)
-    case show(_ baby: Baby)
-    case save(_ baby: Baby)
-    case close(_ baby: Baby)
-    case delete(_ baby: Baby)
-}
-
-struct BabyPickerView: View {
-    var babies: [Baby] = []
-    var selected: Baby?
-    
-    var onAction: ((BabyAction) -> Void)?
-    
-    var body: some View {
-        HStack {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(babies, id: \.self) { baby in
-                        BabyIconView(baby: baby, onSelect: { baby in
-                            self.onAction?(.select(baby))
-                        })
-                        .contextMenu {
-                            
-                            Button(action: {
-                                self.onAction?(.show(baby))
-                            }) {
-                                Text("Show File")
-                                Image(systemName: "doc.text.magnifyingglass")
-                            }
-                            
-                            Button(action: {
-                                self.onAction?(.save(baby))
-                            }) {
-                                Text("Save Now")
-                                Image(systemName: "doc.append")
-                            }
-                            
-                            Button(action: {
-                                self.onAction?(.close(baby))
-                            }) {
-                                Text("Close")
-                                Image(systemName: "xmark.square")
-                            }
-                            
-                            Button(action: {
-                                self.onAction?(.delete(baby))
-                            }) {
-                                Text("Delete")
-                                Image(systemName: "trash")
-                            }
-                        }
-                    }
-                }
-                .frame(height: 44.0, alignment: .top)
-                .padding(2)
-            }
-            
-            Spacer()
-            Button(action: {
-                self.onAction?(.select(nil))
-            }) {
-                Image(systemName: "plus.square.on.square.fill")
-                .padding(8)
-                    .background(Color(.secondarySystemBackground))
-            }
-            .padding(.trailing, 8)
-        }
-        .padding(.horizontal)
-    }
-}
-
-struct BabyIconView: View {
-    @ObservedObject var baby: Baby
-    var selected = false
-    
-    var onSelect: ((Baby) -> Void)?
-    
-    var body: some View {
-        Button(action: {
-            self.onSelect?(self.baby)
-        }) {
-            ZStack {
-                ColoredCircle(color: baby.color ?? .random)
-                    
-                Circle()
-                    .stroke(selected ? Color.black : Color(.secondarySystemBackground), lineWidth: 2)
-                
-                Text(baby.displayInitial)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-            }
-        }
-        .frame(width: 44, height: 44, alignment: .center)
-    }
-}
-
-struct ColoredCircle: View {
-    let color: PreferredColor
-    
-    var body: some View {
-        ZStack {
-            Circle()
-                .foregroundColor(Color(red: color.r, green: color.g, blue: color.b))
-            
-            Circle()
-                .foregroundColor(Color(UIColor.tertiarySystemBackground.withAlphaComponent(0.75)))
-        }
-    }
-}
-
-struct AgeView: View {
-    var birthday: Date?
-    var body: some View {
-        Button(action: {
-            switch self.ageStyle {
-            case .days:
-                self.ageStyle = .weeks
-            case .weeks:
-                self.ageStyle = .months
-            case .months:
-                self.ageStyle = .full
-            case .full:
-                self.ageStyle = .days
-            }
-        }) {
-            Text(ageString)
-            .font(.headline)
-            .foregroundColor(.primary)
-        }
-    }
-    
-    @State var ageStyle: DateView = .days
-    var formatter: DateComponentsFormatter = .init()
-    
-    var ageString: String {
-        guard let birthday = birthday else {
-            return ""
-        }
-        switch ageStyle {
-        case .days:
-            formatter.allowedUnits = [.day]
-        case .weeks:
-            formatter.allowedUnits = [.weekOfMonth, .day]
-        case .months:
-            formatter.allowedUnits = [.month, .weekOfMonth, .day]
-        case .full:
-            formatter.allowedUnits = [.year, .month, .day]
-        }
-        formatter.unitsStyle = .short
-        formatter.maximumUnitCount = 2
-        return formatter.string(from: birthday, to: Date()) ?? ""
-    }
-    
-    enum DateView {
-        case days
-        case weeks
-        case months
-        case full
-    }
-}
 
 struct LogView: View {
     @Environment(\.editMode) var editMode
@@ -426,7 +195,7 @@ struct LogView: View {
                         pluralValue: "Weight Check",
                         allowPresentList: true,
                         newEventTemplate: { () -> WeightEvent in
-                            return WeightEvent(weight: Measurement(value: 10, unit: UnitMass.pounds))
+                            return WeightEvent(measurement: Measurement(value: 10, unit: UnitMass.pounds))
                         }(),
                         filter: { (event: WeightEvent) -> Bool in
                             guard
@@ -501,15 +270,12 @@ struct LogView: View {
                         onAction: self.onEventAction)
                 }
                 
-                    CustomEventView(
-                        date: targetDate,
-                        onAction: self.onEventAction)
+                CustomEventView(
+                    date: targetDate,
+                    onAction: self.onEventAction)
             }
-            
-//            FeedView(babyLog: log)
         }
         .padding(.vertical)
-        .background(Color(.secondarySystemBackground))
         .onReceive(NotificationCenter.default.publisher(for: UIDocument.stateChangedNotification, object: log), perform: self.handleStateChange)
     }
     
@@ -544,11 +310,11 @@ struct LogView: View {
                 event.id = UUID()
             }
             event.date = self.targetDate.date
-            let unit = event.size?.unit ?? UnitVolume.milliliters
+            let unit = event.measurement?.unit ?? UnitVolume.milliliters
             if let modifier = unit.modifier {
-                let value = event.size?.value ?? unit.defaultValue ?? 0
+                let value = event.measurement?.value ?? unit.defaultValue ?? 0
                 let adjustment = modifier * Double(increment ?? 0)
-                event.size = Measurement(value: value + adjustment, unit: unit)
+                event.measurement = Measurement(value: value + adjustment, unit: unit)
                 print("Updated")
             }
             self.log.save(event) { (savedEvent) in
@@ -559,14 +325,14 @@ struct LogView: View {
                 print("Did Delete?")
             }
         case .toggleUnit(var event):
-            guard let size = event.size else { return }
+            guard let size = event.measurement else { return }
             let values = UnitVolume.supported
             let index = values.lastIndex(of: size.unit) ?? values.endIndex
             let newIndex = (index + 1) % values.count
             let newUnit = values[newIndex]
-            event.size = size.converted(to: newUnit)
-            let absCount = round((event.size?.value ?? 0) / (newUnit.modifier ?? 1))
-            event.size?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
+            event.measurement = size.converted(to: newUnit)
+            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
+            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
             self.log.save(event) { (saveEvent) in
                 print("Did Save")
             }
@@ -1110,7 +876,6 @@ struct CustomEventView: View {
         .foregroundColor(.white)
         .padding()
         .background(CustomEvent.type.colorValue)
-        .background(Color(.tertiarySystemBackground))
         .cornerRadius(22)
         .padding(.horizontal)
     }
@@ -1189,9 +954,9 @@ struct DiaperSummaryView: View {
     
     var lastEventDateLabel: AnyView {
         guard let lastEvent = lastEvent else {
-            return EmptyView().anyify()
+            return EmptyView().anyPlease()
         }
-        return Text(DateFormatter.timeDisplay.string(from: lastEvent.date)).anyify()
+        return Text(DateFormatter.shortTimeDisplay.string(from: lastEvent.date)).anyPlease()
     }
     
     var body: some View {
@@ -1220,7 +985,7 @@ struct DiaperSummaryView: View {
                     Text("💩")
                         .foregroundColor(.primary)
                         .padding()
-                        .background(self.poopActive ? Color.blue : Color.white)
+                        .background(self.poopActive ? Color.gray : Color.white)
                         .cornerRadius(32)
                 }
                 
@@ -1233,7 +998,7 @@ struct DiaperSummaryView: View {
                     Text("💦")
                         .foregroundColor(.primary)
                         .padding()
-                        .background(self.wetActive ? Color.blue : Color.white)
+                        .background(self.wetActive ? Color.gray : Color.white)
                         .cornerRadius(32)
                 }
                 Spacer()
@@ -1270,7 +1035,6 @@ struct DiaperSummaryView: View {
         .foregroundColor(.white)
         .padding()
         .background(DiaperEvent.type.colorValue)
-//        .background(Color(.tertiarySystemBackground))
         .cornerRadius(22)
         .padding(.horizontal)
         .onReceive(Just(log), perform: { (_) in
@@ -1293,7 +1057,7 @@ struct DiaperSummaryView: View {
     func defaultSummaryView(_ events: [DiaperEvent], _ selected: DiaperEvent?) -> AnyView {
         guard events.count > 0 else {
             return Text("No Changes Today")
-                .anyify()
+                .anyPlease()
         }
         let poops = events.filter({ $0.poop }).count
         let pees = events.filter({ $0.pee }).count
@@ -1308,7 +1072,7 @@ struct DiaperSummaryView: View {
                 Spacer()
             }
         }
-        .anyify()
+        .anyPlease()
     }
     
     func removeLast() {
@@ -1399,9 +1163,9 @@ struct MeasuredEventSummaryView<E: MeasuredBabyEvent>: View {
     
     var lastEventDateLabel: AnyView {
         guard let lastEvent = lastEvent else {
-            return EmptyView().anyify()
+            return EmptyView().anyPlease()
         }
-        return Text(DateFormatter.timeDisplay.string(from: lastEvent.date)).anyify()
+        return Text(DateFormatter.shortTimeDisplay.string(from: lastEvent.date)).anyPlease()
     }
     
     var summaryViewBuilder: ((_ events: [E], _ selected: E?) -> AnyView) {
@@ -1483,7 +1247,7 @@ struct MeasuredEventSummaryView<E: MeasuredBabyEvent>: View {
     func defaultSummaryView(_ events: [E], _ selected: E?) -> AnyView {
         guard events.count > 0 else {
             return Text("No \(pluralValue) Today")
-                .anyify()
+                .anyPlease()
         }
         var isAmbiguous: Bool = false
         var count: Int = 0
@@ -1532,7 +1296,7 @@ struct MeasuredEventSummaryView<E: MeasuredBabyEvent>: View {
                 Spacer()
             }
         }
-        .anyify()
+        .anyPlease()
     }
     
     func measurementModifierIfNeeded() -> AnyView {
@@ -1575,9 +1339,9 @@ struct MeasuredEventSummaryView<E: MeasuredBabyEvent>: View {
 //            .onTapGesture {
 //                self.editing.toggle()
 //            }
-            .anyify()
+            .anyPlease()
         }
-        return EmptyView().anyify()
+        return EmptyView().anyPlease()
     }
     
     func removeLast() {
@@ -1591,10 +1355,10 @@ struct BabyInfoView: View {
     @Binding var editBaby: Bool
     
     var emojiLabel: AnyView {
-        guard !log.baby.emoji.isEmpty else { return EmptyView().anyify() }
+        guard !log.baby.emoji.isEmpty else { return EmptyView().anyPlease() }
         return Text(log.baby.emoji)
             .font(.headline)
-            .anyify()
+            .anyPlease()
     }
     
     var body: some View {
@@ -1606,7 +1370,7 @@ struct BabyInfoView: View {
                 if !log.baby.name.isEmpty {
                     Text(log.baby.displayName)
                         .font(.system(size: 42.0, weight: .heavy, design: .rounded))
-                        .foregroundColor(log.baby.color?.color ?? .primary)
+                        .foregroundColor(log.baby.themeColor?.color ?? .primary)
                 }
                 if log.baby.birthday != nil {
                     AgeView(birthday: log.baby.birthday)
@@ -1627,67 +1391,22 @@ struct BabyInfoView: View {
                 },
                     babyTextName: self.log.baby.nameComponents != nil ? self.log.baby.name : "",
                     babyEmojiName: self.log.baby.emoji,
-                    color: self.log.baby.color ?? .random,
+                    useEmojiName: self.log.baby.nameComponents == nil,
+                    color: self.log.baby.themeColor ?? .random,
                     birthday: self.log.baby.birthday ?? Date(),
-                    useEmoji: self.log.baby.nameComponents == nil,
-                    useBirthday: self.log.baby.birthday != nil)
+                    saveBirthday: self.log.baby.birthday != nil)
             })
         }
         .padding()
-        .background(Color(.tertiarySystemBackground))
         .cornerRadius(22)
         .padding(.horizontal)
         .padding(.bottom)
     }
 }
 
-struct FeedSummaryView: View {
-    @Binding var manager: BabyEventRecordsManager
-    
-    @State var feedEvents: [UUID: FeedEvent] = [:]
-    
-    var allowChanges: Bool = false
-    
-    var dateSortedEvents: [FeedEvent] {
-        return feedEvents.values.sorted(by: { $0.date > $1.date })
-    }
-    
-    var latestEvent: FeedEvent? {
-        return dateSortedEvents.last
-    }
-    
-    var body: some View {
-        Text("\(feedEvents.count) Events")
-            .onTapGesture {
-                guard self.allowChanges else { return }
-                let feedEvent = FeedEvent(source: .breast(.both))
-                self.manager.save(feedEvent) { (result) in
-                    switch result {
-                    case .failure:
-                        /// Bubble up error
-                        print("Bubble")
-                    case .success:
-                        self.reloadEvents()
-                    }
-                }
-            }
-            .onAppear {
-                self.reloadEvents()
-            }
-    }
-    
-    func reloadEvents() {
-        manager.groupOfType { (result: Result<[UUID: FeedEvent], BabyError>) in
-            if case let .success(newEvents) = result {
-                feedEvents = newEvents
-            }
-        }
-    }
-}
-
-struct BabyIconView_Preview: PreviewProvider {
+struct LogView_Previews: PreviewProvider {
     static var babyLog: BabyLog {
-        let log = BabyLog(fileURL: Bundle.main.url(forResource: "NewBaby", withExtension: "bblg")!)
+        let log = BabyLog(fileURL: Bundle.main.url(forResource: "MyBabyLog", withExtension: "bblg")!)
         log.baby = baby
         return log
     }
@@ -1703,10 +1422,10 @@ struct BabyIconView_Preview: PreviewProvider {
         if let date = components.date {
             baby.birthday = date
         }
-        baby.color = PreferredColor.prebuiltSet.randomElement()!
+        baby.themeColor = PreferredColor.prebuiltSet.randomElement()!
         return baby
     }
     static var previews: some View {
-        DocumentsView(logs: [babyLog])
+        LogView(log: babyLog)
     }
 }

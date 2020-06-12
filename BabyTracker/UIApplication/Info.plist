@@ -9,7 +9,7 @@
 		<dict>
 			<key>CFBundleTypeIconFiles</key>
 			<array>
-				<string>icons8-babys_room</string>
+				<string>bblg_icon.png</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>BabyLog</string>
@@ -39,6 +39,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.chestnut.BabyTracker.viewLogs</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -98,10 +102,6 @@
 				<string>com.chestnut.babylog</string>
 			</dict>
 		</dict>
-	</array>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>com.chestnut.BabyTracker.viewLogs</string>
 	</array>
 </dict>
 </plist>

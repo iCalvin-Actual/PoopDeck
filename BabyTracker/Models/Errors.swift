@@ -38,6 +38,7 @@ extension BBLGSSViewController: BabyErrorHandler {
     func handle(_ error: BabyError) {
         print("🚨: Handling Error - \(error.localizedDescription)")
         let alertController = UIAlertController(title: error.localizedTitle, message: error.localizedDescription, preferredStyle: .alert)
+        alertController.addAction(.init(title: "Close", style: .cancel, handler: nil))
         self.present(alertController, animated: true)
     }
 }

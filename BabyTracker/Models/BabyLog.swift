@@ -19,6 +19,10 @@ struct BabyLogArchive: Codable {
         self.baby = log.baby
         self.eventStore = log.eventStore
     }
+    init(_ baby: Baby) {
+        self.baby = baby
+        self.eventStore = .init()
+    }
 }
 
 // MARK: - Baby Log
@@ -68,6 +72,22 @@ class BabyLog: UIDocument {
             }
         }
         super.presentedItemDidMove(to: newURL)
+    }
+    
+    override func save(to url: URL, for saveOperation: UIDocument.SaveOperation, completionHandler: ((Bool) -> Void)? = nil) {
+        if let last = url.pathComponents.last, !last.contains(baby.displayName) {
+            var expectedURL = url
+            expectedURL.deleteLastPathComponent()
+            expectedURL.appendPathComponent("\(baby.displayName).bblg")
+            do {
+                try FileManager.default.moveItem(at: fileURL, to: expectedURL)
+                super.save(to: expectedURL, for: .forOverwriting, completionHandler: completionHandler)
+                return
+            } catch {
+                print("🚨 Failed to rename file \(url.absoluteString)")
+            }
+        }
+        super.save(to: url, for: .forOverwriting, completionHandler: completionHandler)
     }
 }
 

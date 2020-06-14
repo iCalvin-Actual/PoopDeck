@@ -63,10 +63,12 @@ class BBLGSSViewController: UIViewController {
     }
     
     func dismissPresented(animated: Bool = false, _ completion: (() -> Void)? = nil) {
-        if let presented = presentedViewController {
-            presented.dismiss(animated: animated, completion: completion)
-        } else {
-            completion?()
+        DispatchQueue.main.async {
+            if let presented = self.presentedViewController {
+                presented.dismiss(animated: animated, completion: completion)
+            } else {
+                completion?()
+            }
         }
     }
     
@@ -318,6 +320,10 @@ extension BBLGSSViewController {
             self.deleteDocument(log)
         case .forceClose:
             self.forceCloseDocuments()
+        case .updateColor(let log, newColor: let newColor):
+            guard let logIndex = docsInView.firstIndex(of: log) else { return }
+            docsInView[logIndex].baby.themeColor = newColor
+            self.rebuildSwiftUIView()
         }
     }
     

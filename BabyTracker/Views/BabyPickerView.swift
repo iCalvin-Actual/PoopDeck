@@ -15,6 +15,7 @@ enum LogPickerAction {
     case save(_ baby: BabyLog)
     case close(_ baby: BabyLog)
     case delete(_ baby: BabyLog)
+    case updateColor(_ baby: BabyLog, newColor: PreferredColor)
     case forceClose
 }
 
@@ -24,6 +25,8 @@ struct BabyPickerView: View {
     @ObservedObject var selected: BabyLog
     
     var onAction: ((LogPickerAction) -> Void)?
+    
+    @State private var targetDrop: Bool = true
     
     // MARK: - Views
     
@@ -57,6 +60,16 @@ struct BabyPickerView: View {
                         withAnimation {
                             self.onAction?(.select(log))
                         }
+                    })
+                    .onDrop(of: ["com.apple.uikit.color"], isTargeted: self.$targetDrop, perform: { (items) in
+                        guard let item = items.first else { return false }
+                        _ = item.loadObject(ofClass: UIColor.self) { color, _ in
+                            if let color = color as? UIColor {
+                                self.onAction?(.updateColor(log, newColor: .init(uicolor: color)))
+                                
+                            }
+                        }
+                        return true
                     })
                     .contextMenu {
                         

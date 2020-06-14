@@ -35,7 +35,11 @@ struct LogView: View {
     
     var body: some View {
         VStack(spacing: 2) {
-            BabyInfoView(log: log)
+            BabyInfoView(
+                log: log,
+                onColorUpdate: { (log, color) in
+                    self.onAction?(.updateColor(log, newColor: color))
+                })
 
             DateStepperView(targetDate: $targetDate, accentColor: log.baby.themeColor?.color)
             

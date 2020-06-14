@@ -13,6 +13,10 @@ struct BabyInfoView: View {
     @ObservedObject var log: BabyLog
     @State var editBaby: Bool = false
     
+    var onColorUpdate: ((_: BabyLog, _: PreferredColor) -> Void)?
+    
+    @State private var targetDrop: Bool = true
+    
     // MARK: - Views
     var body: some View {
         HStack(alignment: .center, spacing: 4) {
@@ -31,6 +35,15 @@ struct BabyInfoView: View {
         .background(Color(.systemBackground))
         .cornerRadius(22)
         .padding(.horizontal)
+        .onDrop(of: ["com.apple.uikit.color"], isTargeted: $targetDrop, perform: { (items) in
+            guard let item = items.first else { return false }
+            _ = item.loadObject(ofClass: UIColor.self) { color, _ in
+                if let color = color as? UIColor {
+                    self.onColorUpdate?(self.log, PreferredColor(uicolor: color))
+                }
+            }
+            return true
+        })
         .sheet(
             isPresented: $editBaby,
             content: editingForm)

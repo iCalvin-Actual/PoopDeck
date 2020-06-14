@@ -17,6 +17,7 @@ enum DocumentAction {
     case close(_ log: BabyLog)
     case delete(_ log: BabyLog)
     case resolve(_ log: BabyLog)
+    case updateColor(_ baby: BabyLog, newColor: PreferredColor)
     case forceClose
 }
 
@@ -72,6 +73,8 @@ extension DocumentsView {
             self.onAction?(.delete(log))
         case .forceClose:
             self.onAction?(.forceClose)
+        case .updateColor(let log, newColor: let newColor):
+            self.onAction?(.updateColor(log, newColor: newColor))
         }
     }
 }

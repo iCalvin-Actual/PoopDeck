@@ -9,6 +9,12 @@
 import SwiftUI
 import Combine
 
+extension BabyLog {
+    static var dummy: BabyLog {
+        return BabyLog(fileURL: URL(fileURLWithPath: ""))
+    }
+}
+
 // MARK: - Date
 extension Date {
     static var oneWeekAgo: Date {

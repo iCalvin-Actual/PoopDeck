@@ -11,6 +11,15 @@ import SwiftUI
 import Combine
 
 // MARK: - Archive
+struct BabyLogArchiveOldFormat: Codable {
+    let baby: OldFormatBaby
+    let eventStore: BabyEventStore
+    
+    init(_ baby: OldFormatBaby) {
+        self.baby = baby
+        self.eventStore = .init()
+    }
+}
 struct BabyLogArchive: Codable {
     let baby: Baby
     let eventStore: BabyEventStore
@@ -59,7 +68,18 @@ class BabyLog: UIDocument {
             self.baby = archive.baby
             self.eventStore = archive.eventStore
         } catch {
-            throw BabyError.unknown
+            do {
+                let archive = try JSONDecoder.safe.decode(BabyLogArchiveOldFormat.self, from: contentData)
+                let baby = Baby()
+                baby.name = archive.baby.name
+                baby.emoji = archive.baby.emoji ?? ""
+                baby.birthday = archive.baby.birthday
+                baby.themeColor = archive.baby.themeColor
+                self.baby = baby
+                self.eventStore = archive.eventStore
+            } catch {
+                throw BabyError.unknown
+            }
         }
     }
     

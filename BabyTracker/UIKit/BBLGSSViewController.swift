@@ -19,6 +19,7 @@ class BBLGSSViewController: UIViewController {
     var docsInView: [BabyLog] = [] {
         didSet {
             updateCurrentActivity()
+            self.rebuildSwiftUIView()
         }
     }
     
@@ -50,6 +51,10 @@ class BBLGSSViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
+        
+        documentBrowser.additionalLeadingNavigationBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(rebuildSwiftUIView))
+        ]
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -65,6 +70,7 @@ class BBLGSSViewController: UIViewController {
         }
     }
     
+    @objc
     func rebuildSwiftUIView(animated: Bool = false) {
         dismissPresented(animated: animated) {
             self.buildSwiftUIView(animated: animated)
@@ -77,17 +83,14 @@ extension BBLGSSViewController {
     
     func buildSwiftUIView(animated: Bool = false) {
         let hostController: UIViewController
-        if self.docsInView.count > 0 {
-            let view = DocumentsView(
-                logs: docsInView,
-                selected: docsInView.first!,
-                onAction: onAction)
-            hostController = UIHostingController(rootView: view)
-        } else {
-            let view = NewWindowView(
-                openDocument: showDefaultStateBrowser)
-            hostController = UIHostingController(rootView: view)
-        }
+
+        let view = DocumentsView(
+            logs: docsInView,
+            selected: docsInView.first,
+            onAction: onAction)
+        
+        hostController = UIHostingController(rootView: view)
+        
         self.hostController = hostController
     }
 }
@@ -119,20 +122,25 @@ extension BBLGSSViewController {
         default:
             documentBrowser.allowsPickingMultipleItems = true
         }
+        documentBrowser.allowsDocumentCreation = true
         
-        hostController = documentBrowser
-        if let url = fileDestination {
-            documentBrowser.revealDocument(at: url, importIfNeeded: true) { (url, error) in
-                guard error == nil else {
-                    self.documentBrowser.dismiss(animated: true, completion: {
-                        self.rebuildSwiftUIView()
-                        self.handle(.unknown)
-                    })
-                    return
+        present(documentBrowser, animated: true) {
+            if let url = fileDestination {
+                self.documentBrowser.revealDocument(at: url, importIfNeeded: true) { (url, error) in
+                    guard error == nil else {
+                        self.documentBrowser.dismiss(animated: true, completion: {
+                            self.rebuildSwiftUIView()
+                            self.handle(.unknown)
+                            completion?(self.documentBrowser)
+                        })
+                        return
+                    }
+                    completion?(self.documentBrowser)
                 }
+            } else {
+               completion?(self.documentBrowser)
             }
         }
-        completion?(documentBrowser)
     }
     
     // MARK: - User Activity
@@ -209,6 +217,34 @@ extension BBLGSSViewController {
     }
 }
 
+//// MARK: - New Baby Form
+//extension BBLGSSViewController {
+//    func newBaby() {
+//        let newBabyView = NewBabyForm(
+//            onApply: { baby in
+//                self.dismissPresented(animated: true) {
+//                    self.createDocument(for: baby)
+//                }
+//        })
+//        let hostingController = UIHostingController(rootView: newBabyView)
+//        self.present(hostingController, animated: true, completion: nil)
+//    }
+//
+//    func createDocument(for baby: Baby) {
+//        self.createNewDocument(
+//            with: baby,
+//            at: nil)
+//            { (result) in
+//                switch result {
+//                case .failure(let error):
+//                    self.handle(error)
+//                case .success(let log):
+//                    self.presentDocuments(at: [log.fileURL])
+//                }
+//            }
+//    }
+//}
+
 // MARK: - Document Presentation
 
 extension BBLGSSViewController: LogPresenter { }
@@ -262,7 +298,7 @@ extension BBLGSSViewController {
 extension BBLGSSViewController {
     func onAction(_ action: DocumentAction) {
         switch action {
-        case .createNew:
+        case .showDocuments:
             self.dismissPresented(animated: true) {
                 self.showDefaultStateBrowser()
             }
@@ -280,6 +316,8 @@ extension BBLGSSViewController {
             self.presentDocumentBrowser(.view(log.fileURL))
         case .delete(let log):
             self.deleteDocument(log)
+        case .forceClose:
+            self.forceCloseDocuments()
         }
     }
     
@@ -290,9 +328,17 @@ extension BBLGSSViewController {
                 completion?(.failure(.unknown))
                 return
             }
-            print("Did Save")
             completion?(.success(document))
         }
+    }
+
+    func forceCloseDocuments() {
+        let oldDocsToTryToClose = self.docsInView
+        self.docsInView = []
+        self.rebuildSwiftUIView()
+        oldDocsToTryToClose.forEach({ log in
+            self.saveDocument(log)
+        })
     }
 
     func closeDocument(_ document: BabyLog, completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
@@ -328,29 +374,25 @@ extension BBLGSSViewController {
 
 extension BBLGSSViewController {
     func createNewDocument(with baby: Baby, at url: URL?, completion: @escaping ((Result<BabyLog, BabyError>) -> Void)) {
-        let saveURL: URL?
-        if var importURL = url {
-            importURL.deleteLastPathComponent()
-            importURL.appendPathComponent("\(baby.name).bblg")
-            saveURL = importURL
-        } else {
-            saveURL = FileManager().url(forUbiquityContainerIdentifier: "iCloud.com.chestnut.BabyTracker")?.appendingPathComponent("\(baby.name).bblg")
-        }
-        guard let url = saveURL else {
-            completion(.failure(.unknown))
-            return
-        }
-        dismissPresented(animated: true) {
-            let babyLog = BabyLog(fileURL: url)
-            babyLog.baby = baby
-            self.saveDocument(babyLog) { saveResult in
+        guard var destinationURL = url else { return }
+        
+        destinationURL.deleteLastPathComponent()
+        destinationURL.appendPathComponent("\(baby.displayName).bblg")
+        
+        do {
+            try FileManager.default.moveItem(at: url!, to: destinationURL)
+            let log = BabyLog(fileURL: destinationURL)
+            log.baby = baby
+            self.saveDocument(log) { saveResult in
                 switch saveResult {
                 case .success(let log):
                     completion(.success(log))
                 case .failure(let error):
-                    self.handle(error)
+                    completion(.failure(error))
                 }
             }
+        } catch {
+            completion(.failure(.unknown))
         }
     }
 }

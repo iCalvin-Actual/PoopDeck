@@ -11,18 +11,19 @@ import Combine
 
 // MARK: - Document Actions
 enum DocumentAction {
-    case createNew
+    case showDocuments
     case show(_ log: BabyLog)
     case save(_ log: BabyLog)
     case close(_ log: BabyLog)
     case delete(_ log: BabyLog)
     case resolve(_ log: BabyLog)
+    case forceClose
 }
 
 // MARK: - Documents View
 struct DocumentsView: View {
     @State var logs: [BabyLog] = []
-    @State var selected: BabyLog
+    @State var selected: BabyLog?
     
     var onAction: ((DocumentAction) -> Void)?
     
@@ -31,16 +32,23 @@ struct DocumentsView: View {
         VStack {
             BabyPickerView(
                 logs: logs,
-                selected: selected,
+                selected: selected ?? .dummy,
                 onAction: onBabyAction)
             
-            LogView(
-                log: selected,
-                onAction: onAction)
-                .background(Color(.systemGroupedBackground))
-                .padding(.top, 0)
-            
+            logOrNewWindowView()
         }
+    }
+    
+    func logOrNewWindowView() -> AnyView {
+        guard let selected = selected else {
+            return NewWindowView(openDocument: { self.onAction?(.showDocuments) }).anyPlease()
+        }
+        return LogView(
+            log: selected,
+            onAction: onAction)
+            .background(Color(.systemGroupedBackground))
+            .padding(.top, 0)
+            .anyPlease()
     }
 }
 
@@ -52,7 +60,7 @@ extension DocumentsView {
             self.onAction?(.show(log))
         case .select(let log):
             guard let log = log else {
-                self.onAction?(.createNew)
+                self.onAction?(.showDocuments)
                 return
             }
             self.selected = log
@@ -62,6 +70,8 @@ extension DocumentsView {
             self.onAction?(.close(log))
         case .delete(let log):
             self.onAction?(.delete(log))
+        case .forceClose:
+            self.onAction?(.forceClose)
         }
     }
 }

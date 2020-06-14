@@ -35,7 +35,7 @@ struct LogView: View {
     
     var body: some View {
         VStack(spacing: 2) {
-            BabyInfoView(log: log, editBaby: $editBaby)
+            BabyInfoView(log: log)
 
             DateStepperView(targetDate: $targetDate)
             

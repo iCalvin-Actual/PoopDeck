@@ -15,6 +15,7 @@ enum LogPickerAction {
     case save(_ baby: BabyLog)
     case close(_ baby: BabyLog)
     case delete(_ baby: BabyLog)
+    case forceClose
 }
 
 // MARK: - Baby Picker
@@ -33,6 +34,16 @@ struct BabyPickerView: View {
             Spacer()
             
             newDocButton()
+            .contextMenu {
+                
+                Button(action: {
+                    self.onAction?(.forceClose)
+                }) {
+                    Text("Close All")
+                    Image(systemName: "xmark.circle")
+                }
+                
+            }
         }
         .padding(.horizontal)
         .padding(.vertical, 4)
@@ -84,7 +95,7 @@ struct BabyPickerView: View {
     
     private func closeButton(_ babyLog: BabyLog) -> some View {
         Button(action: {
-            self.onAction?(.save(babyLog))
+            self.onAction?(.close(babyLog))
         }) {
             Text("Close")
             Image(systemName: "xmark.square")
@@ -93,7 +104,7 @@ struct BabyPickerView: View {
     
     private func deleteButton(_ babyLog: BabyLog) -> some View {
         Button(action: {
-            self.onAction?(.save(babyLog))
+            self.onAction?(.delete(babyLog))
         }) {
             Text("Delete")
             Image(systemName: "trash")

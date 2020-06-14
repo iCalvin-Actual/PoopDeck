@@ -15,27 +15,9 @@ struct NewWindowView: View {
     
     var body: some View {
         VStack {
-            Spacer()
-            
             Text("PoopDeck")
                 .font(.system(.largeTitle, design: .rounded))
             
-            Spacer()
-            
-            HStack {
-                Spacer()
-                
-                Button(action: {
-                    self.openDocument?()
-                }) {
-                    VStack {
-                        Image(systemName: "plus.square.fill")
-                        Text("New")
-                    }
-                }
-                
-                Spacer()
-            }
             Spacer()
         }
     }

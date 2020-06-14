@@ -9,6 +9,21 @@
 import Foundation
 
 // MARK: - Baby
+class OldFormatBaby: Codable {
+    
+    var id: UUID
+    
+    init() {
+        self.id = UUID()
+    }
+    
+    var name: String = ""
+    var emoji: String?
+    var birthday: Date?
+    
+    var themeColor: PreferredColor? = .random
+}
+
 class Baby: Codable {
     
     var id: UUID
@@ -19,6 +34,8 @@ class Baby: Codable {
     
     var name: String = ""
     var emoji: String = ""
+    var prefersEmoji: Bool = true
+    
     var birthday: Date?
     
     var themeColor: PreferredColor? = .random

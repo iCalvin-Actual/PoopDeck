@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - BabyInfoView
 struct BabyInfoView: View {
     @ObservedObject var log: BabyLog
-    @Binding var editBaby: Bool
+    @State var editBaby: Bool = false
     
     // MARK: - Views
     var body: some View {
@@ -26,9 +26,6 @@ struct BabyInfoView: View {
             editButton()
                 .accentColor(log.baby.themeColor?.color)
                 .font(.title)
-                .sheet(
-                    isPresented: $editBaby,
-                    content: editingForm)
             
             Spacer()
             
@@ -41,6 +38,9 @@ struct BabyInfoView: View {
         .background(Color(.systemBackground))
         .cornerRadius(22)
         .padding(.horizontal)
+        .sheet(
+            isPresented: $editBaby,
+            content: editingForm)
     }
     
     func emojiLabel() -> AnyView {
@@ -69,11 +69,11 @@ struct BabyInfoView: View {
             self.log.baby = babyToApply
             self.editBaby = false
         },
-            babyTextName: self.log.baby.nameComponents != nil ? self.log.baby.name : "",
+            babyTextName: self.log.baby.name,
             babyEmojiName: self.log.baby.emoji,
-            useEmojiName: self.log.baby.nameComponents == nil,
+            useEmojiName: self.log.baby.prefersEmoji,
             color: self.log.baby.themeColor ?? .random,
-            birthday: self.log.baby.birthday ?? Date(),
+            birthday: self.log.baby.birthday ?? .oneWeekAgo,
             saveBirthday: self.log.baby.birthday != nil)
     }
 }
@@ -101,6 +101,6 @@ struct BabyInfoView_Previews: PreviewProvider {
         return baby
     }
     static var previews: some View {
-        BabyInfoView(log: babyLog, editBaby: .constant(false))
+        BabyInfoView(log: babyLog)
     }
 }

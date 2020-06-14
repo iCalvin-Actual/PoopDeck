@@ -37,7 +37,7 @@ struct LogView: View {
         VStack(spacing: 2) {
             BabyInfoView(log: log)
 
-            DateStepperView(targetDate: $targetDate)
+            DateStepperView(targetDate: $targetDate, accentColor: log.baby.themeColor?.color)
             
             ScrollView(.vertical) {
                 bottleSummaryView()

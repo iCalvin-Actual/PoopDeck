@@ -11,43 +11,81 @@ import SwiftUI
 // MARK: - Date Stepper
 struct DateStepperView: View {
     @Binding var targetDate: ObservableDate
+    var accentColor: Color?
     @State private var currentDate: Date = Date()
     @State var adjustmentComponents: DateComponents = .init(calendar: .current) {
        didSet {
            self.updateTargetDate()
        }
-   }
+    }
+    @State private var adjustingMonth: Bool = false
      
     private var calendar: Calendar { return .current }
     private let ticker: TickPublisher = .init()
     
     // MARK: - Views
     var body: some View {
-        HStack {
+        HStack(alignment: .center) {
             
             Button(action: {
-                self.changeDate(DateComponents(calendar: self.calendar, day: -1))
+                if self.adjustingMonth {
+                    self.changeDate(DateComponents(calendar: self.calendar, month: -1))
+                } else {
+                    self.changeDate(DateComponents(calendar: self.calendar, day: -1))
+                }
             }) {
-                Image(systemName: "arrowtriangle.left.circle.fill")
+                Image(systemName: "minus.circle")
+                .raisedButtonPlease(nil, padding: 8)
+            }
+            .font(.system(size: 16, weight: .black))
+            
+            VStack(alignment: .trailing, spacing: 4) {
+                
+                Text(DateFormatter.shortDateDisplay.string(from: targetDate.date))
+                    .fontWeight(.bold)
+                    .contextMenu {
+                        Button(action: {
+                            self.adjustingMonth.toggle()
+                        }) {
+                            Image(systemName: "calendar")
+                            Text(adjustingMonth ? "Adjust Day" : "Adjust Month")
+                        }
+                    }
+                
+                if dateIsModified() {
+                    Button(action: {
+                        self.adjustmentComponents = DateComponents()
+                        self.adjustingMonth = false
+                    }) {
+                        Text(DateFormatter.shortDateDisplay.string(from: currentDate))
+                            .font(.callout)
+                            .fontWeight(.bold)
+                    }
+                    .accentColor(.primary)
+                }
             }
             
-            Text(DateFormatter.shortDateDisplay.string(from: targetDate.date))
-                .fontWeight(.bold)
-            
-            if adjustmentComponents.day ?? 0 < 0 {
+            if dateIsModified() {
                 
                 Button(action: {
-                    self.changeDate(DateComponents(calendar: self.calendar, day: 1))
+                    if self.adjustingMonth {
+                        self.changeDate(DateComponents(calendar: self.calendar, month: 1))
+                    } else {
+                        self.changeDate(DateComponents(calendar: self.calendar, day: 1))
+                    }
                 }) {
-                    Image(systemName: "arrowtriangle.right.circle.fill")
+                    Image(systemName: "plus.circle")
+                    .raisedButtonPlease(nil, padding: 8)
                 }
+                .font(.system(size: 16, weight: .black))
                 
             }
             
             Spacer()
         }
+        .accentColor(accentColor)
         .font(.system(.title, design: .rounded))
-        .padding(.horizontal)
+        .padding(.horizontal, 4)
         .padding()
         .onReceive(ticker.currentTimePublisher) { newCurrentTime in
             self.currentDate = newCurrentTime
@@ -60,11 +98,19 @@ extension DateStepperView {
     func changeDate(_ components: DateComponents) {
         let newComponents = DateComponents(
             calendar: .current,
+            month: (adjustmentComponents.month ?? 0) + (components.month ?? 0),
             day: (adjustmentComponents.day ?? 0) + (components.day ?? 0))
         adjustmentComponents = newComponents
     }
     func updateTargetDate() {
         targetDate = .init(self.calendar.date(byAdding: self.adjustmentComponents, to: Date()) ?? Date())
+    }
+    
+    func dateIsModified() -> Bool {
+        let dayAdjustment = adjustmentComponents.day ?? 0
+        let monAdjustment = adjustmentComponents.month ?? 0
+        let highestDiff = max(abs(dayAdjustment), abs(monAdjustment))
+        return highestDiff != 0
     }
 }
 

@@ -21,12 +21,7 @@ struct NewBabyForm: View {
     @State var babyTextName: String = ""
     @State var babyEmojiName: String = Baby.emojiSet.randomElement() ?? ""
     @State var useEmojiName: Bool = true
-    @State private var userPrefersEmoji: Bool = false
-    
-    private var activeName: String {
-        if useEmojiName { return babyEmojiName }
-        return babyTextName
-    }
+    @State var userPrefersEmoji: Bool = false
     
     @State var color: PreferredColor = PreferredColor.prebuiltSet.randomElement()!
     @State var birthday: Date = .oneWeekAgo
@@ -35,12 +30,13 @@ struct NewBabyForm: View {
     
     private var babyFromForm: Baby {
         let baby = Baby()
-        baby.name = activeName
+        baby.name = babyTextName
+        baby.emoji = babyEmojiName
         if self.saveBirthday {
             baby.birthday = birthday
         }
-        baby.emoji = babyEmojiName
         baby.themeColor = color
+        baby.prefersEmoji = useEmojiName
         
         return baby
     }

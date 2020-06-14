@@ -19,8 +19,8 @@ extension BabyLog {
 extension Date {
     static var oneWeekAgo: Date {
         var components = Calendar.current
-            .dateComponents([.weekOfYear], from: Date())
-        components.weekOfYear! -= 1
+            .dateComponents([.day], from: Date())
+        components.day! -= 7
         
         return apply(components)
     }

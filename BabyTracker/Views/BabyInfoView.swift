@@ -16,16 +16,9 @@ struct BabyInfoView: View {
     // MARK: - Views
     var body: some View {
         HStack(alignment: .center, spacing: 4) {
-            if !log.baby.emoji.isEmpty {
-                emojiLabel()
-            }
-            if !log.baby.name.isEmpty {
-                nameLabel()
-                .font(.largeTitle)
-            }
             editButton()
                 .accentColor(log.baby.themeColor?.color)
-                .font(.title)
+                
             
             Spacer()
             
@@ -50,7 +43,7 @@ struct BabyInfoView: View {
     }
     
     func nameLabel() -> some View {
-        Text(log.baby.displayName)
+        Text(log.baby.name)
             .fontWeight(.heavy)
             .foregroundColor(log.baby.themeColor?.color ?? .primary)
     }
@@ -59,7 +52,13 @@ struct BabyInfoView: View {
         Button(action: {
             self.editBaby = true
         }) {
-            Image(systemName: "arrowtriangle.right.circle.fill")
+            if !log.baby.emoji.isEmpty {
+                emojiLabel()
+            }
+            if log.baby.displayName != log.baby.emoji {
+                nameLabel()
+                .font(.largeTitle)
+            }
         }
     }
     
@@ -72,6 +71,7 @@ struct BabyInfoView: View {
             babyTextName: self.log.baby.name,
             babyEmojiName: self.log.baby.emoji,
             useEmojiName: self.log.baby.prefersEmoji,
+            userPrefersEmoji: self.log.baby.prefersEmoji,
             color: self.log.baby.themeColor ?? .random,
             birthday: self.log.baby.birthday ?? .oneWeekAgo,
             saveBirthday: self.log.baby.birthday != nil)

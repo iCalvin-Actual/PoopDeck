@@ -62,7 +62,7 @@ struct RaisedButtonStyleModifier: ViewModifier {
         content
         .padding(padding)
         .background(color)
-        .accentColor(.white)
+        .accentColor(.primary)
         .cornerRadius(21)
         .withShadowPlease()
     }
@@ -71,7 +71,8 @@ extension View {
     func raisedButtonPlease(_ overrideColor: Color? = nil, padding: CGFloat = 14.0) -> some View {
         return self.modifier(
             RaisedButtonStyleModifier(
-                color: overrideColor ?? Color(UIColor(named: "PDSecondary") ?? .tertiarySystemBackground),
+//            color: overrideColor ?? Color(UIColor(named: "PDSecondary") ?? .tertiarySystemBackground),
+                color: overrideColor ?? Color(.systemBackground),
                 padding: padding
             )
         )

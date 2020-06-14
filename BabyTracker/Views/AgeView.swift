@@ -38,6 +38,7 @@ struct AgeView: View {
             }
         }) {
             Text(ageString)
+            .font(.system(size: 16, weight: .black))
         }
     }
     

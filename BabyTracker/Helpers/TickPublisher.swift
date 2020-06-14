@@ -10,7 +10,7 @@ import Combine
 import Foundation
 
 class TickPublisher {
-    let currentTimePublisher = Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default)
+    let currentTimePublisher = Timer.TimerPublisher(interval: 10.0, runLoop: .main, mode: .default)
     let cancellable: AnyCancellable?
 
     init() {

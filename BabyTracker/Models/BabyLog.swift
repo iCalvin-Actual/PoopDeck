@@ -94,21 +94,32 @@ class BabyLog: UIDocument {
         super.presentedItemDidMove(to: newURL)
     }
     
-    override func save(to url: URL, for saveOperation: UIDocument.SaveOperation, completionHandler: ((Bool) -> Void)? = nil) {
-        if let last = url.pathComponents.last, !last.contains(baby.displayName) {
-            var expectedURL = url
-            expectedURL.deleteLastPathComponent()
-            expectedURL.appendPathComponent("\(baby.displayName).bblg")
-            do {
-                try FileManager.default.moveItem(at: fileURL, to: expectedURL)
-                super.save(to: expectedURL, for: .forOverwriting, completionHandler: completionHandler)
-                return
-            } catch {
-                print("🚨 Failed to rename file \(url.absoluteString)")
-            }
-        }
-        super.save(to: url, for: .forOverwriting, completionHandler: completionHandler)
-    }
+//    override func save(to url: URL, for saveOperation: UIDocument.SaveOperation, completionHandler: ((Bool) -> Void)? = nil) {
+//        super.save(to: url, for: saveOperation) { (success) in
+//            if let last = url.pathComponents.last, !last.contains(self.baby.displayName) {
+//                var expectedURL = url
+//                expectedURL.deleteLastPathComponent()
+//                expectedURL.appendPathComponent("\(self.baby.displayName).bblg")
+//                self.close { (closed) in
+//                    do {
+//                        try FileManager.default.moveItem(at: self.fileURL, to: expectedURL)
+//                        let newLog = BabyLog(fileURL: expectedURL)
+//                        newLog.open { (openSuccess) in
+//                            completionHandler?(openSuccess)
+//                        }
+//                        return
+//                    } catch {
+//                        self.open { (reopenSuccess) in
+//                            completionHandler?(false)
+//                        }
+//                        print("🚨 Failed to rename file \(url.absoluteString)")
+//                    }
+//                }
+//            } else {
+//                completionHandler?(success)
+//            }
+//        }
+//    }
 }
 
 protocol UndoRegister: AnyObject {
@@ -285,3 +296,9 @@ extension BabyLog {
 
 extension BabyLog: Identifiable { }
 extension BabyLog: ObservableObject { }
+
+struct BabyLog_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}

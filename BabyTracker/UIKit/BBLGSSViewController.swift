@@ -219,34 +219,6 @@ extension BBLGSSViewController {
     }
 }
 
-//// MARK: - New Baby Form
-//extension BBLGSSViewController {
-//    func newBaby() {
-//        let newBabyView = NewBabyForm(
-//            onApply: { baby in
-//                self.dismissPresented(animated: true) {
-//                    self.createDocument(for: baby)
-//                }
-//        })
-//        let hostingController = UIHostingController(rootView: newBabyView)
-//        self.present(hostingController, animated: true, completion: nil)
-//    }
-//
-//    func createDocument(for baby: Baby) {
-//        self.createNewDocument(
-//            with: baby,
-//            at: nil)
-//            { (result) in
-//                switch result {
-//                case .failure(let error):
-//                    self.handle(error)
-//                case .success(let log):
-//                    self.presentDocuments(at: [log.fileURL])
-//                }
-//            }
-//    }
-//}
-
 // MARK: - Document Presentation
 
 extension BBLGSSViewController: LogPresenter { }
@@ -334,8 +306,41 @@ extension BBLGSSViewController {
                 completion?(.failure(.unknown))
                 return
             }
-            completion?(.success(document))
+            if let last = document.fileURL.pathComponents.last, !last.contains(document.baby.displayName) {
+                self.renameDocument(document, completion: completion)
+            } else {
+                completion?(.success(document))
+            }
         }
+    }
+    
+    func renameDocument(_ document: BabyLog, completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
+        completion?(.success(document))
+        
+        // TODO: Doesn't work on secure storage (on device)
+//        var expectedURL = document.fileURL
+//        expectedURL.deleteLastPathComponent()
+//        expectedURL.appendPathComponent("\(document.baby.displayName).bblg")
+//        document.close { (closed) in
+//            do {
+//                try FileManager.default.moveItem(at: document.fileURL, to: expectedURL)
+//                let newLog = BabyLog(fileURL: expectedURL)
+//                newLog.open { (openSuccess) in
+//                    switch openSuccess {
+//                    case true:
+//                        completion?(.success(newLog))
+//                    case false:
+//                        completion?(.failure(.unknown))
+//                    }
+//                }
+//                return
+//            } catch {
+//                document.open { (reopenSuccess) in
+//                    completion?(.failure(.unknown))
+//                }
+//                print("🚨 Failed to rename file \(document.fileURL.absoluteString)")
+//            }
+//        }
     }
 
     func forceCloseDocuments() {
@@ -380,26 +385,13 @@ extension BBLGSSViewController {
 
 extension BBLGSSViewController {
     func createNewDocument(with baby: Baby, at url: URL?, completion: @escaping ((Result<BabyLog, BabyError>) -> Void)) {
-        guard var destinationURL = url else { return }
-        
-        destinationURL.deleteLastPathComponent()
-        destinationURL.appendPathComponent("\(baby.displayName).bblg")
-        
-        do {
-            try FileManager.default.moveItem(at: url!, to: destinationURL)
-            let log = BabyLog(fileURL: destinationURL)
-            log.baby = baby
-            self.saveDocument(log) { saveResult in
-                switch saveResult {
-                case .success(let log):
-                    completion(.success(log))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-        } catch {
+        guard let destinationURL = url else {
             completion(.failure(.unknown))
+            return
         }
+        let log = BabyLog(fileURL: destinationURL)
+        log.baby = baby
+        self.saveDocument(log, completion: completion)
     }
 }
 

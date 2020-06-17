@@ -79,6 +79,54 @@ extension View {
     }
 }
 
+struct BottomSheetModifier: ViewModifier {
+    let presented: Bool
+    let sheetContent: AnyView
+    
+    func body(content: Content) -> some View {
+        ZStack {
+            if presented {
+                VStack(alignment: .center) {
+                    Spacer()
+                    
+                    HStack(alignment: .bottom) {
+                        Spacer()
+                        sheetContent
+                        Spacer()
+                    }
+                }
+            }
+            
+            content
+        }
+    }
+}
+extension View {
+    func bottomSheetPlease(presented: Bool, content sheetContent: AnyView) -> some View {
+        return self.modifier(
+            BottomSheetModifier(
+                presented: presented,
+                sheetContent: sheetContent
+            )
+        )
+    }
+}
+
+// MARK: - Disable Buttons
+struct DisableViewModifier: ViewModifier {
+    let disabled: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .opacity(disabled ? 0.3 : 1)
+    }
+}
+extension View {
+    func disablePlease(_ disabled: Bool = false) -> some View {
+        return self.modifier(DisableViewModifier(disabled: disabled))
+    }
+}
+
 extension View {
     func anyPlease() -> AnyView  {
         AnyView(self)

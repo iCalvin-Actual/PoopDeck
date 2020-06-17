@@ -9,11 +9,10 @@
 import SwiftUI
 
 enum CustomAction {
-    case create(_: CustomEvent, _: (_: String, _: String))
-    case update(_: CustomEvent, _: (_: String, _: String))
-    case remove(_: CustomEvent)
-    case showDetail(_: [CustomEvent])
-    case toggleUnit(_: CustomEvent)
+    case create(_: CustomEventFormView.FormContent)
+    case remove(_: UUID)
+    case showDetail(_: [UUID])
+    case toggleUnit(_: UUID)
     case undo
     case redo
 }
@@ -91,14 +90,14 @@ struct CustomEventView: View {
             if existingEvent != nil {
                 Button(action: {
                     guard let event = self.existingEvent else { return }
-                    self.onAction?(.remove(event))
+//                    self.onAction?(.remove(event))
                 }, label: {
                     Image(systemName: "trash")
                 })
             }
             Spacer()
             Button(action: {
-                self.onAction?(.create(self.existingEvent ?? .new, (self.title, self.info)))
+//                self.onAction?(.create(self.existingEvent ?? .new))
                 self.editing = false
                 self.title = self.existingEvent?.event ?? ""
                 self.info = ""
@@ -108,7 +107,7 @@ struct CustomEventView: View {
             Spacer()
             if existingEvent != nil {
                 Button(action: {
-                    self.onAction?(.update(self.existingEvent ?? .new, (self.title, self.info)))
+//                    self.onAction?(.update(self.existingEvent ?? .new, (self.title, self.info)))
                     self.editing = false
                     self.title = self.existingEvent?.event ?? ""
                     self.info = ""

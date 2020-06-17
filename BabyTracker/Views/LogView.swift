@@ -20,10 +20,12 @@ struct LogView: View {
     @State var targetDate: ObservableDate = .init()
     var startOfTargetDate: Date {
         let calendar = Calendar.current
-        let dateStart = calendar.startOfDay(for: targetDate.date)
-        
-        let components = DateComponents(calendar: .current, day: calendar.component(.hour, from: targetDate.date) < 5 ? -1 : 0, hour: 5)
-        return calendar.date(byAdding: components, to: dateStart) ?? dateStart
+        return calendar.startOfDay(for: targetDate.date)
+    }
+    var endOfTargetDate: Date {
+        let calendar = Calendar.current
+        let components = DateComponents(calendar: .current, day: calendar.component(.day, from: startOfTargetDate) + 1)
+        return calendar.date(byAdding: components, to: startOfTargetDate) ?? Date()
     }
     
     @State private var showDatePicker: Bool = false
@@ -36,29 +38,30 @@ struct LogView: View {
     var body: some View {
         VStack(spacing: 2) {
             BabyInfoView(
-                log: log,
+                log: self.log,
                 onColorUpdate: { (log, color) in
                     self.onAction?(.updateColor(log, newColor: color))
                 })
 
-            DateStepperView(targetDate: $targetDate, accentColor: log.baby.themeColor?.color)
+            DateStepperView(targetDate: self.$targetDate, accentColor: self.log.baby.themeColor?.color)
             
             ScrollView(.vertical) {
-                bottleSummaryView()
+                self.bottleSummaryView()
                 
-                breastFeedSummaryView()
+                self.breastFeedSummaryView()
                 
-                diaperSummaryView()
+                self.diaperSummaryView()
                 
-                napSummaryView()
+                self.napSummaryView()
                 
-                tummyTimeSummaryView()
+                self.tummyTimeSummaryView()
                 
-                fussySummaryView()
+                self.fussySummaryView()
                 
-                customEventsViews()
+                self.customEventsViews()
                 
-                newCustomEventView()
+                self.newCustomEventView()
+                    .padding(.bottom, 300)
             }
         }
         .padding(.vertical)
@@ -298,29 +301,41 @@ struct LogView: View {
     
     // MARK: Custom
     func customEventsViews() -> some View {
-        ForEach(log.eventStore.customEvents.values.filter({ startOfTargetDate <= $0.date && $0.date <= targetDate.date }).reduce([:], { (inputValue, event) -> [String: CustomEvent] in
-            var input = inputValue
-            
-            let inputEvent = inputValue[event.event]
-            
-            if inputEvent == nil || (inputEvent != nil && inputEvent?.date ?? Date() < event.date ) {
-                input[event.event] = event
+        ForEach(
+            log.eventStore.customEvents.values
+                .filter({ event -> Bool in
+                    return startOfTargetDate <= event.date && event.date < endOfTargetDate
+                })
+                .reduce([:], { (inputValue, event) -> [String: [CustomEvent]] in
+                    var input = inputValue
+                    
+                    var inputEvents: [CustomEvent] = inputValue[event.event] ?? []
+                    inputEvents.append(event)
+
+                    input[event.event] = inputEvents
+                    return input
+                })
+                .values
+                .sorted(by: { (_ a: [CustomEvent], _ b: [CustomEvent]) -> Bool in
+                    return a.sorted(by: { $0.date < $1.date }).last!.date < b.sorted(by: { $0.date < $1.date }).last!.date }),
+            id: \.self)
+            { events in
+                CustomEventFormView(
+                    restoreContent: events.map({ event in
+                        return .init(
+                            date: .init(event.date),
+                            id: event.id,
+                            title: event.event,
+                            info: event.detail ?? "")
+                        }),
+                    onAction: self.onEventAction)
             }
-            return input
-        }).values.sorted(by: { $0.date < $1.date }), id: \.id) { event in
-            CustomEventView(
-                date:  self.targetDate,
-                existingEvent: event,
-                title: event.event,
-                info: "",
-                onAction: self.onEventAction)
-        }
     }
     
     func newCustomEventView() -> some View {
-        CustomEventView(
-            date: targetDate,
-            onAction: self.onEventAction)
+        CustomEventFormView(
+            content: .init(),
+            onAction: onEventAction)
     }
 }
 
@@ -603,18 +618,17 @@ extension LogView {
     // MARK: Custom Events
     func onEventAction(_ action: CustomAction) {
         switch action {
-        case .create(var event, let titlePair), .update(var event, let titlePair):
-            if case .create = action {
-                event.id = UUID()
-            }
-            event.event = titlePair.0
-            
-            event.date = self.targetDate.date
+        case .create(let form):
+            let event = CustomEvent(
+                id: form.id ?? .init(),
+                date: form.date.date,
+                event: form.title,
+                detail: form.info.isEmpty ? nil : form.info)
             self.log.save(event) { (savedEvent) in
                 print("Did Save?")
             }
-        case .remove(let event):
-            self.log.delete(event) { (_) in
+        case .remove(let uuid):
+            self.log.delete(uuid) { (_: Result<CustomEvent?, BabyError>) in
                 print("Did Delete?")
             }
         case .toggleUnit:

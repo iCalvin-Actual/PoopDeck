@@ -20,3 +20,7 @@ struct CustomEvent: BabyEvent {
     var event: String
     var detail: String?
 }
+
+extension CustomEvent: Hashable {
+    
+}

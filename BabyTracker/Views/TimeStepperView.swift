@@ -24,7 +24,7 @@ struct TimeStepperView: View {
        }
     }
     
-    @State private var editing: Bool = false
+    @Binding var editing: Bool
     
      
     private var calendar: Calendar { return .current }
@@ -168,6 +168,7 @@ struct TimeStepperView: View {
                 withAnimation {
                     self.editing = false
                     self.adjustmentComponents = DateComponents()
+                    self.targetDate = .init()
                 }
             }) {
                 Image(systemName: "clock")
@@ -180,12 +181,6 @@ struct TimeStepperView: View {
 // MARK: - Date Modifications
 extension TimeStepperView {
     func changeDate(_ components: DateComponents) {
-//        let targetComponents = Calendar.current.dateComponents([.timeZone, .hour, .minute], from: targetDate.date)
-//        let newComponents = DateComponents(
-//            calendar: .current,
-//            timeZone: targetComponents.timeZone ?? .current,
-//            hour: ((targetComponents.hour ?? 0) + (components.hour ?? 0)) % 24,
-//            minute: ((targetComponents.minute ?? 0) + (components.minute ?? 0)) % 60)
         adjustmentComponents = components
     }
     func updateTargetDate() {
@@ -202,6 +197,6 @@ extension TimeStepperView {
 
 struct TimeStepperView_Previews: PreviewProvider {
     static var previews: some View {
-        TimeStepperView(targetDate: .constant(.init()))
+        TimeStepperView(targetDate: .constant(.init()), editing: .constant(false))
     }
 }

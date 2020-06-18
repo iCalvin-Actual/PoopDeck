@@ -124,7 +124,7 @@ struct CustomEventFormView: View {
                     onValueChange: { newValue in
                         guard newValue.date != self.restoreContent.last?.date.date ?? Date() else { return }
                         self.editing = true
-                    })
+                }, editing: $editing)
                 
                 Spacer()
             }
@@ -155,14 +155,15 @@ struct CustomEventFormView: View {
                     self.confirmDelete = true
                 }) {
                     Image(systemName: "trash.circle")
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
                 }
-                .accentColor(BabyEventType.custom.colorValue)
+                .foregroundColor(BabyEventType.custom.colorValue)
                 .opacity(content.id == nil ? 0 : 1)
             }
             
-            Spacer()
-            
             if editing {
+                
+                Spacer()
                 
                 HStack {
                     
@@ -235,6 +236,7 @@ struct CustomEventFormView: View {
                         }
                     }, label: {
                         Image(systemName: "plus")
+                        .font(.system(size: 18, weight: .heavy, design: .rounded))
                     })
                 }
             }

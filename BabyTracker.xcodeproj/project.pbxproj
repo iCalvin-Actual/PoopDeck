@@ -15,6 +15,9 @@
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
 		CF9015162486ACED00343F5C /* bblg_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CF9015152486ACED00343F5C /* bblg_icon.png */; };
+		CFA0E036249807B90095680B /* CustomEventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0E035249807B90095680B /* CustomEventFormView.swift */; };
+		CFA0E03824982EAF0095680B /* TimeStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0E03724982EAF0095680B /* TimeStepperView.swift */; };
+		CFA0E03A2498752F0095680B /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0E0392498752F0095680B /* KeyboardResponder.swift */; };
 		CFAE0FCE2492C93400B52BF1 /* PreferredColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */; };
 		CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCF2492CC2600B52BF1 /* Baby.swift */; };
 		CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD12493016100B52BF1 /* ObservableDate.swift */; };
@@ -73,6 +76,9 @@
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
 		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
 		CF9015152486ACED00343F5C /* bblg_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bblg_icon.png; sourceTree = "<group>"; };
+		CFA0E035249807B90095680B /* CustomEventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEventFormView.swift; sourceTree = "<group>"; };
+		CFA0E03724982EAF0095680B /* TimeStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStepperView.swift; sourceTree = "<group>"; };
+		CFA0E0392498752F0095680B /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredColor.swift; sourceTree = "<group>"; };
 		CFAE0FCF2492CC2600B52BF1 /* Baby.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Baby.swift; sourceTree = "<group>"; };
 		CFAE0FD12493016100B52BF1 /* ObservableDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableDate.swift; sourceTree = "<group>"; };
@@ -167,10 +173,12 @@
 				CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */,
 				CFAE0FD92493076700B52BF1 /* LogView.swift */,
 				CFAE0FF924932B3E00B52BF1 /* DateStepperView.swift */,
+				CFA0E03724982EAF0095680B /* TimeStepperView.swift */,
 				CFAE0FFB24932E8200B52BF1 /* CustomEventView.swift */,
 				CFAE0FFD249332DC00B52BF1 /* DiaperSummaryView.swift */,
 				CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */,
 				CFAE10012493387C00B52BF1 /* MeasuredEventSummaryView.swift */,
+				CFA0E035249807B90095680B /* CustomEventFormView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -195,6 +203,7 @@
 				CFAE0FEB24931A3800B52BF1 /* Formatters.swift */,
 				CFAE0FD12493016100B52BF1 /* ObservableDate.swift */,
 				CFAE0FE92493198800B52BF1 /* TickPublisher.swift */,
+				CFA0E0392498752F0095680B /* KeyboardResponder.swift */,
 				CF125D6624924E3C00E2908C /* ViewModifiers.swift */,
 			);
 			path = Helpers;
@@ -395,6 +404,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFAE0FEA2493198800B52BF1 /* TickPublisher.swift in Sources */,
+				CFA0E03A2498752F0095680B /* KeyboardResponder.swift in Sources */,
 				CFAE10022493387C00B52BF1 /* MeasuredEventSummaryView.swift in Sources */,
 				CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */,
 				CFAE0FE4249315DD00B52BF1 /* FussEvent.swift in Sources */,
@@ -405,8 +415,10 @@
 				CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */,
 				CFAE0FFC24932E8200B52BF1 /* CustomEventView.swift in Sources */,
 				CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */,
+				CFA0E036249807B90095680B /* CustomEventFormView.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
 				CF125D6B249270BA00E2908C /* ConflictResolutionViews.swift in Sources */,
+				CFA0E03824982EAF0095680B /* TimeStepperView.swift in Sources */,
 				CFAE1000249336A800B52BF1 /* BabyInfoView.swift in Sources */,
 				CFAE0FDE249315BE00B52BF1 /* DiaperEvent.swift in Sources */,
 				CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */,

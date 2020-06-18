@@ -13,6 +13,8 @@ import Combine
 struct LogView: View {
     @ObservedObject var log: BabyLog
     
+    @ObservedObject var keyboardResponder: KeyboardResponder = .init()
+    
     @State private var resolvingConflict: Bool = false
     @State private var allowChanges: Bool = true
     @State private var editBaby: Bool = false
@@ -142,14 +144,7 @@ struct LogView: View {
         DiaperSummaryView(
             log: log,
             date: targetDate,
-            newEventTemplate: .new,
-            onAction: self.onEventAction) { (event) -> Bool in
-                guard
-                    self.startOfTargetDate <= event.date,
-                    event.date <= self.targetDate.date
-                    else { return false }
-                return true
-            }
+            onAction: onEventAction)
     }
     
     // MARK: Naps
@@ -590,18 +585,18 @@ extension LogView {
     // MARK: Diaper Events
     func onEventAction(_ action: DiaperAction) {
         switch action {
-        case .create(var event, let diaperContents), .update(var event, let diaperContents):
-            if case .create = action {
-                event.id = UUID()
-            }
-            event.pee = diaperContents.0
-            event.poop = diaperContents.1
-            event.date = self.targetDate.date
+        case .create(let form):
+            let event = DiaperEvent(
+                id: form.id ?? UUID(),
+                date: form.date.date,
+                pee: form.pee,
+                poop: form.poo)
             self.log.save(event) { (savedEvent) in
                 print("Did Save?")
             }
-        case .remove(let event):
-            self.log.delete(event) { (_) in
+        case .remove(let uuid):
+            print("in delete")
+            self.log.delete(uuid) { (deleteResult: Result<DiaperEvent?, BabyError>) in
                 print("Did Delete?")
             }
         case .toggleUnit:

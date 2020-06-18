@@ -230,7 +230,7 @@ extension BabyLog {
             completion(.success(nil))
         } else if let _ = eventStore.changes[id] as? E {
             eventStore.changes[id] = nil
-           completion(.success(nil))
+            completion(.success(nil))
         } else if let _ = eventStore.naps[id] as? E {
             eventStore.naps[id] = nil
             completion(.success(nil))
@@ -246,8 +246,9 @@ extension BabyLog {
         } else if let _ = eventStore.customEvents[id] as? E {
             eventStore.customEvents[id] = nil
             completion(.success(nil))
+        } else {
+            completion(.failure(.unknown))
         }
-        completion(.failure(.unknown))
     }
     
     // MARK: - Duplicate

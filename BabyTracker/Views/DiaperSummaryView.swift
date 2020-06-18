@@ -10,9 +10,8 @@ import Combine
 import SwiftUI
 
 enum DiaperAction {
-    case create(_: DiaperEvent, _: (_: Bool, _: Bool))
-    case update(_: DiaperEvent, _: (_: Bool, _: Bool))
-    case remove(_: DiaperEvent)
+    case create(_: DiaperSummaryView.FormContent)
+    case remove(_: UUID)
     case showDetail(_: [DiaperEvent])
     case toggleUnit(_: DiaperEvent)
     case undo
@@ -20,16 +19,29 @@ enum DiaperAction {
 }
 
 struct DiaperSummaryView: View {
+    struct FormContent {
+        var date: ObservableDate = .init()
+        
+        var id: UUID?
+        var pee: Bool = false
+        var poo: Bool = false
+    }
+    
+    private enum DeleteState {
+        case discard
+        case delete
+    }
+    
+    @State private var confirmDelete: Bool = false
+    @State private var deleteState: DeleteState = .discard
+    
     // MARK: - Variables
     @ObservedObject var log: BabyLog
-    @ObservedObject var date: ObservableDate
+    @State var date: ObservableDate
     
     @State var newEventTemplate: DiaperEvent = .new
     
     var onAction: ((DiaperAction) -> Void)?
-    
-    @State private var poopActive: Bool = false
-    @State private var wetActive: Bool = false
     
     @State private var isLoading: Bool = true
     @State private var editing: Bool = false {
@@ -38,17 +50,16 @@ struct DiaperSummaryView: View {
                 self.updateEvents()
             }
             if !editing {
-                self.wetActive = activeEvent.pee
-                self.poopActive = activeEvent.poop
+                guard activeIndex < restoreContent.count else {
+                    self.content = .init()
+                    return
+                }
+                self.content = restoreContent[activeIndex]
                 
             }
         }
     }
     @State private var items: [UUID: DiaperEvent] = [:]
-    
-    private var allowPresentList: Bool {
-        return !items.isEmpty
-    }
     
     var filter: ((DiaperEvent) -> Bool)? = { diaper in
         return true
@@ -67,8 +78,21 @@ struct DiaperSummaryView: View {
         return filteredEvents.sorted(by: { $0.date < $1.date })
     }
     
+    @State var content: FormContent = .init()
+    var restoreContent: [FormContent] {
+        return sortedEvents.reversed().map(({
+            FormContent(
+                date: .init($0.date),
+                id: $0.id,
+                pee: $0.pee,
+                poo: $0.poop) }))
+    }
+    @State private var activeIndex: Int = 0
+    
     var activeEvent: DiaperEvent {
-        return lastEvent ?? newEventTemplate
+//        return lastEvent ?? newEventTemplate
+        guard sortedEvents.count > activeIndex else { return newEventTemplate }
+        return sortedEvents[activeIndex]
     }
     
     func updateEvents() {
@@ -77,13 +101,8 @@ struct DiaperSummaryView: View {
                 
                 self.items = groupDict
                 
-                if let last = groupDict.values.filter(self.filter ?? { _ in return false }).sorted(by: { $0.date < $1.date }).last {
-                    self.wetActive = last.pee
-                    self.poopActive = last.poop
-                } else {
-                    self.wetActive = self.newEventTemplate.pee
-                    self.poopActive = self.newEventTemplate.poop
-                }
+                
+                
                 self.isLoading = false
             }
         })
@@ -93,19 +112,10 @@ struct DiaperSummaryView: View {
         return sortedEvents.last
     }
     
-    var stateIntValue: Int {
-        var ret = 0
-        if wetActive { ret += 1 }
-        if poopActive { ret += 2 }
-        return ret
-    }
-    
     // MARK: Views
     var body: some View {
         VStack {
             headerRow()
-            
-            contentRow()
             
             actionRow()
         }
@@ -118,6 +128,9 @@ struct DiaperSummaryView: View {
             self.updateEvents()
         })
         .onAppear {
+            if let firstEvent = self.restoreContent.first {
+                self.content = firstEvent
+            }
             if self.isLoading {
                 self.updateEvents()
             }
@@ -126,16 +139,43 @@ struct DiaperSummaryView: View {
     
     func headerRow() -> some View {
         HStack {
-            Text("🧷")
-            
-            Text("Diapers")
+            Color.white
+                .frame(width: 18, height: 18)
+                .mask(Image("SafetyPin").resizable())
+                
+            Text("Diaper Changes")
+                .font(.system(size: 18, weight: .heavy, design: .rounded))
             
             Spacer()
             
-            lastEventDateLabel()
-            
-            if allowPresentList {
-                Image(systemName: "chevron.right.circle")
+            if restoreContent.count > 1 {
+                Button(action: {
+                    guard self.activeIndex < self.restoreContent.count - 1 else { return }
+                    withAnimation {
+                        let newOffset = self.activeIndex + 1
+                        self.editing = false
+                        self.activeIndex = newOffset
+                        self.content = self.restoreContent[newOffset]
+                    }
+                }) {
+                    Image(systemName: "arrow.left.circle")
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                }
+                .disablePlease(activeIndex >= restoreContent.count - 1)
+
+                Button(action: {
+                    guard self.activeIndex > 0 else { return }
+                    withAnimation {
+                        let newOffset = self.activeIndex - 1
+                        self.editing = false
+                        self.activeIndex = newOffset
+                        self.content = self.restoreContent.sorted(by: { $0.date.date > $1.date.date })[newOffset]
+                    }
+                }) {
+                    Image(systemName: "arrow.right.circle")
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                }
+                .disablePlease(activeIndex == 0)
             }
         }
     }
@@ -169,64 +209,130 @@ struct DiaperSummaryView: View {
         .anyPlease()
     }
     
-    func contentRow() -> some View {
-        HStack {
-            defaultSummaryView(filteredEvents, activeEvent)
-            
-            Spacer()
-            
-            Button(action: {
-                self.poopActive.toggle()
-                self.editing = true
-            }) {
-                Text("💩")
-                    .foregroundColor(.primary)
-                    .padding()
-                    .background(self.poopActive ? Color.gray : Color.white)
-                    .cornerRadius(32)
-            }
-            
-            Spacer()
-            
-            Button(action: {
-                self.wetActive.toggle()
-                self.editing = true
-            }) {
-                Text("💦")
-                    .foregroundColor(.primary)
-                    .padding()
-                    .background(self.wetActive ? Color.gray : Color.white)
-                    .cornerRadius(32)
-            }
-            Spacer()
-        }
-    }
-    
     func actionRow() -> some View {
         HStack {
-            if lastEvent != nil {
+            if editing || !restoreContent.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    
+                    TimeStepperView(targetDate: $content.date, editing: $editing)
+                    
+                    HStack {
+                        Button(action: {
+                            withAnimation {
+                                self.content.pee.toggle()
+                                self.editing = true
+                            }
+                        }) {
+                            Text("💦")
+                        }
+                        .raisedButtonPlease(content.pee ? BabyEventType.diaper.colorValue : nil)
+
+                        Button(action: {
+                            withAnimation {
+                                self.content.poo.toggle()
+                                self.editing = true
+                            }
+                        }) {
+                            Text("💩")
+                        }
+                        .raisedButtonPlease(content.poo ? BabyEventType.diaper.colorValue : nil)
+                        
+                        Spacer()
+                    }
+                        
+                    Spacer()
+                    
+                    if editing {
+                        HStack {
+                            
+                            Button(action: {
+                                withAnimation {
+                                    if self.editing {
+                                        self.editing = false
+                                    }
+                                    self.confirmDelete = true
+                                    self.deleteState = .delete
+                                }
+                            }) {
+                                Text("Delete")
+                                .bold()
+                                .foregroundColor(BabyEventType.diaper.colorValue)
+                            }
+                            .disablePlease(restoreContent.isEmpty)
+                            
+                            Spacer()
+                                                    
+                            Button(action: {
+                                withAnimation {
+                                    guard self.content.id != nil else {
+                                        if self.editing {
+                                            self.editing = false
+                                        }
+                                        return
+                                    }
+                                    self.onAction?(.create(self.content))
+                                    self.editing = false
+                                }
+                            }) {
+                                Text("Update")
+                                .bold()
+                                .foregroundColor(BabyEventType.diaper.colorValue)
+                            }
+                            .disablePlease(restoreContent.isEmpty)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                withAnimation {
+                                    var contentToCreate = self.content
+                                    contentToCreate.id = nil
+                                    self.onAction?(.create(contentToCreate))
+                                    self.editing = false
+                                    self.content = self.restoreContent.first ?? .init()
+                                }
+                            }) {
+                                Text("Save")
+                                .bold()
+                                .foregroundColor(BabyEventType.diaper.colorValue)
+                            }
+                        }
+                    }
+                }
+                .foregroundColor(BabyEventType.diaper.colorValue)
+                Spacer()
+            } else {
                 Button(action: {
-                    self.removeLast()
+                    withAnimation {
+                        self.editing = true
+                    }
                 }, label: {
-                    Image(systemName: "trash")
+                    Image(systemName: "plus")
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    .foregroundColor(.primary)
                 })
             }
-            Spacer()
-            Button(action: {
-                self.onAction?(.create(self.newEventTemplate, (self.wetActive, self.poopActive)))
-                self.editing = false
-            }, label: {
-                Image(systemName: "plus")
-            })
-            Spacer()
-            if lastEvent != nil {
-                Button(action: {
-                    self.onAction?(.update(self.lastEvent ?? self.newEventTemplate, (self.wetActive, self.poopActive)))
-                    self.editing = false
-                }, label: {
-                    Image(systemName: "pencil.and.outline")
-                })
-            }
+        }
+        .raisedButtonPlease()
+        .alert(isPresented: $confirmDelete) {
+            Alert(
+                title: Text("\(self.deleteState == .discard ? "Discard" : "Delete") \(self.content.id == nil || self.deleteState == .delete ? "Event" : "Changes")"),
+                message: Text(self.deleteState == .delete ? "Are you sure you want to delete this event?" : "Continue without saving?"),
+                primaryButton:
+                .destructive(Text(self.deleteState == .delete ? "Delete" : "Discard"), action: {
+                        withAnimation {
+                            switch self.deleteState {
+                            case .discard:
+                                self.content = self.restoreContent [self.activeIndex]
+                            case .delete:
+                                if let id = self.content.id {
+                                    self.onAction?(.remove(id))
+                                }
+                            }
+                            self.editing = false
+                        }}),
+                secondaryButton:
+                .cancel()
+            )
         }
     }
 }
@@ -234,8 +340,8 @@ struct DiaperSummaryView: View {
 // MARK: - Diaper Actions
 extension DiaperSummaryView {
     func removeLast() {
-        guard let lastEvent = lastEvent else { return }
-        self.onAction?(.remove(lastEvent))
+        guard let id = content.id else { return }
+        self.onAction?(.remove(id))
         self.editing = false
     }
 }
@@ -244,6 +350,8 @@ struct DiaperSummaryView_Previews: PreviewProvider {
     static var babyLog: BabyLog {
         let log = BabyLog(fileURL: Bundle.main.url(forResource: "MyBabyLog", withExtension: "bblg")!)
         log.baby = baby
+        let event = DiaperEvent(pee: false, poop: true)
+        log.save(event, completion: { _ in })
         return log
     }
     static var baby: Baby {

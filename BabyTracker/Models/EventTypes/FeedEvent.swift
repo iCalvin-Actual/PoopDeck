@@ -22,6 +22,15 @@ struct FeedEvent: MeasuredBabyEvent {
     var measurement: Measurement<UnitVolume>?
 }
 
+extension FeedEvent {
+    static var defaultMeasurement: Measurement<UnitVolume> {
+        return Measurement(
+            value: Locale.current.usesMetricSystem ? 90.0 : 3.0,
+            unit: defaultUnit as! UnitVolume
+        )
+    }
+}
+
 // MARK: - Feed Source
 extension FeedEvent {
     enum Source: Equatable, Codable {

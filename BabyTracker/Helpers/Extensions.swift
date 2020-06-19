@@ -70,7 +70,7 @@ extension Unit {
         case "hr":
             return 0.25
         case "lb":
-            return 0.10
+            return 0.1
         default:
             return nil
         }

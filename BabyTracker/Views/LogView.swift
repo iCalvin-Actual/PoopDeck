@@ -149,19 +149,9 @@ struct LogView: View {
     
     // MARK: Naps
     func napSummaryView() -> some View {
-        MeasuredEventSummaryView(
+        MeasuredEventFormView(
             log: log,
             date: targetDate,
-            emojiLabel: "💤",
-            summaryTitle: "Naps",
-            singularValue: "Nap",
-            pluralValue: "Naps",
-            allowPresentList: true,
-            newEventTemplate: { () -> NapEvent in
-                var new = NapEvent()
-                new.measurement = Measurement(value: 1, unit: UnitDuration.hours)
-                return new
-            }(),
             filter: { (event: NapEvent) -> Bool in
                 guard
                     self.startOfTargetDate <= event.date,
@@ -170,19 +160,7 @@ struct LogView: View {
                 return true
             },
             sort: { $0.date < $1.date },
-            onAction: onEventAction,
-            measurementTextConstructor: { (event, increment) in
-                let unit = event.measurement?.unit ?? UnitDuration.supported.first ?? UnitDuration.minutes
-                guard let modifier = unit.modifier else {
-                    return "0"
-                }
-                let value: Double = event.measurement?.value ?? (increment != nil ? unit.defaultValue : nil) ?? 0
-                let newValue = value + (Double(increment ?? 0) * modifier)
-                let size = Measurement(value: newValue, unit: unit)
-                
-                return MeasurementFormatter.defaultFormatter.string(from: size)
-                    
-            })
+            onAction: onEventAction)
     }
     
     // MARK: Tummy Times
@@ -377,6 +355,11 @@ enum MeasuredEventAction<E: MeasuredBabyEvent> {
     case redo
 }
 
+enum MeasuredEventFormAction<E: MeasuredBabyEvent> {
+    case create(_: MeasuredEventFormView<E>.FormContent)
+    case remove(_: UUID)
+}
+
 extension LogView {
     // MARK: Feed Events
     func onEventAction(_ action: MeasuredEventAction<FeedEvent>) {
@@ -445,22 +428,40 @@ extension LogView {
             }
         case .toggleUnit(var event):
             guard let measurement = event.measurement else { return }
-            let values = UnitDuration.supported
-            let index = values.lastIndex(of: measurement.unit) ?? values.endIndex
-            let newIndex = (index + 1) % values.count
-            let newUnit = values[newIndex]
-            event.measurement = measurement.converted(to: newUnit)
-            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
-            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
-            self.log.save(event) { (saveEvent) in
-                print("💾: Event added to log")
-            }
+//            let values = UnitDuration.supported
+//            let index = values.lastIndex(of: measurement.unit) ?? values.endIndex
+//            let newIndex = (index + 1) % values.count
+//            let newUnit = values[newIndex]
+//            event.measurement = measurement.converted(to: newUnit)
+//            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
+//            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
+//            self.log.save(event) { (saveEvent) in
+//                print("💾: Event added to log")
+//            }
         case .showDetail:
             print("Present list of items")
         case .undo:
             self.log.undoManager.undo()
         case .redo:
             self.log.undoManager.redo()
+        }
+    }
+    
+    func onEventAction(_ action: MeasuredEventFormAction<NapEvent>) {
+        switch action {
+        case .create(let form):
+            let event = NapEvent(
+                id: form.id ?? UUID(),
+                date: form.date.date,
+                measurement: form.measurement
+            )
+            self.log.save(event) { (_) in
+                print("💾: Event added to log")
+            }
+        case .remove(let id):
+            self.log.delete(id) { (deleteResult: Result<NapEvent?, BabyError>) in
+                print("Did Delete?")
+            }
         }
     }
     

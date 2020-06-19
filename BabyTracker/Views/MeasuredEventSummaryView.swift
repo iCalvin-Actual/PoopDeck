@@ -9,27 +9,6 @@
 import Combine
 import SwiftUI
 
-// MARK: - Measurement Style
-enum MeasurementStyle {
-    case none
-    case volume
-    case mass
-    case duration
-    
-    var unit: Unit? {
-        switch self {
-        case .none:
-            return nil
-        case .volume:
-            return UnitVolume.milliliters
-        case .mass:
-            return UnitMass.kilograms
-        case .duration:
-            return UnitDuration.minutes
-        }
-    }
-}
-
 // MARK: - Measured Event Summary
 struct MeasuredEventSummaryView<E: MeasuredBabyEvent>: View {
     @ObservedObject var log: BabyLog

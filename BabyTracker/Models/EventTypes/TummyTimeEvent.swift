@@ -19,3 +19,9 @@ struct TummyTimeEvent: MeasuredBabyEvent {
     
     var measurement: Measurement<UnitDuration>?
 }
+
+extension TummyTimeEvent {
+    static var defaultMeasurement: Measurement<UnitDuration> {
+        return Measurement(value: 3.0, unit: defaultUnit as! UnitDuration)
+    }
+}

@@ -67,6 +67,9 @@ struct TimeStepperView: View {
             // MARK: - Colon Column
             
             VStack {
+                if editing {
+                    Spacer()
+                }
                 Text(":")
                 .font(.system(size: 18.0, weight: .heavy, design: .rounded))
                 .onTapGesture(perform: {
@@ -74,6 +77,9 @@ struct TimeStepperView: View {
                         self.editing.toggle()
                     }
                 })
+                if editing {
+                    Spacer()
+                }
             }
             
             // MARK: - Minute Column

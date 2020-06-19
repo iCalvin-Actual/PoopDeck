@@ -19,3 +19,12 @@ struct WeightEvent: MeasuredBabyEvent {
     
     var measurement: Measurement<UnitMass>?
 }
+
+extension WeightEvent {
+    static var defaultMeasurement: Measurement<UnitMass> {
+        return Measurement(
+            value: Locale.current.usesMetricSystem ? 4.5 : 10.0,
+            unit: defaultUnit as! UnitMass
+        )
+    }
+}

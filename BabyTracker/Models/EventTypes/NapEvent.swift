@@ -17,5 +17,11 @@ struct NapEvent: MeasuredBabyEvent {
     var id = UUID()
     var date: Date = Date()
     
-    var measurement: Measurement<UnitDuration>?
+    var measurement: Measurement<Unit>?
+}
+
+extension NapEvent {
+    static var defaultMeasurement: Measurement<Unit> {
+        return Measurement(value: 30.0, unit: defaultUnit as! UnitDuration)
+    }
 }

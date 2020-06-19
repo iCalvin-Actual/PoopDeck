@@ -11,6 +11,8 @@
 		CF125D6724924E3C00E2908C /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6624924E3C00E2908C /* ViewModifiers.swift */; };
 		CF125D6924926FEB00E2908C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6824926FEB00E2908C /* Errors.swift */; };
 		CF125D6B249270BA00E2908C /* ConflictResolutionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */; };
+		CF2B51D9249BDE880035A11F /* MeasuredEventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2B51D8249BDE880035A11F /* MeasuredEventFormView.swift */; };
+		CF2B51DB249C5D6F0035A11F /* MeasurementStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
@@ -71,6 +73,8 @@
 		CF125D6624924E3C00E2908C /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		CF125D6824926FEB00E2908C /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConflictResolutionViews.swift; sourceTree = "<group>"; };
+		CF2B51D8249BDE880035A11F /* MeasuredEventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredEventFormView.swift; sourceTree = "<group>"; };
+		CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementStepperView.swift; sourceTree = "<group>"; };
 		CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BabyTracker.entitlements; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
@@ -178,7 +182,9 @@
 				CFAE0FFD249332DC00B52BF1 /* DiaperSummaryView.swift */,
 				CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */,
 				CFAE10012493387C00B52BF1 /* MeasuredEventSummaryView.swift */,
+				CF2B51D8249BDE880035A11F /* MeasuredEventFormView.swift */,
 				CFA0E035249807B90095680B /* CustomEventFormView.swift */,
+				CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -422,11 +428,13 @@
 				CFAE1000249336A800B52BF1 /* BabyInfoView.swift in Sources */,
 				CFAE0FDE249315BE00B52BF1 /* DiaperEvent.swift in Sources */,
 				CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */,
+				CF2B51DB249C5D6F0035A11F /* MeasurementStepperView.swift in Sources */,
 				CFC18010245E18B1007C756A /* NewEventTypeSelectorView.swift in Sources */,
 				CF125D6924926FEB00E2908C /* Errors.swift in Sources */,
 				CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */,
 				CFAE0FFA24932B3E00B52BF1 /* DateStepperView.swift in Sources */,
 				CFD6F421248706A900E7DAAD /* BBLGSSViewController.swift in Sources */,
+				CF2B51D9249BDE880035A11F /* MeasuredEventFormView.swift in Sources */,
 				CFAE0FE6249315E700B52BF1 /* TummyTimeEvent.swift in Sources */,
 				CFAE0FEC24931A3800B52BF1 /* Formatters.swift in Sources */,
 				CFD6F41F2487068200E7DAAD /* NewWindowView.swift in Sources */,
@@ -611,7 +619,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -638,7 +646,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

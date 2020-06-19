@@ -62,7 +62,7 @@ extension MeasurementFormatter {
         let measurementFormatter = MeasurementFormatter()
         measurementFormatter.locale = .autoupdatingCurrent
         measurementFormatter.unitOptions = [.providedUnit]
-        measurementFormatter.unitStyle = .short
+        measurementFormatter.unitStyle = .medium
         return measurementFormatter
     }
 }

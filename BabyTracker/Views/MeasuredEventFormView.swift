@@ -1,30 +1,21 @@
 //
-//  DiaperSummaryView.swift
+//  MeasuredEventFormView.swift
 //  BabyTracker
 //
-//  Created by Calvin Chestnut on 6/11/20.
+//  Created by Calvin Chestnut on 6/18/20.
 //  Copyright © 2020 Calvin Chestnut. All rights reserved.
 //
 
 import Combine
 import SwiftUI
 
-enum DiaperAction {
-    case create(_: DiaperSummaryView.FormContent)
-    case remove(_: UUID)
-    case showDetail(_: [DiaperEvent])
-    case toggleUnit(_: DiaperEvent)
-    case undo
-    case redo
-}
-
-struct DiaperSummaryView: View {
+struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
+    
     struct FormContent {
         var date: ObservableDate = .init()
         
         var id: UUID?
-        var pee: Bool = false
-        var poo: Bool = false
+        var measurement: Measurement<Unit>?
     }
     
     private enum DeleteState {
@@ -35,15 +26,9 @@ struct DiaperSummaryView: View {
     @State private var confirmDelete: Bool = false
     @State private var deleteState: DeleteState = .discard
     
-    // MARK: - Variables
     @ObservedObject var log: BabyLog
     @State var date: ObservableDate
     
-    @State var newEventTemplate: DiaperEvent = .new
-    
-    var onAction: ((DiaperAction) -> Void)?
-    
-    @State private var isLoading: Bool = true
     @State private var editing: Bool = false {
         didSet {
             if editing != oldValue, !editing {
@@ -59,22 +44,20 @@ struct DiaperSummaryView: View {
             }
         }
     }
-    @State private var items: [UUID: DiaperEvent] = [:]
+    @State private var items: [UUID: E] = [:]
     
-    var filter: ((DiaperEvent) -> Bool)? = { diaper in
-        return true
-    }
+    var filter: ((_ event: E) -> Bool)?
+    var sort: ((_ lhs: E, _ rhs: E) -> Bool) = { $0.date < $1.date }
+    var onAction: ((MeasuredEventFormAction<E>) -> Void)?
     
-    // MARK: Computed Properties
-    
-    var filteredEvents: [DiaperEvent] {
+    var filteredEvents: [E] {
         guard let filter = self.filter else {
             return []
         }
         return items.values.filter(filter)
     }
     
-    var sortedEvents: [DiaperEvent] {
+    var sortedEvents: [E] {
         return filteredEvents.sorted(by: { $0.date < $1.date })
     }
     
@@ -84,35 +67,12 @@ struct DiaperSummaryView: View {
             FormContent(
                 date: .init($0.date),
                 id: $0.id,
-                pee: $0.pee,
-                poo: $0.poop) }))
+                measurement: $0.measurement) }))
     }
     @State private var activeIndex: Int = 0
     
-    var activeEvent: DiaperEvent {
-//        return lastEvent ?? newEventTemplate
-        guard sortedEvents.count > activeIndex else { return newEventTemplate }
-        return sortedEvents[activeIndex]
-    }
+    @State private var collectMeasurement: Bool = false
     
-    func updateEvents() {
-        self.log.groupOfType(completion: { (result: Result<[UUID: DiaperEvent], BabyError>) in
-            if case let .success(groupDict) = result, groupDict != items {
-                
-                self.items = groupDict
-                
-                
-                
-                self.isLoading = false
-            }
-        })
-    }
-    
-    var lastEvent: DiaperEvent? {
-        return sortedEvents.last
-    }
-    
-    // MARK: Views
     var body: some View {
         VStack {
             headerRow()
@@ -121,7 +81,7 @@ struct DiaperSummaryView: View {
         }
         .foregroundColor(.white)
         .padding()
-        .background(DiaperEvent.type.colorValue)
+        .background(E.type.colorValue)
         .cornerRadius(22)
         .padding(.horizontal)
         .onReceive(Just(log), perform: { (_) in
@@ -131,9 +91,6 @@ struct DiaperSummaryView: View {
             if let firstEvent = self.restoreContent.first {
                 self.content = firstEvent
             }
-            if self.isLoading {
-                self.updateEvents()
-            }
         }
     }
     
@@ -141,72 +98,43 @@ struct DiaperSummaryView: View {
         HStack {
             Color.white
                 .frame(width: 18, height: 18)
-                .mask(Image("SafetyPin").resizable())
+                .mask(Image("Napping").resizable())
                 
-            Text("Diaper Changes")
+            Text("Naps")
                 .font(.system(size: 18, weight: .heavy, design: .rounded))
-            
-            Spacer()
-            
-            if restoreContent.count > 1 {
-                Button(action: {
-                    guard self.activeIndex < self.restoreContent.count - 1 else { return }
-                    withAnimation {
-                        let newOffset = self.activeIndex + 1
-                        self.editing = false
-                        self.activeIndex = newOffset
-                        self.content = self.restoreContent[newOffset]
-                    }
-                }) {
-                    Image(systemName: "arrow.left.circle")
-                    .font(.system(size: 18, weight: .heavy, design: .rounded))
-                }
-                .disablePlease(activeIndex >= restoreContent.count - 1)
-
-                Button(action: {
-                    guard self.activeIndex > 0 else { return }
-                    withAnimation {
-                        let newOffset = self.activeIndex - 1
-                        self.editing = false
-                        self.activeIndex = newOffset
-                        self.content = self.restoreContent.sorted(by: { $0.date.date > $1.date.date })[newOffset]
-                    }
-                }) {
-                    Image(systemName: "arrow.right.circle")
-                    .font(.system(size: 18, weight: .heavy, design: .rounded))
-                }
-                .disablePlease(activeIndex == 0)
-            }
-        }
-    }
-    
-    func lastEventDateLabel() -> AnyView {
-        guard let lastEvent = lastEvent else {
-            return EmptyView().anyPlease()
-        }
-        return Text(DateFormatter.shortTimeDisplay.string(from: lastEvent.date)).anyPlease()
-    }
-    
-    // MARK: - Summary View
-    func defaultSummaryView(_ events: [DiaperEvent], _ selected: DiaperEvent?) -> AnyView {
-        guard events.count > 0 else {
-            return Text("No Changes Today")
-                .anyPlease()
-        }
-        let poops = events.filter({ $0.poop }).count
-        let pees = events.filter({ $0.pee }).count
-        
-        return VStack(alignment: .leading) {
-            Spacer()
-            Text("\(events.count) \(events.count == 1 ? "Diaper Change" : "Diaper Changes")")
-            Spacer()
-            if events.count > 0 {
-                Text("💩 \(poops)")
-                Text("💦 \(pees)")
+                
                 Spacer()
-            }
+                
+                if restoreContent.count > 1 {
+                    Button(action: {
+                        guard self.activeIndex < self.restoreContent.count - 1 else { return }
+                        withAnimation {
+                            let newOffset = self.activeIndex + 1
+                            self.editing = false
+                            self.activeIndex = newOffset
+                            self.content = self.restoreContent[newOffset]
+                        }
+                    }) {
+                        Image(systemName: "arrow.left.circle")
+                        .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    }
+                    .disablePlease(activeIndex >= restoreContent.count - 1)
+
+                    Button(action: {
+                        guard self.activeIndex > 0 else { return }
+                        withAnimation {
+                            let newOffset = self.activeIndex - 1
+                            self.editing = false
+                            self.activeIndex = newOffset
+                            self.content = self.restoreContent.sorted(by: { $0.date.date > $1.date.date })[newOffset]
+                        }
+                    }) {
+                        Image(systemName: "arrow.right.circle")
+                        .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    }
+                    .disablePlease(activeIndex == 0)
+                }
         }
-        .anyPlease()
     }
     
     func actionRow() -> some View {
@@ -216,36 +144,18 @@ struct DiaperSummaryView: View {
                     
                     TimeStepperView(targetDate: $content.date, editing: $editing)
                     
-                    HStack {
-                        Button(action: {
-                            withAnimation {
-                                self.content.pee.toggle()
-                                self.editing = true
-                            }
-                        }) {
-                            Text("💦")
-                        }
-                        .raisedButtonPlease(content.pee ? BabyEventType.diaper.colorValue : .gray)
-
-                        Button(action: {
-                            withAnimation {
-                                self.content.poo.toggle()
-                                self.editing = true
-                            }
-                        }) {
-                            Text("💩")
-                        }
-                        .raisedButtonPlease(content.poo ? BabyEventType.diaper.colorValue : .gray)
-                        
-                        Spacer()
-                    }
+                    MeasurementStepperView(target: $content.measurement, defaultValue: E.self.defaultMeasurement, onValueChange: { (newMeasurement) in
+                        print("Do anything?")
+                    }, editing: $editing)
                     
                     if editing {
+                            
                         Spacer()
                         
                         HStack {
                             
                             Button(action: {
+                                guard !self.restoreContent.isEmpty else { return }
                                 withAnimation {
                                     if self.editing {
                                         self.editing = false
@@ -256,7 +166,7 @@ struct DiaperSummaryView: View {
                             }) {
                                 Text("Delete")
                                 .bold()
-                                .foregroundColor(BabyEventType.diaper.colorValue)
+                                .foregroundColor(E.type.colorValue)
                             }
                             .disablePlease(restoreContent.isEmpty)
                             
@@ -276,7 +186,7 @@ struct DiaperSummaryView: View {
                             }) {
                                 Text("Update")
                                 .bold()
-                                .foregroundColor(BabyEventType.diaper.colorValue)
+                                .foregroundColor(E.type.colorValue)
                             }
                             .disablePlease(restoreContent.isEmpty)
                             
@@ -293,12 +203,12 @@ struct DiaperSummaryView: View {
                             }) {
                                 Text("Save")
                                 .bold()
-                                .foregroundColor(BabyEventType.diaper.colorValue)
+                                    .foregroundColor(E.type.colorValue)
                             }
                         }
                     }
                 }
-                .foregroundColor(BabyEventType.diaper.colorValue)
+                .foregroundColor(E.type.colorValue)
                 Spacer()
             } else {
                 Button(action: {
@@ -337,21 +247,32 @@ struct DiaperSummaryView: View {
     }
 }
 
-// MARK: - Diaper Actions
-extension DiaperSummaryView {
-    func removeLast() {
-        guard let id = content.id else { return }
-        self.onAction?(.remove(id))
-        self.editing = false
+// MARK: - Functions
+extension MeasuredEventFormView {
+    func updateEvents() {
+        self.log.groupOfType(completion: { (result: Result<[UUID: E], BabyError>) in
+            if case let .success(groupDict) = result, groupDict != items {
+                self.items = groupDict
+                guard self.activeIndex < self.restoreContent.count else {
+                    self.content = .init()
+                    self.collectMeasurement = false
+                    return
+                }
+                self.content = self.restoreContent[self.activeIndex]
+                self.collectMeasurement = self.content.measurement != nil
+            }
+        })
     }
 }
 
-struct DiaperSummaryView_Previews: PreviewProvider {
+struct MeasuredEventFormView_Previews: PreviewProvider {
     static var babyLog: BabyLog {
         let log = BabyLog(fileURL: Bundle.main.url(forResource: "MyBabyLog", withExtension: "bblg")!)
         log.baby = baby
-        let event = DiaperEvent(pee: false, poop: true)
-        log.save(event, completion: { _ in })
+        let napEvent = NapEvent(measurement: NapEvent.defaultMeasurement)
+        log.save(napEvent) { (result: Result<NapEvent, BabyError>) in
+            print("Saved")
+        }
         return log
     }
     static var baby: Baby {
@@ -370,6 +291,6 @@ struct DiaperSummaryView_Previews: PreviewProvider {
         return baby
     }
     static var previews: some View {
-        DiaperSummaryView(log: babyLog, date: .init())
+        MeasuredEventFormView<NapEvent>(log: babyLog, date: .init())
     }
 }

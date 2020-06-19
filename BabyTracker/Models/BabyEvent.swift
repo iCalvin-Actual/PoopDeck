@@ -40,6 +40,7 @@ extension BabyEvent {
 // MARK: Measured Events
 protocol MeasuredBabyEvent: BabyEvent {
     var measurement: Measurement<Unit>? { get set }
+    static var defaultMeasurement: Measurement<Unit> { get }
 }
 
 extension MeasuredBabyEvent {
@@ -49,6 +50,32 @@ extension MeasuredBabyEvent {
         }
         set {
             // Do nothing
+        }
+    }
+    static var defaultUnit: Unit {
+        switch self.new.type {
+        case .feed:
+            return Locale.current.usesMetricSystem ? UnitVolume.milliliters : UnitVolume.fluidOunces
+        case .nap, .fuss, .tummyTime:
+            return UnitDuration.minutes
+        case .weight:
+            return Locale.current.usesMetricSystem ? UnitMass.kilograms : UnitMass.pounds
+        default:
+            return UnitArea.squareCentimeters
+        }
+    }
+    static var defaultMeasurement: Measurement<Unit> {
+        switch type {
+        case .feed:
+            return Measurement(value: 4.0, unit: defaultUnit)
+        case .nap:
+            return Measurement(value: 30.0, unit: defaultUnit)
+        case .tummyTime:
+            return Measurement(value: 3.0, unit: defaultUnit)
+        case .weight:
+            return Measurement(value: 10.0, unit: defaultUnit)
+        default:
+            return Measurement(value: 0.0, unit: defaultUnit)
         }
     }
 }

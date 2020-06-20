@@ -9,7 +9,7 @@
 import Foundation
 
 struct CustomEvent: BabyEvent {
-    var type: BabyEventType = .custom
+    static var type: BabyEventType = .custom
     static var new: CustomEvent {
         return CustomEvent(event: "")
     }

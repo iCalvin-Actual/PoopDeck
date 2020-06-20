@@ -9,7 +9,7 @@
 import Foundation
 
 struct WeightEvent: MeasuredBabyEvent {
-    var type: BabyEventType = .weight
+    static var type: BabyEventType = .weight
     static var new: WeightEvent {
         return WeightEvent(measurement: Measurement.init(value: 4.20, unit: UnitMass.kilograms))
     }

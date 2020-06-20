@@ -9,7 +9,7 @@
 import Foundation
 
 struct NapEvent: MeasuredBabyEvent {
-    var type: BabyEventType = .nap
+    static var type: BabyEventType = .nap
     static var new: NapEvent {
         return NapEvent()
     }

@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Feed Event
 struct FeedEvent: MeasuredBabyEvent {
-    var type: BabyEventType = .feed
+    static var type: BabyEventType = .feed
     static var new: FeedEvent {
         return FeedEvent(source: .breast(.both))
     }
@@ -36,7 +36,6 @@ struct FeedEventOld: Codable {
 
 extension FeedEvent {
     static var defaultMeasurement: Measurement<UnitVolume> {
-        let new = FeedEvent.self.type
         return Measurement(
             value: Locale.current.usesMetricSystem ? 90.0 : 3.0,
             unit: defaultUnit as! UnitVolume

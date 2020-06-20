@@ -9,7 +9,7 @@
 import Foundation
 
 struct DiaperEvent: BabyEvent {
-    var type: BabyEventType = .diaper
+    static var type: BabyEventType = .diaper
     static var new: DiaperEvent {
         return DiaperEvent()
     }

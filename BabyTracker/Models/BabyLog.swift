@@ -145,7 +145,6 @@ struct BabyEventStore: Codable {
     var feedings:       [UUID: FeedEvent] = [:]
     var changes:        [UUID: DiaperEvent] = [:]
     var naps:           [UUID: NapEvent] = [:]
-    var fussies:        [UUID: FussEvent] = [:]
     var weighIns:       [UUID: WeightEvent] = [:]
     var tummyTimes:     [UUID: TummyTimeEvent] = [:]
     var customEvents:   [UUID: CustomEvent] = [:]
@@ -154,7 +153,6 @@ struct BabyEventStoreOld: Codable {
     var feedings:       [UUID: FeedEventOld] = [:]
     var changes:        [UUID: DiaperEvent] = [:]
     var naps:           [UUID: NapEventOld] = [:]
-    var fussies:        [UUID: FussEvent] = [:]
     var weighIns:       [UUID: WeightEventOld] = [:]
     var tummyTimes:     [UUID: TummyTimeEventOld] = [:]
     var customEvents:   [UUID: CustomEvent] = [:]
@@ -216,7 +214,6 @@ struct BabyEventStoreOld: Codable {
             feedings: newFeedings,
             changes: newChanges,
             naps: newNaps,
-            fussies: [:],
             weighIns: newWeights,
             tummyTimes: newTummies,
             customEvents: newCustom)
@@ -232,8 +229,6 @@ extension BabyLog {
             completion(.success(naps))
         } else if DiaperEvent.self == E.self, let changes = eventStore.changes as? [UUID: E] {
             completion(.success(changes))
-        } else if FussEvent.self == E.self, let fussies = eventStore.fussies as? [UUID: E] {
-            completion(.success(fussies))
         } else if WeightEvent.self == E.self, let weighIns = eventStore.weighIns as? [UUID: E] {
             completion(.success(weighIns))
         } else if TummyTimeEvent.self == E.self, let tummyTimes = eventStore.tummyTimes as? [UUID: E] {
@@ -256,9 +251,6 @@ extension BabyLog {
         } else if let newNaps = newValue as? [UUID: NapEvent] {
             eventStore.naps = newNaps
             completion(.success(newValue))
-        } else if let newFussies = newValue as? [UUID: FussEvent] {
-            eventStore.fussies = newFussies
-            completion(.success(newValue))
         } else if let newWeighIns = newValue as? [UUID: WeightEvent] {
             eventStore.weighIns = newWeighIns
             completion(.success(newValue))
@@ -280,8 +272,6 @@ extension BabyLog {
            completion(.success(changeEvent))
         } else if let napEvent = eventStore.naps[id] as? E {
             completion(.success(napEvent))
-        } else if let fussEvent = eventStore.fussies[id] as? E {
-            completion(.success(fussEvent))
         } else if let weightEvent = eventStore.weighIns[id] as? E {
             completion(.success(weightEvent))
         } else if let tummyEvent = eventStore.tummyTimes[id] as? E {
@@ -305,9 +295,6 @@ extension BabyLog {
             completion(.success(nil))
         } else if let _ = eventStore.naps[id] as? E {
             eventStore.naps[id] = nil
-            completion(.success(nil))
-        } else if let _ = eventStore.fussies[id] as? E {
-            eventStore.fussies[id] = nil
             completion(.success(nil))
         } else if let _ = eventStore.weighIns[id] as? E {
             eventStore.weighIns[id] = nil
@@ -348,9 +335,6 @@ extension BabyLog {
            completion(.success(event))
         } else if let napEvent = event as? NapEvent {
             eventStore.naps[event.id] = napEvent
-            completion(.success(event))
-        } else if let fussEvent = event as? FussEvent {
-            eventStore.fussies[event.id] = fussEvent
             completion(.success(event))
         } else if let weightEvent = event as? WeightEvent {
             eventStore.weighIns[event.id] = weightEvent

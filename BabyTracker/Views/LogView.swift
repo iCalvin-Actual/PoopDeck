@@ -447,39 +447,6 @@ extension LogView {
         }
     }
     
-    // MARK: Fuss Events
-    func onEventAction(_ action: MeasuredEventAction<FussEvent>) {
-        switch action {
-        case .create(var event, let increment), .update(var event, let increment):
-            if case .create = action {
-                event.id = UUID()
-            }
-            event.date = self.targetDate.date
-            let unit = event.measurement?.unit ?? UnitDuration.minutes
-            if unit.modifier > 0 {
-                let value = event.measurement?.value ?? unit.defaultValue
-                let adjustment = unit.modifier * Double(increment ?? 0)
-                event.measurement = Measurement(value: value + adjustment, unit: unit)
-                print("Updated")
-            }
-            self.log.save(event) { (savedEvent) in
-                print("💾: Event added to log")
-            }
-        case .remove(let event):
-            self.log.delete(event) { (_) in
-                print("Did Delete?")
-            }
-        case .toggleUnit(let event):
-            guard event.measurement != nil else { return }
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
-        }
-    }
-    
     // MARK: Weight Events
     func onEventAction(_ action: MeasuredEventAction<WeightEvent>) {
         switch action {

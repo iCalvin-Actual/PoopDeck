@@ -9,6 +9,15 @@
 import Combine
 import SwiftUI
 
+enum CustomAction {
+    case create(_: CustomEventFormView.FormContent)
+    case remove(_: UUID)
+    case showDetail(_: [UUID])
+    case toggleUnit(_: UUID)
+    case undo
+    case redo
+}
+
 struct CustomEventFormView: View {
     
     struct FormContent {

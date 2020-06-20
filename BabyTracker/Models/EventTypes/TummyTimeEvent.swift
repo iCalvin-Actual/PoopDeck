@@ -9,7 +9,7 @@
 import Foundation
 
 struct TummyTimeEvent: MeasuredBabyEvent {
-    var type: BabyEventType = .tummyTime
+    static var type: BabyEventType = .tummyTime
     static var new: TummyTimeEvent {
         return TummyTimeEvent()
     }

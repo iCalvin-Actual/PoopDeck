@@ -13,7 +13,7 @@ import Combine
 // MARK: - Archive
 struct BabyLogArchiveOldFormat: Codable {
     let baby: OldFormatBaby
-    let eventStore: BabyEventStore
+    let eventStore: BabyEventStoreOld
     
     init(_ baby: OldFormatBaby) {
         self.baby = baby
@@ -76,7 +76,7 @@ class BabyLog: UIDocument {
                 baby.birthday = archive.baby.birthday
                 baby.themeColor = archive.baby.themeColor
                 self.baby = baby
-                self.eventStore = archive.eventStore
+                self.eventStore = archive.eventStore.newFormat
             } catch {
                 throw BabyError.unknown
             }
@@ -149,6 +149,78 @@ struct BabyEventStore: Codable {
     var weighIns:       [UUID: WeightEvent] = [:]
     var tummyTimes:     [UUID: TummyTimeEvent] = [:]
     var customEvents:   [UUID: CustomEvent] = [:]
+}
+struct BabyEventStoreOld: Codable {
+    var feedings:       [UUID: FeedEventOld] = [:]
+    var changes:        [UUID: DiaperEvent] = [:]
+    var naps:           [UUID: NapEventOld] = [:]
+    var fussies:        [UUID: FussEvent] = [:]
+    var weighIns:       [UUID: WeightEventOld] = [:]
+    var tummyTimes:     [UUID: TummyTimeEventOld] = [:]
+    var customEvents:   [UUID: CustomEvent] = [:]
+
+    var newFormat: BabyEventStore {
+        
+        let newFeedings: [UUID: FeedEvent] = feedings.values.reduce([:]) { (inputResult, oldEvent) -> [UUID: FeedEvent] in
+            var returnResult = inputResult
+            returnResult[oldEvent.id] = FeedEvent(
+                id: oldEvent.id,
+                date: oldEvent.date,
+                source: oldEvent.source,
+                measurement: oldEvent.size)
+            return returnResult
+        }
+        let newChanges: [UUID: DiaperEvent] = changes.values.reduce([:]) { (inputResult, oldEvent) -> [UUID: DiaperEvent] in
+            var returnResult = inputResult
+            returnResult[oldEvent.id] = DiaperEvent(
+                id: oldEvent.id,
+                date: oldEvent.date,
+                pee: oldEvent.pee,
+                poop: oldEvent.poop)
+            return returnResult
+        }
+        let newNaps: [UUID: NapEvent] = naps.values.reduce([:]) { (inputResult, oldEvent) -> [UUID: NapEvent] in
+            var returnResult = inputResult
+            returnResult[oldEvent.id] = NapEvent(
+                id: oldEvent.id,
+                date: oldEvent.date,
+                measurement: Measurement(value: oldEvent.duration / 60.0, unit: UnitDuration.minutes))
+            return returnResult
+        }
+        let newWeights: [UUID: WeightEvent] = weighIns.values.reduce([:]) { (inputResult, oldEvent) -> [UUID: WeightEvent] in
+            var returnResult = inputResult
+            returnResult[oldEvent.id] = WeightEvent(
+                id: oldEvent.id,
+                date: oldEvent.date,
+                measurement: oldEvent.weight == nil ? nil : Measurement(value: oldEvent.weight?.value ?? 0, unit: oldEvent.weight!.unit))
+            return returnResult
+        }
+        let newTummies: [UUID: TummyTimeEvent] = tummyTimes.values.reduce([:]) { (inputResult, oldEvent) -> [UUID: TummyTimeEvent] in
+            var returnResult = inputResult
+            returnResult[oldEvent.id] = TummyTimeEvent(
+                id: oldEvent.id,
+                date: oldEvent.date,
+                measurement: Measurement(value: oldEvent.duration / 60.0, unit: UnitDuration.minutes))
+            return returnResult
+        }
+        let newCustom: [UUID: CustomEvent] = customEvents.values.reduce([:]) { (inputResult, oldEvent) -> [UUID: CustomEvent] in
+            var returnResult = inputResult
+            returnResult[oldEvent.id] = CustomEvent(
+                id: oldEvent.id,
+                date: oldEvent.date,
+                event: oldEvent.event)
+            return returnResult
+        }
+        
+        return BabyEventStore(
+            feedings: newFeedings,
+            changes: newChanges,
+            naps: newNaps,
+            fussies: [:],
+            weighIns: newWeights,
+            tummyTimes: newTummies,
+            customEvents: newCustom)
+    }
 }
 
 extension BabyLog {

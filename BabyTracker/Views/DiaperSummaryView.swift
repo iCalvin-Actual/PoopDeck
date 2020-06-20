@@ -141,9 +141,9 @@ struct DiaperSummaryView: View {
         HStack {
             Color.white
                 .frame(width: 18, height: 18)
-                .mask(Image("SafetyPin").resizable())
+                .mask(Image(BabyEventType.diaper.imageName).resizable())
                 
-            Text("Diaper Changes")
+            Text(BabyEventType.diaper.displayTitle)
                 .font(.system(size: 18, weight: .heavy, design: .rounded))
             
             Spacer()

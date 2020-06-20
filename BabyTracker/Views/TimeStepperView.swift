@@ -172,7 +172,6 @@ struct TimeStepperView: View {
         .contextMenu {
             Button(action: {
                 withAnimation {
-                    self.editing = false
                     self.adjustmentComponents = DateComponents()
                     self.targetDate = .init()
                 }

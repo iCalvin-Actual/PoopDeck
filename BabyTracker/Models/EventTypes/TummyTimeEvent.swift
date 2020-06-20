@@ -17,7 +17,19 @@ struct TummyTimeEvent: MeasuredBabyEvent {
     var id = UUID()
     var date: Date = Date()
     
-    var measurement: Measurement<UnitDuration>?
+    var measurement: Measurement<Unit>?
+}
+
+struct TummyTimeEventOld: Codable {
+    var type: BabyEventType = .tummyTime
+    static var new: TummyTimeEvent {
+        return TummyTimeEvent()
+    }
+    
+    var id = UUID()
+    var date: Date = Date()
+    
+    var duration: Double
 }
 
 extension TummyTimeEvent {

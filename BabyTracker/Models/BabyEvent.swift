@@ -78,6 +78,34 @@ extension MeasuredBabyEvent {
             return Measurement(value: 0.0, unit: defaultUnit)
         }
     }
+    static var displayTitle: String {
+        switch type {
+        case .feed:
+            return ""
+        case .nap:
+            return ""
+        case .tummyTime:
+            return ""
+        case .weight:
+            return ""
+        default:
+            return ""
+        }
+    }
+    var imageName: String {
+        switch type {
+        case .feed:
+            return ""
+        case .nap:
+            return ""
+        case .tummyTime:
+            return ""
+        case .weight:
+            return ""
+        default:
+            return ""
+        }
+    }
 }
 
 // MARK: Display
@@ -100,6 +128,42 @@ extension BabyEventType {
             return "👨‍👩‍👧"
         }
     }
+    var displayTitle: String {
+        switch self {
+        case .feed:
+            return "Feedings"
+        case .diaper:
+            return "Diapers"
+        case .nap:
+            return "Naps"
+        case .fuss:
+            return ""
+        case .weight:
+            return "Weight"
+        case .tummyTime:
+            return "Tummy Times"
+        case .custom:
+            return "Event"
+        }
+    }
+    var imageName: String {
+        switch self {
+        case .feed:
+            return "BreastFeeding"
+        case .diaper:
+            return "Diaper"
+        case .nap:
+            return "Napping"
+        case .fuss:
+            return ""
+        case .weight:
+            return "Scale"
+        case .tummyTime:
+            return "TummyTime"
+        case .custom:
+            return "Event"
+        }
+    }
     
     var colorValue: Color {
         switch self {
@@ -108,7 +172,7 @@ extension BabyEventType {
         case .diaper:
             return .blue
         case .nap:
-            return .red
+            return .purple
         case .fuss:
             return .purple
         case .weight:
@@ -117,6 +181,25 @@ extension BabyEventType {
             return .green
         case .custom:
             return .pink
+        }
+    }
+}
+
+extension FeedEvent.Source {
+    var displayTitle: String {
+        switch self {
+        case .bottle:
+            return "Bottle Feedings"
+        case .breast:
+            return "Breast Feedings"
+        }
+    }
+    var imageName: String {
+        switch self {
+        case .bottle:
+            return "Bottle"
+        case .breast:
+            return "BreastFeeding"
         }
     }
 }

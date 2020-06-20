@@ -26,8 +26,10 @@ struct LogView: View {
     }
     var endOfTargetDate: Date {
         let calendar = Calendar.current
-        let components = DateComponents(calendar: .current, day: calendar.component(.day, from: startOfTargetDate) + 1)
-        return calendar.date(byAdding: components, to: startOfTargetDate) ?? Date()
+        let start = startOfTargetDate
+        
+        let components = DateComponents(calendar: .current, day:1)
+        return calendar.date(byAdding: components, to: start) ?? Date()
     }
     
     @State private var showDatePicker: Bool = false
@@ -58,7 +60,7 @@ struct LogView: View {
                 
                 self.tummyTimeSummaryView()
                 
-                self.fussySummaryView()
+                self.weightSummaryView()
                 
                 self.customEventsViews()
                 
@@ -72,71 +74,36 @@ struct LogView: View {
     
     // MARK: Bottle Feedings
     func bottleSummaryView() -> some View {
-        MeasuredEventSummaryView(
+        MeasuredEventFormView<FeedEvent>(
             log: log,
             date: targetDate,
-            emojiLabel: "🍼",
-            summaryTitle: "Bottle Feedings",
-            singularValue: "Bottle",
-            pluralValue: "Bottles",
-            allowPresentList: true,
-            newEventTemplate: FeedEvent(source: .bottle),
+            displayTitle: FeedEvent.Source.bottle.displayTitle,
+            imageName: FeedEvent.Source.bottle.imageName,
             filter: { (event: FeedEvent) -> Bool in
-                guard
-                    case .bottle = event.source,
-                    self.startOfTargetDate <= event.date,
-                    event.date <= self.targetDate.date
+                guard self.startOfTargetDate <= event.date,
+                    event.date < self.endOfTargetDate
                     else { return false }
-                return true
+                return event.source == FeedEvent.Source.bottle
             },
             sort: { $0.date < $1.date },
-            onAction: onEventAction,
-            measurementTextConstructor: { (event, increment) in
-                let unit = event.measurement?.unit ?? UnitVolume.supported.first ?? UnitVolume.fluidOunces
-                guard let modifier = unit.modifier else {
-                    return "0"
-                }
-                let value: Double = event.measurement?.value ?? (increment != nil ? unit.defaultValue : nil) ?? 0
-                let newValue = value + (Double(increment ?? 0) * modifier)
-                let size = Measurement(value: newValue, unit: unit)
-                
-                return MeasurementFormatter.defaultFormatter.string(from: size)
-        })
+            onAction: onBottleEventAction)
     }
     
     // MARK: Breast Feedings
     func breastFeedSummaryView() -> some View {
-        MeasuredEventSummaryView(
+        MeasuredEventFormView<FeedEvent>(
             log: log,
             date: targetDate,
-            emojiLabel: "🤱🏻",
-            summaryTitle: "Breast Feedings",
-            singularValue: "Feeding",
-            pluralValue: "Feedings",
-            allowPresentList: true,
-            newEventTemplate: FeedEvent(source: .breast(.both)),
+            displayTitle: FeedEvent.Source.breast(.both).displayTitle,
+            imageName: FeedEvent.Source.breast(.both).imageName,
             filter: { (event: FeedEvent) -> Bool in
-                guard
-                    case .breast = event.source,
-                    self.startOfTargetDate <= event.date,
-                    event.date <= self.targetDate.date
+                guard self.startOfTargetDate <= event.date,
+                    event.date < self.endOfTargetDate
                     else { return false }
-                return true
+                return event.source != FeedEvent.Source.bottle
             },
             sort: { $0.date < $1.date },
-            onAction: onEventAction,
-            measurementTextConstructor: { (event, increment) in
-                let unit = event.measurement?.unit ?? UnitVolume.supported.first ?? UnitVolume.fluidOunces
-                guard let modifier = unit.modifier else {
-                    return "0"
-                }
-                let value: Double = event.measurement?.value ?? (increment != nil ? unit.defaultValue : nil) ?? 0
-                let newValue = value + (Double(increment ?? 0) * modifier)
-                let size = Measurement(value: newValue, unit: unit)
-                
-                return MeasurementFormatter.defaultFormatter.string(from: size)
-                
-            })
+            onAction: onEventAction)
     }
     
     // MARK: Diapers
@@ -144,7 +111,13 @@ struct LogView: View {
         DiaperSummaryView(
             log: log,
             date: targetDate,
-            onAction: onEventAction)
+            onAction: onEventAction,
+            filter: { (event: DiaperEvent) -> Bool in
+                guard self.startOfTargetDate <= event.date,
+                    event.date < self.endOfTargetDate
+                    else { return false }
+                return true
+            })
     }
     
     // MARK: Naps
@@ -152,10 +125,12 @@ struct LogView: View {
         MeasuredEventFormView(
             log: log,
             date: targetDate,
+            displayTitle: BabyEventType.nap.displayTitle,
+            imageName: BabyEventType.nap.imageName,
             filter: { (event: NapEvent) -> Bool in
                 guard
                     self.startOfTargetDate <= event.date,
-                    event.date <= self.targetDate.date
+                    event.date < self.endOfTargetDate
                     else { return false }
                 return true
             },
@@ -165,74 +140,41 @@ struct LogView: View {
     
     // MARK: Tummy Times
     func tummyTimeSummaryView() -> some View {
-        MeasuredEventSummaryView(
+        MeasuredEventFormView<TummyTimeEvent>(
             log: log,
             date: targetDate,
-            emojiLabel: "🚼",
-            summaryTitle: "Tummy Time",
-            singularValue: "Tummy Time",
-            pluralValue: "Tummy Times",
-            allowPresentList: true,
-            newEventTemplate: { () -> TummyTimeEvent in
-                var new = TummyTimeEvent()
-                new.measurement = Measurement(value: 5, unit: UnitDuration.minutes)
-                return new
-            }(),
+            displayTitle: BabyEventType.tummyTime.displayTitle,
+            imageName: BabyEventType.tummyTime.imageName,
             filter: { (event: TummyTimeEvent) -> Bool in
                 guard
                     self.startOfTargetDate <= event.date,
-                    event.date <= self.targetDate.date
+                    event.date < self.endOfTargetDate
                     else { return false }
                 return true
             },
             sort: { $0.date < $1.date },
             onAction: onEventAction,
-            measurementTextConstructor: { (event, increment) in
-                let unit = event.measurement?.unit ?? UnitDuration.supported.first ?? UnitDuration.minutes
-                guard let modifier = unit.modifier else {
-                    return "0"
-                }
-                let value: Double = event.measurement?.value ?? (increment != nil ? unit.defaultValue : nil) ?? 0
-                let newValue = value + (Double(increment ?? 0) * modifier)
-                let size = Measurement(value: newValue, unit: unit)
-                
-                return MeasurementFormatter.defaultFormatter.string(from: size)
-            })
+            overrideIncrement: 1.0)
     }
     
     // MARK: Weight Checks
     func weightSummaryView() -> some View {
-        MeasuredEventSummaryView<WeightEvent>(
+        MeasuredEventFormView<WeightEvent>(
             log: log,
             date: targetDate,
-            emojiLabel: "⚖️",
-            summaryTitle: "Weight Check",
-            singularValue: "Weight Check",
-            pluralValue: "Weight Check",
-            allowPresentList: true,
-            newEventTemplate: { () -> WeightEvent in
-                return WeightEvent(measurement: Measurement(value: 10, unit: UnitMass.pounds))
-            }(),
+            displayTitle: BabyEventType.weight.displayTitle,
+            imageName: BabyEventType.weight.imageName,
             filter: { (event: WeightEvent) -> Bool in
+                let start = self.startOfTargetDate
+                let end = self.endOfTargetDate
                 guard
-                    self.startOfTargetDate <= event.date,
-                    event.date <= self.targetDate.date
+                    start <= event.date,
+                    event.date < end
                     else { return false }
                 return true
             },
             sort: { $0.date < $1.date },
-            onAction: onEventAction,
-            measurementTextConstructor: { (event, increment) in
-                let unit = event.measurement?.unit ?? UnitMass.supported.first ?? UnitMass.pounds
-                guard let modifier = unit.modifier else {
-                    return "0"
-                }
-                let value: Double = event.measurement?.value ?? (increment != nil ? unit.defaultValue : nil) ?? 0
-                let newValue = value + (Double(increment ?? 0) * modifier)
-                let size = Measurement(value: newValue, unit: unit)
-                
-                return MeasurementFormatter.defaultFormatter.string(from: size)
-            })
+            onAction: onEventAction)
     }
     
     // MARK: Fussies
@@ -253,7 +195,7 @@ struct LogView: View {
             filter: { (event: FussEvent) -> Bool in
                 guard
                     self.startOfTargetDate <= event.date,
-                    event.date <= self.targetDate.date
+                    event.date < self.endOfTargetDate
                     else { return false }
                 return true
             },
@@ -385,22 +327,60 @@ extension LogView {
             }
         case .toggleUnit(var event):
             guard let size = event.measurement else { return }
-            let values = UnitVolume.supported
-            let index = values.lastIndex(of: size.unit) ?? values.endIndex
-            let newIndex = (index + 1) % values.count
-            let newUnit = values[newIndex]
-            event.measurement = size.converted(to: newUnit)
-            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
-            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
-            self.log.save(event) { (_) in
-                print("💾: Event added to log")
-            }
+//            let values = UnitVolume.supported
+//            let index = values.lastIndex(of: size.unit) ?? values.endIndex
+//            let newIndex = (index + 1) % values.count
+//            let newUnit = values[newIndex]
+//            event.measurement = size.converted(to: newUnit)
+//            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
+//            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
+//            self.log.save(event) { (_) in
+//                print("💾: Event added to log")
+//            }
         case .showDetail:
             print("Present list of items")
         case .undo:
             self.log.undoManager.undo()
         case .redo:
             self.log.undoManager.redo()
+        }
+    }
+    
+    func onEventAction(_ action: MeasuredEventFormAction<FeedEvent>) {
+        switch action {
+        case .create(let form):
+            let event = FeedEvent(
+                id: form.id ?? UUID(),
+                date: form.date.date,
+                source: .breast(.both),
+                measurement: form.measurement
+            )
+            self.log.save(event) { (saveResult) in
+                print("💾: Event added to log")
+            }
+        case .remove(let id):
+            self.log.delete(id) { (deleteResult: Result<FeedEvent?, BabyError>) in
+                print("Did Delete?")
+            }
+        }
+    }
+    
+    func onBottleEventAction(_ action: MeasuredEventFormAction<FeedEvent>) {
+        switch action {
+        case .create(let form):
+            let event = FeedEvent(
+                id: form.id ?? UUID(),
+                date: form.date.date,
+                source: .bottle,
+                measurement: form.measurement
+            )
+            self.log.save(event) { (saveResult) in
+                print("💾: Event added to log")
+            }
+        case .remove(let id):
+            self.log.delete(id) { (deleteResult: Result<FeedEvent?, BabyError>) in
+                print("Did Delete?")
+            }
         }
     }
     
@@ -450,16 +430,38 @@ extension LogView {
     func onEventAction(_ action: MeasuredEventFormAction<NapEvent>) {
         switch action {
         case .create(let form):
+            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
+            let date = Calendar.current.date(byAdding: timeComponents, to: self.startOfTargetDate) ?? form.date.date
             let event = NapEvent(
                 id: form.id ?? UUID(),
-                date: form.date.date,
+                date: date,
                 measurement: form.measurement
             )
-            self.log.save(event) { (_) in
+            self.log.save(event) { (saveResult) in
                 print("💾: Event added to log")
             }
         case .remove(let id):
             self.log.delete(id) { (deleteResult: Result<NapEvent?, BabyError>) in
+                print("Did Delete?")
+            }
+        }
+    }
+    
+    func onEventAction(_ action: MeasuredEventFormAction<TummyTimeEvent>) {
+        switch action {
+        case .create(let form):
+            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
+            let date = Calendar.current.date(byAdding: timeComponents, to: self.startOfTargetDate) ?? form.date.date
+            let event = TummyTimeEvent(
+                id: form.id ?? UUID(),
+                date: date,
+                measurement: form.measurement
+            )
+            self.log.save(event) { (saveResult) in
+                print("💾: Event added to log")
+            }
+        case .remove(let id):
+            self.log.delete(id) { (deleteResult: Result<TummyTimeEvent?, BabyError>) in
                 print("Did Delete?")
             }
         }
@@ -564,22 +566,42 @@ extension LogView {
             }
         case .toggleUnit(var event):
             guard let measurement = event.measurement else { return }
-            let values = UnitMass.supported
-            let index = values.lastIndex(of: measurement.unit) ?? values.endIndex
-            let newIndex = (index + 1) % values.count
-            let newUnit = values[newIndex]
-            event.measurement = measurement.converted(to: newUnit)
-            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
-            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
-            self.log.save(event) { (saveEvent) in
-                print("💾: Event added to log")
-            }
+//            let values = UnitMass.supported
+//            let index = values.lastIndex(of: measurement.unit) ?? values.endIndex
+//            let newIndex = (index + 1) % values.count
+//            let newUnit = values[newIndex]
+//            event.measurement = measurement.converted(to: newUnit)
+//            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
+//            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
+//            self.log.save(event) { (saveEvent) in
+//                print("💾: Event added to log")
+//            }
         case .showDetail:
             print("Present list of items")
         case .undo:
             self.log.undoManager.undo()
         case .redo:
             self.log.undoManager.redo()
+        }
+    }
+    
+    func onEventAction(_ action: MeasuredEventFormAction<WeightEvent>) {
+        switch action {
+        case .create(let form):
+            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
+            let date = Calendar.current.date(byAdding: timeComponents, to: self.startOfTargetDate) ?? form.date.date
+            let event = WeightEvent(
+                id: form.id ?? UUID(),
+                date: date,
+                measurement: form.measurement
+            )
+            self.log.save(event) { (saveResult) in
+                print("💾: Event added to log")
+            }
+        case .remove(let id):
+            self.log.delete(id) { (deleteResult: Result<WeightEvent?, BabyError>) in
+                print("Did Delete?")
+            }
         }
     }
     

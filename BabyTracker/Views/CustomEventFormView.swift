@@ -66,10 +66,11 @@ struct CustomEventFormView: View {
     
     private func headerRow() -> some View {
         HStack(alignment: .top) {
-            Image(systemName: "pencil")
-                .font(.system(size: 18, weight: .heavy, design: .rounded))
+            Color.white
+                .frame(width: 18, height: 18)
+                .mask(Image(BabyEventType.custom.imageName).resizable())
             
-            Text("Event")
+            Text(BabyEventType.custom.displayTitle)
                 .font(.system(size: 18, weight: .heavy, design: .rounded))
             
             Spacer()

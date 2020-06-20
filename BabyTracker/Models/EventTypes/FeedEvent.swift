@@ -19,7 +19,19 @@ struct FeedEvent: MeasuredBabyEvent {
     var date: Date = Date()
     
     var source: Source
-    var measurement: Measurement<UnitVolume>?
+    var measurement: Measurement<Unit>?
+}
+struct FeedEventOld: Codable {
+    var type: BabyEventType = .feed
+    static var new: FeedEvent {
+        return FeedEvent(source: .breast(.both))
+    }
+    
+    var id = UUID()
+    var date: Date = Date()
+    
+    var source: FeedEvent.Source
+    var size: Measurement<Unit>?
 }
 
 extension FeedEvent {

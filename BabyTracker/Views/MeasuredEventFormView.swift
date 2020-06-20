@@ -29,6 +29,9 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
     @ObservedObject var log: BabyLog
     @State var date: ObservableDate
     
+    var displayTitle: String
+    var imageName: String
+    
     @State private var editing: Bool = false {
         didSet {
             if editing != oldValue, !editing {
@@ -56,7 +59,6 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
         }
         return items.values.filter(filter)
     }
-    
     var sortedEvents: [E] {
         return filteredEvents.sorted(by: { $0.date < $1.date })
     }
@@ -70,6 +72,7 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
                 measurement: $0.measurement) }))
     }
     @State private var activeIndex: Int = 0
+    var overrideIncrement: Double?
     
     @State private var collectMeasurement: Bool = false
     
@@ -98,9 +101,9 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
         HStack {
             Color.white
                 .frame(width: 18, height: 18)
-                .mask(Image("Napping").resizable())
+                .mask(Image(imageName).resizable())
                 
-            Text("Naps")
+            Text(displayTitle)
                 .font(.system(size: 18, weight: .heavy, design: .rounded))
                 
                 Spacer()
@@ -146,7 +149,8 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
                     
                     MeasurementStepperView(target: $content.measurement, defaultValue: E.self.defaultMeasurement, onValueChange: { (newMeasurement) in
                         print("Do anything?")
-                    }, editing: $editing)
+                    }, editing: $editing, overrideIncrement: overrideIncrement)
+                    
                     
                     if editing {
                             
@@ -269,8 +273,8 @@ struct MeasuredEventFormView_Previews: PreviewProvider {
     static var babyLog: BabyLog {
         let log = BabyLog(fileURL: Bundle.main.url(forResource: "MyBabyLog", withExtension: "bblg")!)
         log.baby = baby
-        let napEvent = NapEvent(measurement: NapEvent.defaultMeasurement)
-        log.save(napEvent) { (result: Result<NapEvent, BabyError>) in
+        let napEvent = TummyTimeEvent(measurement: TummyTimeEvent.defaultMeasurement)
+        log.save(napEvent) { (result: Result<TummyTimeEvent, BabyError>) in
             print("Saved")
         }
         return log
@@ -291,6 +295,6 @@ struct MeasuredEventFormView_Previews: PreviewProvider {
         return baby
     }
     static var previews: some View {
-        MeasuredEventFormView<NapEvent>(log: babyLog, date: .init())
+        MeasuredEventFormView<TummyTimeEvent>(log: babyLog, date: .init(), displayTitle: TummyTimeEvent.type.displayTitle, imageName: TummyTimeEvent.type.imageName)
     }
 }

@@ -30,7 +30,7 @@ struct DocumentsView: View {
     
     // MARK: - Body
     var body: some View {
-        VStack {
+        VStack(spacing: 4) {
             BabyPickerView(
                 logs: logs,
                 selected: selected ?? .dummy,

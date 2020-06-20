@@ -11,13 +11,25 @@ import Foundation
 struct WeightEvent: MeasuredBabyEvent {
     var type: BabyEventType = .weight
     static var new: WeightEvent {
-        return WeightEvent(measurement: Measurement.init(value: 4.20, unit: .kilograms))
+        return WeightEvent(measurement: Measurement.init(value: 4.20, unit: UnitMass.kilograms))
     }
     
     var id = UUID()
     var date: Date = Date()
     
-    var measurement: Measurement<UnitMass>?
+    var measurement: Measurement<Unit>?
+}
+
+struct WeightEventOld: Codable {
+    var type: BabyEventType = .weight
+    static var new: WeightEvent {
+        return WeightEvent(measurement: Measurement.init(value: 4.20, unit: UnitMass.kilograms))
+    }
+    
+    var id = UUID()
+    var date: Date = Date()
+    
+    var weight: Measurement<Unit>?
 }
 
 extension WeightEvent {

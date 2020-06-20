@@ -19,12 +19,18 @@ struct MeasurementStepperView: View {
     
     @Binding var editing: Bool
     
+    var overrideIncrement: Double?
+    
+    var increment: Double? {
+        return overrideIncrement ?? self.target?.unit.modifier
+    }
     
     var body: some View {
         HStack {
             if editing {
                 Button(action: {
-                    guard let increment = self.target?.unit.modifier, self.target?.value ?? 0 > 0 else {
+                    guard let increment = self.increment, self.target?.value ?? 0 > 0 else {
+                        self.target = self.defaultValue
                         // Bad unit?
                         return
                     }
@@ -63,7 +69,8 @@ struct MeasurementStepperView: View {
             
             if editing {
                 Button(action: {
-                    guard let increment = self.target?.unit.modifier else {
+                    guard let increment = self.increment else {
+                        self.target = self.defaultValue
                         // Bad unit?
                         return
                     }
@@ -92,6 +99,9 @@ struct MeasurementStepperView_Previews: PreviewProvider {
             
             MeasurementStepperView(
                 target: .constant(Measurement(value: 10.0, unit: UnitMass.pounds)), defaultValue: WeightEvent.defaultMeasurement, editing: .constant(true))
+                
+            MeasurementStepperView(
+                target: .constant(nil), defaultValue: WeightEvent.defaultMeasurement, editing: .constant(true))
         }
     }
 }

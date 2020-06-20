@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias BreastSide = FeedEvent.Source.BreastSide
+
 // MARK: - Feed Event
 struct FeedEvent: MeasuredBabyEvent {
     static var type: BabyEventType = .feed
@@ -21,24 +23,12 @@ struct FeedEvent: MeasuredBabyEvent {
     var source: Source
     var measurement: Measurement<Unit>?
 }
-struct FeedEventOld: Codable {
-    var type: BabyEventType = .feed
-    static var new: FeedEvent {
-        return FeedEvent(source: .breast(.both))
-    }
-    
-    var id = UUID()
-    var date: Date = Date()
-    
-    var source: FeedEvent.Source
-    var size: Measurement<Unit>?
-}
 
 extension FeedEvent {
-    static var defaultMeasurement: Measurement<UnitVolume> {
+    static var defaultMeasurement: Measurement<Unit> {
         return Measurement(
             value: Locale.current.usesMetricSystem ? 90.0 : 3.0,
-            unit: defaultUnit as! UnitVolume
+            unit: defaultUnit
         )
     }
 }

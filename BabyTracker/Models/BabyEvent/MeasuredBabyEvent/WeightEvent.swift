@@ -20,23 +20,11 @@ struct WeightEvent: MeasuredBabyEvent {
     var measurement: Measurement<Unit>?
 }
 
-struct WeightEventOld: Codable {
-    var type: BabyEventType = .weight
-    static var new: WeightEvent {
-        return WeightEvent(measurement: Measurement.init(value: 4.20, unit: UnitMass.kilograms))
-    }
-    
-    var id = UUID()
-    var date: Date = Date()
-    
-    var weight: Measurement<Unit>?
-}
-
 extension WeightEvent {
-    static var defaultMeasurement: Measurement<UnitMass> {
+    static var defaultMeasurement: Measurement<Unit> {
         return Measurement(
             value: Locale.current.usesMetricSystem ? 4.5 : 10.0,
-            unit: defaultUnit as! UnitMass
+            unit: defaultUnit
         )
     }
 }

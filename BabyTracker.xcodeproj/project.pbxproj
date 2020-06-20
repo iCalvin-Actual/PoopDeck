@@ -28,6 +28,10 @@
 		CF402355249E8EE400739641 /* View_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402354249E8EE400739641 /* View_Extensions.swift */; };
 		CF402358249EB36F00739641 /* BabyEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402357249EB36F00739641 /* BabyEventType.swift */; };
 		CF40235A249EB46200739641 /* MeasuredBabyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402359249EB46200739641 /* MeasuredBabyEvent.swift */; };
+		CF40235C249EC59000739641 /* BabyEventType_CardHeaderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40235B249EC59000739641 /* BabyEventType_CardHeaderProvider.swift */; };
+		CF40235E249EC71C00739641 /* CardHeaderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40235D249EC71C00739641 /* CardHeaderProvider.swift */; };
+		CF402360249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40235F249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift */; };
+		CF402362249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
@@ -100,6 +104,10 @@
 		CF402354249E8EE400739641 /* View_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View_Extensions.swift; sourceTree = "<group>"; };
 		CF402357249EB36F00739641 /* BabyEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyEventType.swift; sourceTree = "<group>"; };
 		CF402359249EB46200739641 /* MeasuredBabyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredBabyEvent.swift; sourceTree = "<group>"; };
+		CF40235B249EC59000739641 /* BabyEventType_CardHeaderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyEventType_CardHeaderProvider.swift; sourceTree = "<group>"; };
+		CF40235D249EC71C00739641 /* CardHeaderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderProvider.swift; sourceTree = "<group>"; };
+		CF40235F249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEventSource_CardHeaderProvider.swift; sourceTree = "<group>"; };
+		CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredBabyEvent_Extensions.swift; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
 		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
@@ -170,6 +178,7 @@
 				CF40233C249E669900739641 /* FileVersion_Extensions.swift */,
 				CF40233E249E66A500739641 /* Unit_Extensions.swift */,
 				CF402354249E8EE400739641 /* View_Extensions.swift */,
+				CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -204,6 +213,55 @@
 				CFA0E0392498752F0095680B /* KeyboardResponder.swift */,
 			);
 			path = Publishers;
+			sourceTree = "<group>";
+		};
+		CF402363249ED53000739641 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				CF402364249ED53A00739641 /* CardHeaderProvider */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		CF402364249ED53A00739641 /* CardHeaderProvider */ = {
+			isa = PBXGroup;
+			children = (
+				CF40235D249EC71C00739641 /* CardHeaderProvider.swift */,
+				CF40235B249EC59000739641 /* BabyEventType_CardHeaderProvider.swift */,
+				CF40235F249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift */,
+			);
+			path = CardHeaderProvider;
+			sourceTree = "<group>";
+		};
+		CF402365249ED56000739641 /* BabyEvent */ = {
+			isa = PBXGroup;
+			children = (
+				CFC18032245E224E007C756A /* BabyEvent.swift */,
+				CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */,
+				CFAE0FE72493178800B52BF1 /* CustomEvent.swift */,
+				CF402366249ED56800739641 /* MeasuredBabyEvent */,
+			);
+			path = BabyEvent;
+			sourceTree = "<group>";
+		};
+		CF402366249ED56800739641 /* MeasuredBabyEvent */ = {
+			isa = PBXGroup;
+			children = (
+				CF402359249EB46200739641 /* MeasuredBabyEvent.swift */,
+				CFAE0FDB2493159000B52BF1 /* FeedEvent.swift */,
+				CFAE0FDF249315C900B52BF1 /* NapEvent.swift */,
+				CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */,
+				CFAE0FE5249315E700B52BF1 /* TummyTimeEvent.swift */,
+			);
+			path = MeasuredBabyEvent;
+			sourceTree = "<group>";
+		};
+		CF402367249ED57A00739641 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				CF402357249EB36F00739641 /* BabyEventType.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 		CFAE0FED24931E0900B52BF1 /* UIApplication */ = {
@@ -252,10 +310,9 @@
 		CFAE0FF024931E3000B52BF1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CFC18032245E224E007C756A /* BabyEvent.swift */,
-				CF402359249EB46200739641 /* MeasuredBabyEvent.swift */,
-				CF402357249EB36F00739641 /* BabyEventType.swift */,
-				CFAE0FF224931F2B00B52BF1 /* EventTypes */,
+				CF402363249ED53000739641 /* Protocols */,
+				CF402365249ED56000739641 /* BabyEvent */,
+				CF402367249ED57A00739641 /* Enums */,
 				CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */,
 				CFAE0FCF2492CC2600B52BF1 /* Baby.swift */,
 				CF90150F2486ABF000343F5C /* BabyLog.swift */,
@@ -273,19 +330,6 @@
 				CF402349249E8C9A00739641 /* Modifiers */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		CFAE0FF224931F2B00B52BF1 /* EventTypes */ = {
-			isa = PBXGroup;
-			children = (
-				CFAE0FDB2493159000B52BF1 /* FeedEvent.swift */,
-				CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */,
-				CFAE0FDF249315C900B52BF1 /* NapEvent.swift */,
-				CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */,
-				CFAE0FE5249315E700B52BF1 /* TummyTimeEvent.swift */,
-				CFAE0FE72493178800B52BF1 /* CustomEvent.swift */,
-			);
-			path = EventTypes;
 			sourceTree = "<group>";
 		};
 		CFAE0FF524931FED00B52BF1 /* Templates */ = {
@@ -472,6 +516,7 @@
 				CFA0E03A2498752F0095680B /* KeyboardResponder.swift in Sources */,
 				CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */,
 				CF40234B249E8CB000739641 /* HavNavBarModifier.swift in Sources */,
+				CF40235C249EC59000739641 /* BabyEventType_CardHeaderProvider.swift in Sources */,
 				CFC1800C245E18B1007C756A /* AppDelegate.swift in Sources */,
 				CFAE0FDC2493159000B52BF1 /* FeedEvent.swift in Sources */,
 				CF125D65249246B800E2908C /* NewBabyFormView.swift in Sources */,
@@ -485,6 +530,8 @@
 				CF402353249E8E5600739641 /* AppearDisabledModifier.swift in Sources */,
 				CF402358249EB36F00739641 /* BabyEventType.swift in Sources */,
 				CF402355249E8EE400739641 /* View_Extensions.swift in Sources */,
+				CF402362249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift in Sources */,
+				CF402360249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift in Sources */,
 				CF402351249E8D8100739641 /* FloatingModifier.swift in Sources */,
 				CFAE1000249336A800B52BF1 /* BabyInfoView.swift in Sources */,
 				CFAE0FDE249315BE00B52BF1 /* DiaperEvent.swift in Sources */,
@@ -508,6 +555,7 @@
 				CF40235A249EB46200739641 /* MeasuredBabyEvent.swift in Sources */,
 				CFAE0FFE249332DC00B52BF1 /* DiaperSummaryView.swift in Sources */,
 				CFAE0FE0249315C900B52BF1 /* NapEvent.swift in Sources */,
+				CF40235E249EC71C00739641 /* CardHeaderProvider.swift in Sources */,
 				CFAE0FE82493178800B52BF1 /* CustomEvent.swift in Sources */,
 				CF402339249E663200739641 /* Date_Extensions.swift in Sources */,
 				CFAE0FE2249315D300B52BF1 /* WeightEvent.swift in Sources */,

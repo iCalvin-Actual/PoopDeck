@@ -25,15 +25,11 @@ struct LogView: View {
         return calendar.startOfDay(for: targetDate.date)
     }
     var endOfTargetDate: Date {
-        let calendar = Calendar.current
         let start = startOfTargetDate
         
         let components = DateComponents(calendar: .current, day:1)
-        return calendar.date(byAdding: components, to: start) ?? Date()
+        return Date.apply(components, to: start)
     }
-    
-    @State private var showDatePicker: Bool = false
-    @State private var showTimePicker: Bool = false
     
     var onAction: ((DocumentAction) -> Void)?
     
@@ -177,43 +173,6 @@ struct LogView: View {
             onAction: onEventAction)
     }
     
-    // MARK: Fussies
-    func fussySummaryView() -> some View {
-        MeasuredEventSummaryView(
-            log: log,
-            date: targetDate,
-            emojiLabel: "😾",
-            summaryTitle: "Fussies",
-            singularValue: "Fussy",
-            pluralValue: "Fussies",
-            allowPresentList: true,
-            newEventTemplate: { () -> FussEvent in
-                var new = FussEvent()
-                new.measurement = Measurement(value: 5, unit: UnitDuration.minutes)
-                return new
-            }(),
-            filter: { (event: FussEvent) -> Bool in
-                guard
-                    self.startOfTargetDate <= event.date,
-                    event.date < self.endOfTargetDate
-                    else { return false }
-                return true
-            },
-            sort: { $0.date < $1.date },
-            onAction: onEventAction,
-            measurementTextConstructor: { (event, increment) in
-                let unit = event.measurement?.unit ?? UnitDuration.supported.first ?? UnitDuration.minutes
-                guard let modifier = unit.modifier else {
-                    return "0"
-                }
-                let value: Double = event.measurement?.value ?? (increment != nil ? unit.defaultValue : nil) ?? 0
-                let newValue = value + (Double(increment ?? 0) * modifier)
-                let size = Measurement(value: newValue, unit: unit)
-                
-                return MeasurementFormatter.defaultFormatter.string(from: size)
-            })
-    }
-    
     // MARK: Custom
     func customEventsViews() -> some View {
         ForEach(
@@ -312,11 +271,10 @@ extension LogView {
             }
             event.date = self.targetDate.date
             let unit = event.measurement?.unit ?? UnitVolume.milliliters
-            if let modifier = unit.modifier {
-                let value = event.measurement?.value ?? unit.defaultValue ?? 0
-                let adjustment = modifier * Double(increment ?? 0)
+            if unit.modifier > 0 {
+                let value = event.measurement?.value ?? unit.defaultValue
+                let adjustment = unit.modifier * Double(increment ?? 0)
                 event.measurement = Measurement(value: value + adjustment, unit: unit)
-                print("Updated")
             }
             self.log.save(event) { (_) in
                 print("💾: Event added to log")
@@ -325,8 +283,8 @@ extension LogView {
             self.log.delete(event) { (_) in
                 print("Did Delete?")
             }
-        case .toggleUnit(var event):
-            guard let size = event.measurement else { return }
+        case .toggleUnit(let event):
+            guard event.measurement != nil else { return }
 //            let values = UnitVolume.supported
 //            let index = values.lastIndex(of: size.unit) ?? values.endIndex
 //            let newIndex = (index + 1) % values.count
@@ -393,9 +351,9 @@ extension LogView {
             }
             event.date = self.targetDate.date
             let unit = event.measurement?.unit ?? UnitDuration.minutes
-            if let modifier = unit.modifier {
-                let value = event.measurement?.value ?? unit.defaultValue ?? 0
-                let adjustment = modifier * Double(increment ?? 0)
+            if unit.modifier > 0 {
+                let value = event.measurement?.value ?? unit.defaultValue
+                let adjustment = unit.modifier * Double(increment ?? 0)
                 event.measurement = Measurement(value: value + adjustment, unit: unit)
                 print("Updated")
             }
@@ -406,18 +364,8 @@ extension LogView {
             self.log.delete(event) { (_) in
                 print("Did Delete?")
             }
-        case .toggleUnit(var event):
-            guard let measurement = event.measurement else { return }
-//            let values = UnitDuration.supported
-//            let index = values.lastIndex(of: measurement.unit) ?? values.endIndex
-//            let newIndex = (index + 1) % values.count
-//            let newUnit = values[newIndex]
-//            event.measurement = measurement.converted(to: newUnit)
-//            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
-//            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
-//            self.log.save(event) { (saveEvent) in
-//                print("💾: Event added to log")
-//            }
+        case .toggleUnit(let event):
+            guard event.measurement != nil else { return }
         case .showDetail:
             print("Present list of items")
         case .undo:
@@ -431,7 +379,7 @@ extension LogView {
         switch action {
         case .create(let form):
             let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
-            let date = Calendar.current.date(byAdding: timeComponents, to: self.startOfTargetDate) ?? form.date.date
+            let date = Date.apply(timeComponents, to: startOfTargetDate)
             let event = NapEvent(
                 id: form.id ?? UUID(),
                 date: date,
@@ -451,7 +399,7 @@ extension LogView {
         switch action {
         case .create(let form):
             let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
-            let date = Calendar.current.date(byAdding: timeComponents, to: self.startOfTargetDate) ?? form.date.date
+            let date = Date.apply(timeComponents, to: startOfTargetDate)
             let event = TummyTimeEvent(
                 id: form.id ?? UUID(),
                 date: date,
@@ -476,9 +424,9 @@ extension LogView {
             }
             event.date = self.targetDate.date
             let unit = event.measurement?.unit ?? UnitDuration.minutes
-            if let modifier = unit.modifier {
-                let value = event.measurement?.value ?? 5
-                let adjustment = modifier * Double(increment ?? 0)
+            if unit.modifier > 0 {
+                let value = event.measurement?.value ?? unit.defaultValue
+                let adjustment = unit.modifier * Double(increment ?? 0)
                 event.measurement = Measurement(value: value + adjustment, unit: unit)
             }
             self.log.save(event) { (savedEvent) in
@@ -508,9 +456,9 @@ extension LogView {
             }
             event.date = self.targetDate.date
             let unit = event.measurement?.unit ?? UnitDuration.minutes
-            if let modifier = unit.modifier {
-                let value = event.measurement?.value ?? unit.defaultValue ?? 0
-                let adjustment = modifier * Double(increment ?? 0)
+            if unit.modifier > 0 {
+                let value = event.measurement?.value ?? unit.defaultValue
+                let adjustment = unit.modifier * Double(increment ?? 0)
                 event.measurement = Measurement(value: value + adjustment, unit: unit)
                 print("Updated")
             }
@@ -521,18 +469,8 @@ extension LogView {
             self.log.delete(event) { (_) in
                 print("Did Delete?")
             }
-        case .toggleUnit(var event):
-            guard let measurement = event.measurement else { return }
-            let values = UnitDuration.supported
-            let index = values.lastIndex(of: measurement.unit) ?? values.endIndex
-            let newIndex = (index + 1) % values.count
-            let newUnit = values[newIndex]
-            event.measurement = measurement.converted(to: newUnit)
-            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
-            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
-            self.log.save(event) { (saveEvent) in
-                print("💾: Event added to log")
-            }
+        case .toggleUnit(let event):
+            guard event.measurement != nil else { return }
         case .showDetail:
             print("Present list of items")
         case .undo:
@@ -551,9 +489,9 @@ extension LogView {
             }
             event.date = self.targetDate.date
             let unit = event.measurement?.unit ?? UnitMass.pounds
-            if let modifier = unit.modifier {
-                let value = event.measurement?.value ?? unit.defaultValue ?? 0
-                let adjustment = modifier * Double(increment ?? 0)
+            if unit.modifier > 0 {
+                let value = event.measurement?.value ?? unit.defaultValue
+                let adjustment = unit.modifier * Double(increment ?? 0)
                 event.measurement = Measurement(value: value + adjustment, unit: unit)
                 print("Updated")
             }
@@ -564,18 +502,8 @@ extension LogView {
             self.log.delete(event) { (_) in
                 print("Did Delete?")
             }
-        case .toggleUnit(var event):
-            guard let measurement = event.measurement else { return }
-//            let values = UnitMass.supported
-//            let index = values.lastIndex(of: measurement.unit) ?? values.endIndex
-//            let newIndex = (index + 1) % values.count
-//            let newUnit = values[newIndex]
-//            event.measurement = measurement.converted(to: newUnit)
-//            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
-//            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
-//            self.log.save(event) { (saveEvent) in
-//                print("💾: Event added to log")
-//            }
+        case .toggleUnit(let event):
+            guard event.measurement != nil else { return }
         case .showDetail:
             print("Present list of items")
         case .undo:
@@ -589,7 +517,7 @@ extension LogView {
         switch action {
         case .create(let form):
             let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
-            let date = Calendar.current.date(byAdding: timeComponents, to: self.startOfTargetDate) ?? form.date.date
+            let date = Date.apply(timeComponents, to: startOfTargetDate)
             let event = WeightEvent(
                 id: form.id ?? UUID(),
                 date: date,

@@ -105,7 +105,7 @@ struct ConflictResolutionView: View {
                 
                 Spacer()
                 
-                Text(DateFormatter.shortDisplay.string(from: conflict.babyLog.fileModificationDate ?? Date()))
+                Text(DateFormatter.shortDateTime.string(from: conflict.babyLog.fileModificationDate ?? Date()))
                     .multilineTextAlignment(.trailing)
                     .lineLimit(0)
                 
@@ -217,7 +217,7 @@ struct VersionInfoStack: View {
                     .bold()
             }
             Spacer()
-            Text(DateFormatter.shortDisplay.string(from: version.modificationDate ?? Date()))
+            Text(DateFormatter.shortDateTime.string(from: version.modificationDate ?? Date()))
         }
     }
 }

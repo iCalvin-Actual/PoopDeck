@@ -37,13 +37,13 @@ struct MeasurementStepperView: View {
                     self.target?.value = max((self.target?.value ?? 0) - increment, 0)
                 }) {
                     Image(systemName: "minus.circle")
-                    .raisedButtonPlease(nil, padding: 8)
+                    .floatingPlease(nil, padding: 8)
                 }
                 .font(.system(size: 16, weight: .black))
             }
             
             if target != nil {
-                Text(MeasurementFormatter.defaultFormatter.string(from: target!))
+                Text(MeasurementFormatter.natural.string(from: target!))
                     .font(.system(size: 18.0, weight: .heavy, design: .rounded))
                     .onTapGesture(perform: {
                         withAnimation {
@@ -77,7 +77,7 @@ struct MeasurementStepperView: View {
                     self.target?.value = (self.target?.value ?? 0) + increment
                 }) {
                     Image(systemName: "plus.circle")
-                    .raisedButtonPlease(nil, padding: 8)
+                    .floatingPlease(nil, padding: 8)
                 }
                 .font(.system(size: 16, weight: .black))
             }

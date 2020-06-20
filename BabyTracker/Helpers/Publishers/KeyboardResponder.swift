@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// Publishes the height of the keyboard anytime a frame change notification is received
 class KeyboardResponder {
     private var notificationCenter: NotificationCenter
     

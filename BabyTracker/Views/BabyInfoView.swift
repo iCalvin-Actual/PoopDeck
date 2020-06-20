@@ -28,7 +28,7 @@ struct BabyInfoView: View {
             
             if log.baby.birthday != nil {
                 AgeView(birthday: log.baby.birthday)
-                    .raisedButtonPlease(padding: 8)
+                    .floatingPlease(padding: 8)
             }
         }
         .padding()

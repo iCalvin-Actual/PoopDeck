@@ -93,7 +93,7 @@ struct CustomEventFormView: View {
                     Image(systemName: "arrow.left.circle")
                     .font(.system(size: 18, weight: .heavy, design: .rounded))
                 }
-                .disablePlease(activeOffset >= restoreContent.count - 1)
+                .appearDisabledPlease(activeOffset >= restoreContent.count - 1)
 
                 Button(action: {
                     guard self.activeOffset > 0 else { return }
@@ -112,7 +112,7 @@ struct CustomEventFormView: View {
                     Image(systemName: "arrow.right.circle")
                     .font(.system(size: 18, weight: .heavy, design: .rounded))
                 }
-                .disablePlease(activeOffset == 0)
+                .appearDisabledPlease(activeOffset == 0)
             }
         }
     }
@@ -182,7 +182,7 @@ struct CustomEventFormView: View {
                         .bold()
                         .foregroundColor(BabyEventType.custom.colorValue)
                     }
-                    .disablePlease(!isEdited)
+                    .appearDisabledPlease(!isEdited)
                     
                     Spacer()
                     
@@ -198,7 +198,7 @@ struct CustomEventFormView: View {
                         .bold()
                         .foregroundColor(BabyEventType.custom.colorValue)
                     }
-                    .disablePlease(!isValid)
+                    .appearDisabledPlease(!isValid)
                 }
             }
         }
@@ -243,7 +243,7 @@ struct CustomEventFormView: View {
             }
             .foregroundColor(.primary)
         }
-        .raisedButtonPlease()
+        .floatingPlease()
     }
 }
 

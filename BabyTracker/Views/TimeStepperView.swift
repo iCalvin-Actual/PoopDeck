@@ -28,7 +28,7 @@ struct TimeStepperView: View {
     
      
     private var calendar: Calendar { return .current }
-    private let ticker: TickPublisher = .init()
+    private let ticker: Ticker = .init()
     
     var body: some View {
         HStack(alignment: .top) {
@@ -40,12 +40,12 @@ struct TimeStepperView: View {
                         self.changeDate(DateComponents(calendar: self.calendar, hour: 1))
                     }) {
                         Image(systemName: "plus.circle")
-                        .raisedButtonPlease(nil, padding: 8)
+                        .floatingPlease(nil, padding: 8)
                     }
                     .font(.system(size: 16, weight: .black))
                 }
                 
-                Text(DateFormatter.hourFormatter.string(from: targetDate.date))
+                Text(DateFormatter.hour.string(from: targetDate.date))
                     .font(.system(size: 18.0, weight: .heavy, design: .rounded))
                     .onTapGesture(perform: {
                         withAnimation {
@@ -58,7 +58,7 @@ struct TimeStepperView: View {
                         self.changeDate(DateComponents(calendar: self.calendar, hour: -1))
                     }) {
                         Image(systemName: "minus.circle")
-                        .raisedButtonPlease(nil, padding: 8)
+                        .floatingPlease(nil, padding: 8)
                     }
                     .font(.system(size: 16, weight: .black))
                 }
@@ -91,20 +91,20 @@ struct TimeStepperView: View {
                             self.changeDate(DateComponents(calendar: .current, minute: 10))
                         }) {
                             Image(systemName: "plus.circle")
-                            .raisedButtonPlease(nil, padding: 8)
+                            .floatingPlease(nil, padding: 8)
                         }
                         
                         Button(action: {
                             self.changeDate(DateComponents(calendar: .current, minute: 1))
                         }) {
                             Image(systemName: "plus.circle")
-                            .raisedButtonPlease(nil, padding: 8)
+                            .floatingPlease(nil, padding: 8)
                         }
                     }
                     .font(.system(size: 16, weight: .black))
                 }
                 
-                Text(DateFormatter.minuteFormatter.string(from: targetDate.date))
+                Text(DateFormatter.minute.string(from: targetDate.date))
                     .font(.system(size: 18.0, weight: .heavy, design: .rounded))
                     .onTapGesture(perform: {
                         withAnimation {
@@ -118,14 +118,14 @@ struct TimeStepperView: View {
                             self.changeDate(DateComponents(calendar: .current, minute: -10))
                         }) {
                             Image(systemName: "minus.circle")
-                            .raisedButtonPlease(nil, padding: 8)
+                            .floatingPlease(nil, padding: 8)
                         }
                         
                         Button(action: {
                             self.changeDate(DateComponents(calendar: .current, minute: -1))
                         }) {
                             Image(systemName: "minus.circle")
-                            .raisedButtonPlease(nil, padding: 8)
+                            .floatingPlease(nil, padding: 8)
                         }
                     }
                     .font(.system(size: 16, weight: .black))
@@ -141,12 +141,12 @@ struct TimeStepperView: View {
                         self.changeDate(DateComponents(calendar: self.calendar, hour: currentHour < 12 ? 12 : -12 ))
                     }) {
                         Image(systemName: "plus.circle")
-                        .raisedButtonPlease(nil, padding: 8)
+                        .floatingPlease(nil, padding: 8)
                     }
                     .font(.system(size: 16, weight: .black))
                 }
                 
-                Text(DateFormatter.ampmFormatter.string(from: targetDate.date))
+                Text(DateFormatter.ampm.string(from: targetDate.date))
                     .font(.system(size: 18.0, weight: .heavy, design: .rounded))
                     .onTapGesture(perform: {
                         withAnimation {
@@ -160,7 +160,7 @@ struct TimeStepperView: View {
                         self.changeDate(DateComponents(calendar: self.calendar, hour: currentHour < 12 ? 12 : -12 ))
                     }) {
                         Image(systemName: "minus.circle")
-                        .raisedButtonPlease(nil, padding: 8)
+                        .floatingPlease(nil, padding: 8)
                     }
                     .font(.system(size: 16, weight: .black))
                 }
@@ -189,7 +189,7 @@ extension TimeStepperView {
         adjustmentComponents = components
     }
     func updateTargetDate() {
-        targetDate = .init(self.calendar.date(byAdding: self.adjustmentComponents, to: targetDate.date) ?? Date())
+        targetDate = .init(Date.apply(adjustmentComponents, to: targetDate.date))
     }
     
     func dateIsModified() -> Bool {

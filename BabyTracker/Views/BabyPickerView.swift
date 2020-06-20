@@ -131,7 +131,7 @@ struct BabyPickerView: View {
             Image(systemName: "plus.square.on.square.fill")
         }
         .font(.system(size: 20.0, weight: .semibold))
-        .raisedButtonPlease()
+        .floatingPlease()
     }
 }
 

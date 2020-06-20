@@ -21,7 +21,7 @@ struct DateStepperView: View {
     @State private var adjustingMonth: Bool = false
      
     private var calendar: Calendar { return .current }
-    private let ticker: TickPublisher = .init()
+    private let ticker: Ticker = .init()
     
     // MARK: - Views
     var body: some View {
@@ -35,13 +35,13 @@ struct DateStepperView: View {
                 }
             }) {
                 Image(systemName: "minus.circle")
-                .raisedButtonPlease(nil, padding: 8)
+                .floatingPlease(nil, padding: 8)
             }
             .font(.system(size: 16, weight: .black))
             
             VStack(alignment: .trailing, spacing: 4) {
                 
-                Text(DateFormatter.shortDateDisplay.string(from: targetDate.date))
+                Text(DateFormatter.shortDate.string(from: targetDate.date))
                     .fontWeight(.bold)
                     .contextMenu {
                         Button(action: {
@@ -57,7 +57,7 @@ struct DateStepperView: View {
                         self.adjustmentComponents = DateComponents()
                         self.adjustingMonth = false
                     }) {
-                        Text(DateFormatter.shortDateDisplay.string(from: currentDate))
+                        Text(DateFormatter.shortDate.string(from: currentDate))
                             .font(.callout)
                             .fontWeight(.bold)
                     }
@@ -75,7 +75,7 @@ struct DateStepperView: View {
                     }
                 }) {
                     Image(systemName: "plus.circle")
-                    .raisedButtonPlease(nil, padding: 8)
+                    .floatingPlease(nil, padding: 8)
                 }
                 .font(.system(size: 16, weight: .black))
                 
@@ -103,7 +103,7 @@ extension DateStepperView {
         adjustmentComponents = newComponents
     }
     func updateTargetDate() {
-        targetDate = .init(self.calendar.date(byAdding: self.adjustmentComponents, to: Date()) ?? Date())
+        targetDate = .init(Date.apply(adjustmentComponents, to: Date()))
     }
     
     func dateIsModified() -> Bool {

@@ -83,7 +83,7 @@ struct NewBabyForm: View {
                 Image(systemName: "arrow.down.circle.fill")
             }
             .padding(2)
-            .raisedButtonPlease(padding: 4)
+            .floatingPlease(padding: 4)
         }
     }
     

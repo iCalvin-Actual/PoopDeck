@@ -43,21 +43,21 @@ class Baby: Codable {
 
 // MARK: - Computed Variables
 extension Baby {
-    var nameComponents: PersonNameComponents? {
-        return PersonNameComponentsFormatter.decodingFormatter.personNameComponents(from: name)
+    private var nameComponents: PersonNameComponents? {
+        return PersonNameComponentsFormatter.decoding.personNameComponents(from: name)
     }
     var displayName: String {
         guard let components = nameComponents else {
             return name
         }
-        return PersonNameComponentsFormatter.shortNameFormatter.string(from: components)
+        return PersonNameComponentsFormatter.short.string(from: components)
     }
     
     var displayInitial: String {
         guard let components = nameComponents else {
             return name
         }
-        return PersonNameComponentsFormatter.initialFormatter.string(from: components)
+        return PersonNameComponentsFormatter.abbreviated.string(from: components)
     }
 }
 

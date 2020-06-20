@@ -58,7 +58,7 @@ struct CustomEventView: View {
             
             Spacer()
             
-            Text(DateFormatter.shortDisplay.string(from: existingEvent?.date ?? date.date))
+            Text(DateFormatter.shortDateTime.string(from: existingEvent?.date ?? date.date))
             
             if allowPresentList {
                 
@@ -89,7 +89,7 @@ struct CustomEventView: View {
         HStack {
             if existingEvent != nil {
                 Button(action: {
-                    guard let event = self.existingEvent else { return }
+                    guard self.existingEvent != nil else { return }
 //                    self.onAction?(.remove(event))
                 }, label: {
                     Image(systemName: "trash")

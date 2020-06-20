@@ -161,7 +161,7 @@ struct DiaperSummaryView: View {
                     Image(systemName: "arrow.left.circle")
                     .font(.system(size: 18, weight: .heavy, design: .rounded))
                 }
-                .disablePlease(activeIndex >= restoreContent.count - 1)
+                .appearDisabledPlease(activeIndex >= restoreContent.count - 1)
 
                 Button(action: {
                     guard self.activeIndex > 0 else { return }
@@ -175,16 +175,9 @@ struct DiaperSummaryView: View {
                     Image(systemName: "arrow.right.circle")
                     .font(.system(size: 18, weight: .heavy, design: .rounded))
                 }
-                .disablePlease(activeIndex == 0)
+                .appearDisabledPlease(activeIndex == 0)
             }
         }
-    }
-    
-    func lastEventDateLabel() -> AnyView {
-        guard let lastEvent = lastEvent else {
-            return EmptyView().anyPlease()
-        }
-        return Text(DateFormatter.shortTimeDisplay.string(from: lastEvent.date)).anyPlease()
     }
     
     // MARK: - Summary View
@@ -225,7 +218,7 @@ struct DiaperSummaryView: View {
                         }) {
                             Text("💦")
                         }
-                        .raisedButtonPlease(content.pee ? BabyEventType.diaper.colorValue : .gray)
+                        .floatingPlease(content.pee ? BabyEventType.diaper.colorValue : .gray)
 
                         Button(action: {
                             withAnimation {
@@ -235,7 +228,7 @@ struct DiaperSummaryView: View {
                         }) {
                             Text("💩")
                         }
-                        .raisedButtonPlease(content.poo ? BabyEventType.diaper.colorValue : .gray)
+                        .floatingPlease(content.poo ? BabyEventType.diaper.colorValue : .gray)
                         
                         Spacer()
                     }
@@ -258,7 +251,7 @@ struct DiaperSummaryView: View {
                                 .bold()
                                 .foregroundColor(BabyEventType.diaper.colorValue)
                             }
-                            .disablePlease(restoreContent.isEmpty)
+                            .appearDisabledPlease(restoreContent.isEmpty)
                             
                             Spacer()
                                                     
@@ -278,7 +271,7 @@ struct DiaperSummaryView: View {
                                 .bold()
                                 .foregroundColor(BabyEventType.diaper.colorValue)
                             }
-                            .disablePlease(restoreContent.isEmpty)
+                            .appearDisabledPlease(restoreContent.isEmpty)
                             
                             Spacer()
                             
@@ -312,7 +305,7 @@ struct DiaperSummaryView: View {
                 })
             }
         }
-        .raisedButtonPlease()
+        .floatingPlease()
         .alert(isPresented: $confirmDelete) {
             Alert(
                 title: Text("\(self.deleteState == .discard ? "Discard" : "Delete") \(self.content.id == nil || self.deleteState == .delete ? "Event" : "Changes")"),

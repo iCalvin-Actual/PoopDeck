@@ -51,6 +51,7 @@
 		CF6A3276249F11BD0046F370 /* BBLGSViewController_LogPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3275249F11BD0046F370 /* BBLGSViewController_LogPresenter.swift */; };
 		CF6A3279249F124B0046F370 /* BBLGSViewController_DocumentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3278249F124B0046F370 /* BBLGSViewController_DocumentManager.swift */; };
 		CF6A327B249F12B30046F370 /* DocumentAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A327A249F12B30046F370 /* DocumentAction.swift */; };
+		CF6A327E249F18E20046F370 /* DocumentBrowserViewController_BrowserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A327D249F18E20046F370 /* DocumentBrowserViewController_BrowserDelegate.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
@@ -146,6 +147,7 @@
 		CF6A3275249F11BD0046F370 /* BBLGSViewController_LogPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBLGSViewController_LogPresenter.swift; sourceTree = "<group>"; };
 		CF6A3278249F124B0046F370 /* BBLGSViewController_DocumentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBLGSViewController_DocumentManager.swift; sourceTree = "<group>"; };
 		CF6A327A249F12B30046F370 /* DocumentAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentAction.swift; sourceTree = "<group>"; };
+		CF6A327D249F18E20046F370 /* DocumentBrowserViewController_BrowserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController_BrowserDelegate.swift; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
 		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
@@ -363,6 +365,15 @@
 			path = LogPresenter;
 			sourceTree = "<group>";
 		};
+		CF6A327C249F18BA0046F370 /* DocumentBrowserViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */,
+				CF6A327D249F18E20046F370 /* DocumentBrowserViewController_BrowserDelegate.swift */,
+			);
+			path = DocumentBrowserViewController;
+			sourceTree = "<group>";
+		};
 		CFAE0FED24931E0900B52BF1 /* UIApplication */ = {
 			isa = PBXGroup;
 			children = (
@@ -379,7 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				CF6A326A249F0D660046F370 /* BBLGSViewController */,
-				CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */,
+				CF6A327C249F18BA0046F370 /* DocumentBrowserViewController */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -645,6 +656,7 @@
 				CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */,
 				CF402348249E6EA100739641 /* MeasurementFormatters.swift in Sources */,
 				CF40236B249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift in Sources */,
+				CF6A327E249F18E20046F370 /* DocumentBrowserViewController_BrowserDelegate.swift in Sources */,
 				CF6A326C249F0D7C0046F370 /* BBLGSViewController_Lifecycle.swift in Sources */,
 				CF2B51DB249C5D6F0035A11F /* MeasurementStepperView.swift in Sources */,
 				CF402342249E6E7900739641 /* DateFormatters.swift in Sources */,

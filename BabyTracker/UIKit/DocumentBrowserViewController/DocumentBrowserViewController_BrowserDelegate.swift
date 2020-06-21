@@ -1,38 +1,19 @@
 //
-//  DocumentBrowserViewController.swift
+//  DocumentBrowserViewController_BrowserDelegate.swift
 //  BabyTracker
 //
-//  Created by Calvin Chestnut on 6/2/20.
+//  Created by Calvin Chestnut on 6/21/20.
 //  Copyright © 2020 Calvin Chestnut. All rights reserved.
 //
 
 import UIKit
-import SwiftUI
-
-class DocumentBrowserViewController: UIDocumentBrowserViewController {
-    
-    var logPresenter: LogPresenter?
-    
-    private var presentedFileURLs: [URL] = [] {
-        didSet {
-            guard !self.presentedFileURLs.isEmpty else { return }
-            self.logPresenter?.presentDocuments(at: self.presentedFileURLs)
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        delegate = self
-    }
-}
 
 extension DocumentBrowserViewController: UIDocumentBrowserViewControllerDelegate {
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void) {
+        
+        /// This is tricky. I have a template file in the project, so it wants us to copy that file into the chosen URL. But ideally the file should save with the Baby's name as the filename, so this will need to be renamed, which is harder than it should be
         let newDocumentURL: URL? = Bundle.main.url(forResource: "MyBabyLog", withExtension: "bblg")
         
-        // Set the URL for the new document here. Optionally, you can present a template chooser before calling the importHandler.
-        // Make sure the importHandler is always called, even if the user cancels the creation request.
         if newDocumentURL != nil {
             importHandler(newDocumentURL, .copy)
         } else {

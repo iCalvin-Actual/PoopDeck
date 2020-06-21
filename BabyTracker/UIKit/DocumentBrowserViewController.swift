@@ -9,11 +9,6 @@
 import UIKit
 import SwiftUI
 
-protocol LogPresenter {
-    func presentDocuments(at documentURLs: [URL])
-    func createDocument(at documentURL: URL, completion: ((Result<BabyLog, BabyError>) -> Void)?)
-}
-
 class DocumentBrowserViewController: UIDocumentBrowserViewController {
     
     var logPresenter: LogPresenter?

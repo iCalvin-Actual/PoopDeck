@@ -9,18 +9,6 @@
 import SwiftUI
 import Combine
 
-// MARK: - Document Actions
-enum DocumentAction {
-    case showDocuments
-    case show(_ log: BabyLog)
-    case save(_ log: BabyLog)
-    case close(_ log: BabyLog)
-    case delete(_ log: BabyLog)
-    case resolve(_ log: BabyLog)
-    case updateColor(_ baby: BabyLog, newColor: ThemeColor)
-    case forceClose
-}
-
 // MARK: - Documents View
 struct DocumentsView: View {
     @State var logs: [BabyLog] = []

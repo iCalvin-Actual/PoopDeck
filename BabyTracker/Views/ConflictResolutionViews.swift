@@ -17,7 +17,7 @@ struct LogConflict {
 
 // MARK: - View Controller Extension
 
-extension BBLGSSViewController {
+extension BBLGSViewController {
     func resolveConflict(in log: BabyLog, with completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
         guard let versions = NSFileVersion.unresolvedConflictVersionsOfItem(at: log.fileURL) else {
             /// No conflicts?

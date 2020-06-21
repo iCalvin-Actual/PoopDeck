@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension BBLGSSViewController: BabyErrorHandler {
+extension BBLGSViewController: BabyErrorHandler {
     func handle(_ error: BabyError) {
         print("🚨: Handling Error - \(error.localizedDescription)")
         let alertController = UIAlertController(title: error.localizedTitle, message: error.localizedDescription, preferredStyle: .alert)

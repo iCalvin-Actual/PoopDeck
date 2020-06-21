@@ -15,7 +15,7 @@ enum LogPickerAction {
     case save(_ baby: BabyLog)
     case close(_ baby: BabyLog)
     case delete(_ baby: BabyLog)
-    case updateColor(_ baby: BabyLog, newColor: PreferredColor)
+    case updateColor(_ baby: BabyLog, newColor: ThemeColor)
     case forceClose
 }
 
@@ -154,7 +154,7 @@ struct BabyPickerView_Previews: PreviewProvider {
         if let date = components.date {
             baby.birthday = date
         }
-        baby.themeColor = PreferredColor.prebuiltSet.randomElement()!
+        baby.themeColor = ThemeColor.prebuiltSet.randomElement()!
         return baby
     }
     static var previews: some View {

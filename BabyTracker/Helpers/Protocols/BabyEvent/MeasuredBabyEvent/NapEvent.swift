@@ -19,9 +19,3 @@ struct NapEvent: MeasuredBabyEvent {
     
     var measurement: Measurement<Unit>?
 }
-
-extension NapEvent {
-    static var defaultMeasurement: Measurement<Unit> {
-        return Measurement(value: 30.0, unit: defaultUnit)
-    }
-}

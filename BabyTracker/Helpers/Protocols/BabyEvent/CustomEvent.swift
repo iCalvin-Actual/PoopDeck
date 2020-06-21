@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Custom event attaches a datestamp to two text fields, allowing arbitrary event entry
 struct CustomEvent: BabyEvent {
     static var type: BabyEventType = .custom
     static var new: CustomEvent {
@@ -21,6 +22,4 @@ struct CustomEvent: BabyEvent {
     var detail: String?
 }
 
-extension CustomEvent: Hashable {
-    
-}
+extension CustomEvent: Hashable { }

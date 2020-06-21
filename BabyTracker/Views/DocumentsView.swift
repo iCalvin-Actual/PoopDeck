@@ -17,7 +17,7 @@ enum DocumentAction {
     case close(_ log: BabyLog)
     case delete(_ log: BabyLog)
     case resolve(_ log: BabyLog)
-    case updateColor(_ baby: BabyLog, newColor: PreferredColor)
+    case updateColor(_ baby: BabyLog, newColor: ThemeColor)
     case forceClose
 }
 
@@ -98,7 +98,7 @@ struct BabyIconView_Preview: PreviewProvider {
         if let date = components.date {
             baby.birthday = date
         }
-        baby.themeColor = PreferredColor.prebuiltSet.randomElement()!
+        baby.themeColor = ThemeColor.prebuiltSet.randomElement()!
         return baby
     }
     static var previews: some View {

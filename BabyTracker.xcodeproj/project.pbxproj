@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		CF125D65249246B800E2908C /* NewBabyFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D64249246B800E2908C /* NewBabyFormView.swift */; };
-		CF125D6924926FEB00E2908C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6824926FEB00E2908C /* Errors.swift */; };
 		CF125D6B249270BA00E2908C /* ConflictResolutionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */; };
 		CF2B51D9249BDE880035A11F /* MeasuredEventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2B51D8249BDE880035A11F /* MeasuredEventFormView.swift */; };
 		CF2B51DB249C5D6F0035A11F /* MeasurementStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */; };
@@ -32,6 +31,18 @@
 		CF40235E249EC71C00739641 /* CardHeaderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40235D249EC71C00739641 /* CardHeaderProvider.swift */; };
 		CF402360249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40235F249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift */; };
 		CF402362249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */; };
+		CF402369249EEA5300739641 /* FeedEventSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402368249EEA5300739641 /* FeedEventSource.swift */; };
+		CF40236B249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236A249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift */; };
+		CF40236D249EEFBF00739641 /* CircleViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236C249EEFBF00739641 /* CircleViews.swift */; };
+		CF40236F249EF11600739641 /* ThemeColor_Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236E249EF11600739641 /* ThemeColor_Options.swift */; };
+		CF6A3258249F023E0046F370 /* Baby_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3257249F023E0046F370 /* Baby_Extensions.swift */; };
+		CF6A325A249F03B80046F370 /* BabyLogArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3259249F03B80046F370 /* BabyLogArchive.swift */; };
+		CF6A325C249F059C0046F370 /* BabyEventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A325B249F059C0046F370 /* BabyEventStore.swift */; };
+		CF6A325E249F05F10046F370 /* BabyLog_EventStoreActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A325D249F05F10046F370 /* BabyLog_EventStoreActions.swift */; };
+		CF6A3260249F075E0046F370 /* BabyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A325F249F075E0046F370 /* BabyError.swift */; };
+		CF6A3262249F077E0046F370 /* BabyErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3261249F077E0046F370 /* BabyErrorHandler.swift */; };
+		CF6A3265249F07DB0046F370 /* BBLGSViewController_BabyErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3264249F07DB0046F370 /* BBLGSViewController_BabyErrorHandler.swift */; };
+		CF6A3269249F09550046F370 /* UserActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3268249F09550046F370 /* UserActivityType.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
@@ -39,7 +50,7 @@
 		CFA0E036249807B90095680B /* CustomEventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0E035249807B90095680B /* CustomEventFormView.swift */; };
 		CFA0E03824982EAF0095680B /* TimeStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0E03724982EAF0095680B /* TimeStepperView.swift */; };
 		CFA0E03A2498752F0095680B /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0E0392498752F0095680B /* KeyboardResponder.swift */; };
-		CFAE0FCE2492C93400B52BF1 /* PreferredColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */; };
+		CFAE0FCE2492C93400B52BF1 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCD2492C93400B52BF1 /* ThemeColor.swift */; };
 		CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCF2492CC2600B52BF1 /* Baby.swift */; };
 		CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD12493016100B52BF1 /* ObservableDate.swift */; };
 		CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */; };
@@ -83,7 +94,6 @@
 
 /* Begin PBXFileReference section */
 		CF125D64249246B800E2908C /* NewBabyFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBabyFormView.swift; sourceTree = "<group>"; };
-		CF125D6824926FEB00E2908C /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		CF125D6A249270BA00E2908C /* ConflictResolutionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConflictResolutionViews.swift; sourceTree = "<group>"; };
 		CF2B51D8249BDE880035A11F /* MeasuredEventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredEventFormView.swift; sourceTree = "<group>"; };
 		CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementStepperView.swift; sourceTree = "<group>"; };
@@ -108,6 +118,18 @@
 		CF40235D249EC71C00739641 /* CardHeaderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderProvider.swift; sourceTree = "<group>"; };
 		CF40235F249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEventSource_CardHeaderProvider.swift; sourceTree = "<group>"; };
 		CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredBabyEvent_Extensions.swift; sourceTree = "<group>"; };
+		CF402368249EEA5300739641 /* FeedEventSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEventSource.swift; sourceTree = "<group>"; };
+		CF40236A249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredBabyEvent_Defaults.swift; sourceTree = "<group>"; };
+		CF40236C249EEFBF00739641 /* CircleViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleViews.swift; sourceTree = "<group>"; };
+		CF40236E249EF11600739641 /* ThemeColor_Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor_Options.swift; sourceTree = "<group>"; };
+		CF6A3257249F023E0046F370 /* Baby_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Baby_Extensions.swift; sourceTree = "<group>"; };
+		CF6A3259249F03B80046F370 /* BabyLogArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyLogArchive.swift; sourceTree = "<group>"; };
+		CF6A325B249F059C0046F370 /* BabyEventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyEventStore.swift; sourceTree = "<group>"; };
+		CF6A325D249F05F10046F370 /* BabyLog_EventStoreActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyLog_EventStoreActions.swift; sourceTree = "<group>"; };
+		CF6A325F249F075E0046F370 /* BabyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyError.swift; sourceTree = "<group>"; };
+		CF6A3261249F077E0046F370 /* BabyErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyErrorHandler.swift; sourceTree = "<group>"; };
+		CF6A3264249F07DB0046F370 /* BBLGSViewController_BabyErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBLGSViewController_BabyErrorHandler.swift; sourceTree = "<group>"; };
+		CF6A3268249F09550046F370 /* UserActivityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityType.swift; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
 		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
@@ -115,7 +137,7 @@
 		CFA0E035249807B90095680B /* CustomEventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEventFormView.swift; sourceTree = "<group>"; };
 		CFA0E03724982EAF0095680B /* TimeStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStepperView.swift; sourceTree = "<group>"; };
 		CFA0E0392498752F0095680B /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
-		CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredColor.swift; sourceTree = "<group>"; };
+		CFAE0FCD2492C93400B52BF1 /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		CFAE0FCF2492CC2600B52BF1 /* Baby.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Baby.swift; sourceTree = "<group>"; };
 		CFAE0FD12493016100B52BF1 /* ObservableDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableDate.swift; sourceTree = "<group>"; };
 		CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyPickerView.swift; sourceTree = "<group>"; };
@@ -172,13 +194,16 @@
 		CF402335249E65D100739641 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				CF6A3257249F023E0046F370 /* Baby_Extensions.swift */,
 				CF402336249E65E900739641 /* BabyLog_Extensions.swift */,
-				CF402338249E663200739641 /* Date_Extensions.swift */,
 				CF40233A249E664F00739641 /* Codable_Extensions.swift */,
+				CF402338249E663200739641 /* Date_Extensions.swift */,
 				CF40233C249E669900739641 /* FileVersion_Extensions.swift */,
+				CF40236A249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift */,
+				CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */,
 				CF40233E249E66A500739641 /* Unit_Extensions.swift */,
 				CF402354249E8EE400739641 /* View_Extensions.swift */,
-				CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */,
+				CF40236E249EF11600739641 /* ThemeColor_Options.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -196,11 +221,11 @@
 		CF402349249E8C9A00739641 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
+				CF402352249E8E5600739641 /* AppearDisabledModifier.swift */,
 				CF40234A249E8CB000739641 /* HavNavBarModifier.swift */,
+				CF402350249E8D8100739641 /* FloatingModifier.swift */,
 				CF40234C249E8CBF00739641 /* ForcedGroupStyleModifier.swift */,
 				CF40234E249E8CD000739641 /* ShadowModifier.swift */,
-				CF402350249E8D8100739641 /* FloatingModifier.swift */,
-				CF402352249E8E5600739641 /* AppearDisabledModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -208,9 +233,9 @@
 		CF402356249E93CA00739641 /* Publishers */ = {
 			isa = PBXGroup;
 			children = (
+				CFA0E0392498752F0095680B /* KeyboardResponder.swift */,
 				CFAE0FD12493016100B52BF1 /* ObservableDate.swift */,
 				CFAE0FE92493198800B52BF1 /* Ticker.swift */,
-				CFA0E0392498752F0095680B /* KeyboardResponder.swift */,
 			);
 			path = Publishers;
 			sourceTree = "<group>";
@@ -218,6 +243,8 @@
 		CF402363249ED53000739641 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				CF6A3263249F07830046F370 /* BabyErrorHandler */,
+				CF402365249ED56000739641 /* BabyEvent */,
 				CF402364249ED53A00739641 /* CardHeaderProvider */,
 			);
 			path = Protocols;
@@ -237,8 +264,8 @@
 			isa = PBXGroup;
 			children = (
 				CFC18032245E224E007C756A /* BabyEvent.swift */,
-				CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */,
 				CFAE0FE72493178800B52BF1 /* CustomEvent.swift */,
+				CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */,
 				CF402366249ED56800739641 /* MeasuredBabyEvent */,
 			);
 			path = BabyEvent;
@@ -250,8 +277,8 @@
 				CF402359249EB46200739641 /* MeasuredBabyEvent.swift */,
 				CFAE0FDB2493159000B52BF1 /* FeedEvent.swift */,
 				CFAE0FDF249315C900B52BF1 /* NapEvent.swift */,
-				CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */,
 				CFAE0FE5249315E700B52BF1 /* TummyTimeEvent.swift */,
+				CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */,
 			);
 			path = MeasuredBabyEvent;
 			sourceTree = "<group>";
@@ -259,9 +286,41 @@
 		CF402367249ED57A00739641 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				CF6A325F249F075E0046F370 /* BabyError.swift */,
 				CF402357249EB36F00739641 /* BabyEventType.swift */,
+				CF402368249EEA5300739641 /* FeedEventSource.swift */,
+				CF6A3268249F09550046F370 /* UserActivityType.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		CF6A3263249F07830046F370 /* BabyErrorHandler */ = {
+			isa = PBXGroup;
+			children = (
+				CF6A3261249F077E0046F370 /* BabyErrorHandler.swift */,
+				CF6A3264249F07DB0046F370 /* BBLGSViewController_BabyErrorHandler.swift */,
+			);
+			path = BabyErrorHandler;
+			sourceTree = "<group>";
+		};
+		CF6A3266249F082F0046F370 /* BabyLog */ = {
+			isa = PBXGroup;
+			children = (
+				CF90150F2486ABF000343F5C /* BabyLog.swift */,
+				CF6A325D249F05F10046F370 /* BabyLog_EventStoreActions.swift */,
+				CF6A3259249F03B80046F370 /* BabyLogArchive.swift */,
+				CF6A325B249F059C0046F370 /* BabyEventStore.swift */,
+			);
+			path = BabyLog;
+			sourceTree = "<group>";
+		};
+		CF6A3267249F08380046F370 /* Baby */ = {
+			isa = PBXGroup;
+			children = (
+				CFAE0FCF2492CC2600B52BF1 /* Baby.swift */,
+				CFAE0FCD2492C93400B52BF1 /* ThemeColor.swift */,
+			);
+			path = Baby;
 			sourceTree = "<group>";
 		};
 		CFAE0FED24931E0900B52BF1 /* UIApplication */ = {
@@ -288,6 +347,7 @@
 		CFAE0FEF24931E2500B52BF1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CF40236C249EEFBF00739641 /* CircleViews.swift */,
 				CF125D64249246B800E2908C /* NewBabyFormView.swift */,
 				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
 				CFAE0FD7249306B400B52BF1 /* AgeView.swift */,
@@ -310,13 +370,9 @@
 		CFAE0FF024931E3000B52BF1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CF402363249ED53000739641 /* Protocols */,
-				CF402365249ED56000739641 /* BabyEvent */,
+				CF6A3267249F08380046F370 /* Baby */,
+				CF6A3266249F082F0046F370 /* BabyLog */,
 				CF402367249ED57A00739641 /* Enums */,
-				CFAE0FCD2492C93400B52BF1 /* PreferredColor.swift */,
-				CFAE0FCF2492CC2600B52BF1 /* Baby.swift */,
-				CF90150F2486ABF000343F5C /* BabyLog.swift */,
-				CF125D6824926FEB00E2908C /* Errors.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -327,6 +383,7 @@
 				CF402335249E65D100739641 /* Extensions */,
 				CF402340249E6E2400739641 /* Formatters */,
 				CF402356249E93CA00739641 /* Publishers */,
+				CF402363249ED53000739641 /* Protocols */,
 				CF402349249E8C9A00739641 /* Modifiers */,
 			);
 			path = Helpers;
@@ -512,6 +569,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF6A3260249F075E0046F370 /* BabyError.swift in Sources */,
+				CF6A325C249F059C0046F370 /* BabyEventStore.swift in Sources */,
 				CFAE0FEA2493198800B52BF1 /* Ticker.swift in Sources */,
 				CFA0E03A2498752F0095680B /* KeyboardResponder.swift in Sources */,
 				CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */,
@@ -522,24 +581,28 @@
 				CF125D65249246B800E2908C /* NewBabyFormView.swift in Sources */,
 				CFAE0FD62493067300B52BF1 /* BabyIconView.swift in Sources */,
 				CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */,
+				CF6A325E249F05F10046F370 /* BabyLog_EventStoreActions.swift in Sources */,
 				CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */,
 				CFA0E036249807B90095680B /* CustomEventFormView.swift in Sources */,
+				CF40236D249EEFBF00739641 /* CircleViews.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
 				CF125D6B249270BA00E2908C /* ConflictResolutionViews.swift in Sources */,
 				CFA0E03824982EAF0095680B /* TimeStepperView.swift in Sources */,
+				CF6A3265249F07DB0046F370 /* BBLGSViewController_BabyErrorHandler.swift in Sources */,
 				CF402353249E8E5600739641 /* AppearDisabledModifier.swift in Sources */,
 				CF402358249EB36F00739641 /* BabyEventType.swift in Sources */,
 				CF402355249E8EE400739641 /* View_Extensions.swift in Sources */,
 				CF402362249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift in Sources */,
 				CF402360249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift in Sources */,
 				CF402351249E8D8100739641 /* FloatingModifier.swift in Sources */,
+				CF402369249EEA5300739641 /* FeedEventSource.swift in Sources */,
 				CFAE1000249336A800B52BF1 /* BabyInfoView.swift in Sources */,
 				CFAE0FDE249315BE00B52BF1 /* DiaperEvent.swift in Sources */,
 				CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */,
 				CF402348249E6EA100739641 /* MeasurementFormatters.swift in Sources */,
+				CF40236B249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift in Sources */,
 				CF2B51DB249C5D6F0035A11F /* MeasurementStepperView.swift in Sources */,
 				CF402342249E6E7900739641 /* DateFormatters.swift in Sources */,
-				CF125D6924926FEB00E2908C /* Errors.swift in Sources */,
 				CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */,
 				CFAE0FFA24932B3E00B52BF1 /* DateStepperView.swift in Sources */,
 				CF40233D249E669900739641 /* FileVersion_Extensions.swift in Sources */,
@@ -554,17 +617,22 @@
 				CF40234F249E8CD000739641 /* ShadowModifier.swift in Sources */,
 				CF40235A249EB46200739641 /* MeasuredBabyEvent.swift in Sources */,
 				CFAE0FFE249332DC00B52BF1 /* DiaperSummaryView.swift in Sources */,
+				CF6A325A249F03B80046F370 /* BabyLogArchive.swift in Sources */,
 				CFAE0FE0249315C900B52BF1 /* NapEvent.swift in Sources */,
 				CF40235E249EC71C00739641 /* CardHeaderProvider.swift in Sources */,
+				CF6A3258249F023E0046F370 /* Baby_Extensions.swift in Sources */,
 				CFAE0FE82493178800B52BF1 /* CustomEvent.swift in Sources */,
 				CF402339249E663200739641 /* Date_Extensions.swift in Sources */,
 				CFAE0FE2249315D300B52BF1 /* WeightEvent.swift in Sources */,
 				CFD6F42324870E6C00E7DAAD /* DocumentsView.swift in Sources */,
-				CFAE0FCE2492C93400B52BF1 /* PreferredColor.swift in Sources */,
+				CFAE0FCE2492C93400B52BF1 /* ThemeColor.swift in Sources */,
 				CF9015102486ABF100343F5C /* BabyLog.swift in Sources */,
 				CF40233F249E66A500739641 /* Unit_Extensions.swift in Sources */,
+				CF6A3262249F077E0046F370 /* BabyErrorHandler.swift in Sources */,
 				CFC18033245E224E007C756A /* BabyEvent.swift in Sources */,
 				CFAE0FD8249306B400B52BF1 /* AgeView.swift in Sources */,
+				CF40236F249EF11600739641 /* ThemeColor_Options.swift in Sources */,
+				CF6A3269249F09550046F370 /* UserActivityType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

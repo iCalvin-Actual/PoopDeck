@@ -23,7 +23,7 @@ struct NewBabyForm: View {
     @State var useEmojiName: Bool = true
     @State var userPrefersEmoji: Bool = false
     
-    @State var color: PreferredColor = PreferredColor.prebuiltSet.randomElement()!
+    @State var color: ThemeColor = ThemeColor.prebuiltSet.randomElement()!
     @State var birthday: Date = .oneWeekAgo
     
     @State var saveBirthday: Bool = true
@@ -133,8 +133,8 @@ struct NewBabyForm: View {
     private func colorSection() -> some View {
         Section(footer: Text("Theme color to use for this BabyLog")) {
             Picker("Color", selection: $color) {
-                ForEach(PreferredColor.prebuiltSet, id: \.self) { color in
-                    ColoredCircle(color: color)
+                ForEach(ThemeColor.prebuiltSet, id: \.self) { color in
+                    CircleViews(color: color)
                         .frame(width: 44, height: 44, alignment: .trailing)
                 }
             }

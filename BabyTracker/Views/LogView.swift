@@ -43,7 +43,7 @@ struct LogView: View {
                     self.onAction?(.updateColor(log, newColor: color))
                 })
 
-            DateStepperView(targetDate: self.$targetDate, accentColor: self.log.baby.themeColor?.color)
+            DateStepperView(targetDate: self.$targetDate, accentColor: self.log.baby.themeColor?.colorValue)
             
             ScrollView(.vertical) {
                 self.bottleSummaryView()
@@ -263,47 +263,6 @@ enum MeasuredEventFormAction<E: MeasuredBabyEvent> {
 
 extension LogView {
     // MARK: Feed Events
-    func onEventAction(_ action: MeasuredEventAction<FeedEvent>) {
-        switch action {
-        case .create(var event, let increment), .update(var event, let increment):
-            if case .create = action {
-                event.id = UUID()
-            }
-            event.date = self.targetDate.date
-            let unit = event.measurement?.unit ?? UnitVolume.milliliters
-            if unit.modifier > 0 {
-                let value = event.measurement?.value ?? unit.defaultValue
-                let adjustment = unit.modifier * Double(increment ?? 0)
-                event.measurement = Measurement(value: value + adjustment, unit: unit)
-            }
-            self.log.save(event) { (_) in
-                print("💾: Event added to log")
-            }
-        case .remove(let event):
-            self.log.delete(event) { (_) in
-                print("Did Delete?")
-            }
-        case .toggleUnit(let event):
-            guard event.measurement != nil else { return }
-//            let values = UnitVolume.supported
-//            let index = values.lastIndex(of: size.unit) ?? values.endIndex
-//            let newIndex = (index + 1) % values.count
-//            let newUnit = values[newIndex]
-//            event.measurement = size.converted(to: newUnit)
-//            let absCount = round((event.measurement?.value ?? 0) / (newUnit.modifier ?? 1))
-//            event.measurement?.value = max((absCount * (newUnit.modifier ?? 0)), 0)
-//            self.log.save(event) { (_) in
-//                print("💾: Event added to log")
-//            }
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
-        }
-    }
-    
     func onEventAction(_ action: MeasuredEventFormAction<FeedEvent>) {
         switch action {
         case .create(let form):
@@ -343,38 +302,6 @@ extension LogView {
     }
     
     // MARK: Nap Events
-    func onEventAction(_ action: MeasuredEventAction<NapEvent>) {
-        switch action {
-        case .create(var event, let increment), .update(var event, let increment):
-            if case .create = action {
-                event.id = UUID()
-            }
-            event.date = self.targetDate.date
-            let unit = event.measurement?.unit ?? UnitDuration.minutes
-            if unit.modifier > 0 {
-                let value = event.measurement?.value ?? unit.defaultValue
-                let adjustment = unit.modifier * Double(increment ?? 0)
-                event.measurement = Measurement(value: value + adjustment, unit: unit)
-                print("Updated")
-            }
-            self.log.save(event) { (_) in
-                print("💾: Event added to log")
-            }
-        case .remove(let event):
-            self.log.delete(event) { (_) in
-                print("Did Delete?")
-            }
-        case .toggleUnit(let event):
-            guard event.measurement != nil else { return }
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
-        }
-    }
-    
     func onEventAction(_ action: MeasuredEventFormAction<NapEvent>) {
         switch action {
         case .create(let form):
@@ -395,6 +322,7 @@ extension LogView {
         }
     }
     
+    // MARK: Tummy Time Events
     func onEventAction(_ action: MeasuredEventFormAction<TummyTimeEvent>) {
         switch action {
         case .create(let form):
@@ -415,71 +343,7 @@ extension LogView {
         }
     }
     
-    // MARK: Tummy Time Events
-    func onEventAction(_ action: MeasuredEventAction<TummyTimeEvent>) {
-        switch action {
-        case .create(var event, let increment), .update(var event, let increment):
-            if case .create = action {
-                event.id = UUID()
-            }
-            event.date = self.targetDate.date
-            let unit = event.measurement?.unit ?? UnitDuration.minutes
-            if unit.modifier > 0 {
-                let value = event.measurement?.value ?? unit.defaultValue
-                let adjustment = unit.modifier * Double(increment ?? 0)
-                event.measurement = Measurement(value: value + adjustment, unit: unit)
-            }
-            self.log.save(event) { (savedEvent) in
-                print("💾: Event added to log")
-            }
-        case .remove(let event):
-            self.log.delete(event) { (_) in
-                print("💾: Event removed from log")
-            }
-        case .toggleUnit:
-            print("Toggle Unit")
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
-        }
-    }
-    
     // MARK: Weight Events
-    func onEventAction(_ action: MeasuredEventAction<WeightEvent>) {
-        switch action {
-        case .create(var event, let increment), .update(var event, let increment):
-            if case .create = action {
-                event.id = UUID()
-            }
-            event.date = self.targetDate.date
-            let unit = event.measurement?.unit ?? UnitMass.pounds
-            if unit.modifier > 0 {
-                let value = event.measurement?.value ?? unit.defaultValue
-                let adjustment = unit.modifier * Double(increment ?? 0)
-                event.measurement = Measurement(value: value + adjustment, unit: unit)
-                print("Updated")
-            }
-            self.log.save(event) { (savedEvent) in
-                print("💾: Event added to log")
-            }
-        case .remove(let event):
-            self.log.delete(event) { (_) in
-                print("Did Delete?")
-            }
-        case .toggleUnit(let event):
-            guard event.measurement != nil else { return }
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
-        }
-    }
-    
     func onEventAction(_ action: MeasuredEventFormAction<WeightEvent>) {
         switch action {
         case .create(let form):
@@ -576,7 +440,7 @@ struct LogView_Previews: PreviewProvider {
         if let date = components.date {
             baby.birthday = date
         }
-        baby.themeColor = PreferredColor.prebuiltSet.randomElement()!
+        baby.themeColor = ThemeColor.prebuiltSet.randomElement()!
         return baby
     }
     static var previews: some View {

@@ -13,7 +13,7 @@ struct BabyInfoView: View {
     @ObservedObject var log: BabyLog
     @State var editBaby: Bool = false
     
-    var onColorUpdate: ((_: BabyLog, _: PreferredColor) -> Void)?
+    var onColorUpdate: ((_: BabyLog, _: ThemeColor) -> Void)?
     
     @State private var targetDrop: Bool = true
     
@@ -21,7 +21,7 @@ struct BabyInfoView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 4) {
             editButton()
-                .accentColor(log.baby.themeColor?.color)
+                .accentColor(log.baby.themeColor?.colorValue)
                 
             
             Spacer()
@@ -39,7 +39,7 @@ struct BabyInfoView: View {
             guard let item = items.first else { return false }
             _ = item.loadObject(ofClass: UIColor.self) { color, _ in
                 if let color = color as? UIColor {
-                    self.onColorUpdate?(self.log, PreferredColor(uicolor: color))
+                    self.onColorUpdate?(self.log, ThemeColor(uicolor: color))
                 }
             }
             return true
@@ -58,7 +58,7 @@ struct BabyInfoView: View {
     func nameLabel() -> some View {
         Text(log.baby.name)
             .fontWeight(.heavy)
-            .foregroundColor(log.baby.themeColor?.color ?? .primary)
+            .foregroundColor(log.baby.themeColor?.colorValue ?? .primary)
     }
     
     func editButton() -> some View {
@@ -110,7 +110,7 @@ struct BabyInfoView_Previews: PreviewProvider {
         if let date = components.date {
             baby.birthday = date
         }
-        baby.themeColor = PreferredColor.prebuiltSet.randomElement()!
+        baby.themeColor = ThemeColor.prebuiltSet.randomElement()!
         return baby
     }
     static var previews: some View {

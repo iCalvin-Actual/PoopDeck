@@ -14,7 +14,7 @@ struct BabyIconView: View {
     
     var onSelect: ((Baby) -> Void)?
     
-    var activeColor: PreferredColor {
+    var activeColor: ThemeColor {
         return baby.themeColor ?? .random
     }
     
@@ -24,9 +24,9 @@ struct BabyIconView: View {
         }) {
             ZStack {
                 Circle()
-                    .stroke(selected ? .secondary : activeColor.color, lineWidth: 2)
+                    .stroke(selected ? .secondary : activeColor.colorValue, lineWidth: 2)
                 
-                ColoredCircle(color: activeColor)
+                CircleViews(color: activeColor)
                 
                 Text(baby.displayInitial)
                     .fontWeight(.heavy)
@@ -51,7 +51,7 @@ struct BabyIconView_Previews: PreviewProvider {
         if let date = components.date {
             baby.birthday = date
         }
-        baby.themeColor = PreferredColor.prebuiltSet.randomElement()!
+        baby.themeColor = ThemeColor.prebuiltSet.randomElement()!
         return baby
     }
     static var previews: some View {

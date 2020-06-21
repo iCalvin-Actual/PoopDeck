@@ -9,7 +9,6 @@
 import SwiftUI
 
 extension BabyEventType: CardHeaderProvider {
-    
     var displayTitle: String {
         switch self {
         case .feed:

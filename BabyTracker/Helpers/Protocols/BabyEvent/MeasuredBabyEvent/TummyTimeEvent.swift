@@ -11,17 +11,11 @@ import Foundation
 struct TummyTimeEvent: MeasuredBabyEvent {
     static var type: BabyEventType = .tummyTime
     static var new: TummyTimeEvent {
-        return TummyTimeEvent()
+        return TummyTimeEvent(measurement: Self.defaultMeasurement)
     }
     
     var id = UUID()
     var date: Date = Date()
     
     var measurement: Measurement<Unit>?
-}
-
-extension TummyTimeEvent {
-    static var defaultMeasurement: Measurement<Unit> {
-        return Measurement(value: 3.0, unit: defaultUnit)
-    }
 }

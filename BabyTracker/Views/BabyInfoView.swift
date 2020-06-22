@@ -76,18 +76,29 @@ struct BabyInfoView: View {
     }
     
     func editingForm() -> some View {
-        NewBabyForm(
-            onApply: { (babyToApply) in
-            self.log.baby = babyToApply
-            self.editBaby = false
+        BabyFormView(
+            onApply: { (formToApply) in
+                let newBaby = Baby()
+                newBaby.name = formToApply.name
+                newBaby.emoji = formToApply.emoji
+                newBaby.prefersEmoji = formToApply.useEmojiName
+                
+                newBaby.themeColor = formToApply.color
+                
+                if formToApply.saveBirthday {
+                    newBaby.birthday = formToApply.birthday
+                }
+                
+                self.log.baby = newBaby
+                self.editBaby = false
         },
-            babyTextName: self.log.baby.name,
-            babyEmojiName: self.log.baby.emoji,
-            useEmojiName: self.log.baby.prefersEmoji,
-            userPrefersEmoji: self.log.baby.prefersEmoji,
-            color: self.log.baby.themeColor ?? .random,
-            birthday: self.log.baby.birthday ?? .oneWeekAgo,
-            saveBirthday: self.log.baby.birthday != nil)
+            restoreContent: .init(
+                name: log.baby.name,
+                emoji: log.baby.emoji,
+                useEmojiName: log.baby.prefersEmoji,
+                color: log.baby.themeColor ?? ThemeColor.random,
+                birthday: log.baby.birthday ?? .oneWeekAgo,
+                saveBirthday: log.baby.birthday == nil))
     }
 }
 

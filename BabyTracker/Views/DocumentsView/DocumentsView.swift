@@ -19,6 +19,7 @@ struct DocumentsView: View {
     // MARK: - Body
     var body: some View {
         VStack(spacing: 4) {
+            /// Shows open docs and allows new document creation or switching between docs
             BabyPickerView(
                 logs: logs,
                 selected: selected ?? .dummy,
@@ -42,30 +43,6 @@ struct DocumentsView: View {
 }
 
 // MARK: - Baby Action Handler
-extension DocumentsView {
-    func onBabyAction(_ logPickerAction: LogPickerAction) {
-        switch logPickerAction {
-        case .show(let log):
-            self.onAction?(.show(log))
-        case .select(let log):
-            guard let log = log else {
-                self.onAction?(.showDocuments)
-                return
-            }
-            self.selected = log
-        case .save(let log):
-            self.onAction?(.save(log))
-        case .close(let log):
-            self.onAction?(.close(log))
-        case .delete(let log):
-            self.onAction?(.delete(log))
-        case .forceClose:
-            self.onAction?(.forceClose)
-        case .updateColor(let log, newColor: let newColor):
-            self.onAction?(.updateColor(log, newColor: newColor))
-        }
-    }
-}
 
 // MARK: - Preview
 struct BabyIconView_Preview: PreviewProvider {

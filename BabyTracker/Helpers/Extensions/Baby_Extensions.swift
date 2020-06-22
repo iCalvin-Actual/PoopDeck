@@ -40,3 +40,10 @@ extension Baby {
         return PersonNameComponentsFormatter.abbreviated.string(from: components)
     }
 }
+
+/// Validation
+extension Baby {
+    var validName: Bool {
+        return !name.isEmpty || !emoji.isEmpty
+    }
+}

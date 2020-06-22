@@ -9,7 +9,9 @@
 import SwiftUI
 
 struct BabyIconView: View {
+    /// Observed so we can react to changes in the baby
     @ObservedObject var baby: Baby
+    
     var selected = false
     
     var onSelect: ((Baby) -> Void)?
@@ -23,11 +25,13 @@ struct BabyIconView: View {
             self.onSelect?(self.baby)
         }) {
             ZStack {
+                /// This selection style is janky AF
                 Circle()
                     .stroke(selected ? .secondary : activeColor.colorValue, lineWidth: 2)
                 
-                CircleViews(color: activeColor)
+                ThemeColorView(theme: activeColor)
                 
+                /// Show initials or emoji
                 Text(baby.displayInitial)
                     .fontWeight(.heavy)
                     .foregroundColor(.primary)

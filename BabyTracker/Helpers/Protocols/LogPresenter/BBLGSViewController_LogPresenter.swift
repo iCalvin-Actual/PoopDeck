@@ -35,19 +35,31 @@ extension BBLGSViewController: LogPresenter {
     
     func createDocument(at documentURL: URL, completion: ((Result<BabyLog, BabyError>) -> Void)? = nil) {
         dismissPresented(animated: true) {
-            let newBabyView = NewBabyForm(
-                onApply: { baby in
-                    self.dismissPresented(animated: true) {
-                        self.createNewDocument(with: baby, at: documentURL) { (result) in
-                            switch result {
-                            case .failure(let error):
-                                self.handle(error)
-                            case .success(let log):
-                                self.presentDocuments(at: [log.fileURL])
+            let newBabyView =
+                BabyFormView(
+                    onApply: { (formToApply) in
+                        let newBaby = Baby()
+                        newBaby.name = formToApply.name
+                        newBaby.emoji = formToApply.emoji
+                        newBaby.prefersEmoji = formToApply.useEmojiName
+                        
+                        newBaby.themeColor = formToApply.color
+                        
+                        if formToApply.saveBirthday {
+                            newBaby.birthday = formToApply.birthday
+                        }
+                        
+                        self.dismissPresented(animated: true) {
+                            self.createNewDocument(with: newBaby, at: documentURL) { (result) in
+                                switch result {
+                                case .failure(let error):
+                                    self.handle(error)
+                                case .success(let log):
+                                    self.presentDocuments(at: [log.fileURL])
+                                }
                             }
                         }
-                    }
-            })
+                })
             let hostingController = UIHostingController(rootView: newBabyView)
             self.present(hostingController, animated: true, completion: nil)
         }

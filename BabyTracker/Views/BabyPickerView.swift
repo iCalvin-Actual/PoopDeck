@@ -8,25 +8,19 @@
 
 import SwiftUI
 
-// MARK: - Log Picker Actions
-enum LogPickerAction {
-    case select(_ baby: BabyLog?)
-    case show(_ baby: BabyLog)
-    case save(_ baby: BabyLog)
-    case close(_ baby: BabyLog)
-    case delete(_ baby: BabyLog)
-    case updateColor(_ baby: BabyLog, newColor: ThemeColor)
-    case forceClose
-}
-
 // MARK: - Baby Picker
 struct BabyPickerView: View {
+    
+    /// Open and available baby log documents
     var logs: [BabyLog] = []
+    
+    /// The selected and visible baby log
     @ObservedObject var selected: BabyLog
     
     var onAction: ((LogPickerAction) -> Void)?
     
-    @State private var targetDrop: Bool = true
+    /// Binding bool to pass to Drop handler
+    @State private var targetDrop: Bool = false
     
     // MARK: - Views
     
@@ -56,29 +50,33 @@ struct BabyPickerView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(logs, id: \.self) { log in
-                    BabyIconView(baby: log.baby, selected: log == self.selected, onSelect: { baby in
-                        withAnimation {
-                            self.onAction?(.select(log))
-                        }
-                    })
-                    .onDrop(of: ["com.apple.uikit.color"], isTargeted: self.$targetDrop, perform: { (items) in
-                        guard let item = items.first else { return false }
-                        _ = item.loadObject(ofClass: UIColor.self) { color, _ in
-                            if let color = color as? UIColor {
-                                self.onAction?(.updateColor(log, newColor: .init(uicolor: color)))
-                                
+                    BabyIconView(
+                        baby: log.baby,
+                        selected: log == self.selected,
+                        onSelect: { baby in
+                            withAnimation {
+                                self.onAction?(.select(log))
                             }
+                        })
+                        /// Thanks STS
+                        .onDrop(of: ["com.apple.uikit.color"], isTargeted: self.$targetDrop, perform: { (items) in
+                            guard let item = items.first else { return false }
+                            _ = item.loadObject(ofClass: UIColor.self) { color, _ in
+                                if let color = color as? UIColor {
+                                    self.onAction?(.updateColor(log, newColor: .init(uicolor: color)))
+                                    
+                                }
+                            }
+                            return true
+                        })
+                        .contextMenu {
+                            
+                            self.revealButton(log)
+                            self.saveButton(log)
+                            self.closeButton(log)
+                            self.deleteButton(log)
+                            
                         }
-                        return true
-                    })
-                    .contextMenu {
-                        
-                        self.revealButton(log)
-                        self.saveButton(log)
-                        self.closeButton(log)
-                        self.deleteButton(log)
-                        
-                    }
                 }
                 .padding(6)
             }

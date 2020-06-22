@@ -1,5 +1,5 @@
 //
-//  NewBabyFormView.swift
+//  BabyFormView.swift
 //  BabyTracker
 //
 //  Created by Calvin Chestnut on 6/11/20.
@@ -9,40 +9,18 @@
 import SwiftUI
 import Combine
 
-extension Baby {
-    var validName: Bool {
-        return !name.isEmpty || !emoji.isEmpty
-    }
-}
-
-struct NewBabyForm: View {
-    var onApply: ((Baby) -> Void)?
+struct BabyFormView: View {
+    var onApply: ((FormContent) -> Void)?
     
-    @State var babyTextName: String = ""
-    @State var babyEmojiName: String = Baby.emojiSet.randomElement() ?? ""
-    @State var useEmojiName: Bool = true
+    @State var content: FormContent = .init()
+    var restoreContent: FormContent?
+    
+    /// content.useEmoji can be flipped if the baby name is invalid. This boolean tracks whether the user has explicitely expressed an emoji preference
     @State var userPrefersEmoji: Bool = false
-    
-    @State var color: ThemeColor = ThemeColor.prebuiltSet.randomElement()!
-    @State var birthday: Date = .oneWeekAgo
-    
-    @State var saveBirthday: Bool = true
-    
-    private var babyFromForm: Baby {
-        let baby = Baby()
-        baby.name = babyTextName
-        baby.emoji = babyEmojiName
-        if self.saveBirthday {
-            baby.birthday = birthday
-        }
-        baby.themeColor = color
-        baby.prefersEmoji = useEmojiName
-        
-        return baby
-    }
     
     var body: some View {
         VStack {
+            /// Use ZStack to header view stays center without accomidating for save button
             ZStack {
                 headerView()
                 
@@ -52,6 +30,7 @@ struct NewBabyForm: View {
                 }
             }
             .padding()
+            
             NavigationView {
                 Form {
                     nameSection()
@@ -62,6 +41,11 @@ struct NewBabyForm: View {
                 }
                 .groupedStylePlease()
                 .hideNavBarPlease()
+            }
+        }
+        .onAppear {
+            if let contentToRestore = self.restoreContent {
+                self.content = contentToRestore
             }
         }
     }
@@ -89,32 +73,29 @@ struct NewBabyForm: View {
     
     private func nameSection() -> some View {
         Section(header: Text("Name")) {
-            TextField("Name", text: $babyTextName)
+            TextField("Name", text: $content.name)
                 .autocapitalization(.words)
                 .textContentType(.name)
-                .onReceive(Just(babyTextName)) { (newTextName) in
+                .onReceive(Just(content.name)) { (newTextName) in
                     if !self.userPrefersEmoji {
-                        self.useEmojiName = newTextName.isEmpty
+                        self.content.useEmojiName = newTextName.isEmpty
                     }
                 }
             
-            Picker("Emoji", selection: $babyEmojiName) {
+            Picker("Emoji", selection: $content.emoji) {
                 ForEach(Baby.emojiSet + [""], id: \.self) { Text($0) }
             }
             
-            Toggle(isOn: $useEmojiName, label: {
+            Toggle(isOn: $content.useEmojiName, label: {
                 Text("Use Emoji as 'Name'")
             })
             .onTapGesture(perform: {
-                self.userPrefersEmoji = !self.useEmojiName
+                /// On an explicit touch gesture mark the user's preference
+                self.userPrefersEmoji = !self.content.useEmojiName
             })
-            .onAppear {
-                if self.babyEmojiName.isEmpty && self.useEmojiName {
-                    self.useEmojiName = false
-                }
-            }
             .onReceive(Just(userPrefersEmoji)) { (newValue) in
-                if !self.babyTextName.isEmpty {
+                /// Should prevent new value from applying if the name isn't empty, although on second look this doesn't seem correct
+                if !self.content.name.isEmpty {
                     self.userPrefersEmoji = newValue
                 }
             }
@@ -123,8 +104,9 @@ struct NewBabyForm: View {
     
     private func birthdaySection() -> some View {
         Section {
-            DatePicker("Birthday", selection: $birthday, displayedComponents: .date)
-            Toggle(isOn: $saveBirthday, label: {
+            DatePicker("Birthday", selection: $content.birthday, displayedComponents: .date)
+            
+            Toggle(isOn: $content.saveBirthday, label: {
                 Text("Save birthday")
             })
         }
@@ -132,24 +114,18 @@ struct NewBabyForm: View {
     
     private func colorSection() -> some View {
         Section(footer: Text("Theme color to use for this BabyLog")) {
-            Picker("Color", selection: $color) {
+            Picker("Color", selection: $content.color) {
                 ForEach(ThemeColor.prebuiltSet, id: \.self) { color in
-                    CircleViews(color: color)
+                    ThemeColorView(theme: color)
                         .frame(width: 44, height: 44, alignment: .trailing)
                 }
             }
         }
     }
-    
-    private func validateAndApply() {
-        let baby = self.babyFromForm
-        guard baby.validName else { return }
-        onApply?(baby)
-    }
 }
 
 struct NewBabyFormView_Previews: PreviewProvider {
     static var previews: some View {
-        NewBabyForm()
+        BabyFormView()
     }
 }

@@ -8,14 +8,16 @@
 
 import SwiftUI
 
-struct CircleViews: View {
-    let color: ThemeColor
+struct ThemeColorView: View {
+    let theme: ThemeColor
     
     var body: some View {
         ZStack {
             Circle()
-                .foregroundColor(Color(red: color.r, green: color.g, blue: color.b))
+                .foregroundColor(
+                    theme.colorValue)
             
+            /// Stacking a semi-transparent system backgroud enables 'dark mode' versions
             Circle()
                 .foregroundColor(Color(UIColor.tertiarySystemBackground.withAlphaComponent(0.4)))
         }
@@ -24,18 +26,20 @@ struct CircleViews: View {
 
 struct CircleViews_Previews: PreviewProvider {
     static var previews: some View {
+        /// Show all the pre-built values in light and dark modes
         HStack {
             VStack {
                 ForEach(ThemeColor.prebuiltSet, id: \.self) { color in
-                    CircleViews(color: color)
+                    ThemeColorView(theme: color)
                 }
             }
             .padding()
             .background(Color(.systemBackground))
             .environment(\.colorScheme, .light)
+            
             VStack {
                 ForEach(ThemeColor.prebuiltSet, id: \.self) { color in
-                    CircleViews(color: color)
+                    ThemeColorView(theme: color)
                 }
             }
             .padding()

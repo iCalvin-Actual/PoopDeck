@@ -62,6 +62,8 @@
 		CF8FC1F524A063A7009AE094 /* FileVersionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC1F424A063A7009AE094 /* FileVersionList.swift */; };
 		CF8FC1F724A063E1009AE094 /* FileVersionInfoStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC1F624A063E1009AE094 /* FileVersionInfoStack.swift */; };
 		CF8FC1FC24A18293009AE094 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CF8FC1FB24A18293009AE094 /* .gitignore */; };
+		CF8FC20224A19995009AE094 /* TimeStepperView_DateModification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20124A19995009AE094 /* TimeStepperView_DateModification.swift */; };
+		CF8FC20524A19AD8009AE094 /* DateStepperView_DateModification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20424A19AD8009AE094 /* DateStepperView_DateModification.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
@@ -168,6 +170,8 @@
 		CF8FC1F424A063A7009AE094 /* FileVersionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileVersionList.swift; sourceTree = "<group>"; };
 		CF8FC1F624A063E1009AE094 /* FileVersionInfoStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileVersionInfoStack.swift; sourceTree = "<group>"; };
 		CF8FC1FB24A18293009AE094 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		CF8FC20124A19995009AE094 /* TimeStepperView_DateModification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStepperView_DateModification.swift; sourceTree = "<group>"; };
+		CF8FC20424A19AD8009AE094 /* DateStepperView_DateModification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateStepperView_DateModification.swift; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
 		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
@@ -427,6 +431,7 @@
 		CF8FC1ED24A06213009AE094 /* ConflictResolution */ = {
 			isa = PBXGroup;
 			children = (
+				CF125D6A249270BA00E2908C /* ConflictResolutionView.swift */,
 				CF8FC1F224A06329009AE094 /* FileVersionGroupSummary.swift */,
 				CF8FC1F424A063A7009AE094 /* FileVersionList.swift */,
 				CF8FC1F624A063E1009AE094 /* FileVersionInfoStack.swift */,
@@ -437,8 +442,8 @@
 		CF8FC1F824A065F8009AE094 /* DateSteppers */ = {
 			isa = PBXGroup;
 			children = (
-				CFAE0FF924932B3E00B52BF1 /* DateStepperView.swift */,
-				CFA0E03724982EAF0095680B /* TimeStepperView.swift */,
+				CF8FC20324A19ABF009AE094 /* DateStepperView */,
+				CF8FC20024A1997C009AE094 /* TimeStepperView */,
 			);
 			path = DateSteppers;
 			sourceTree = "<group>";
@@ -467,6 +472,24 @@
 				CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */,
 			);
 			path = MeasurementStepperViews;
+			sourceTree = "<group>";
+		};
+		CF8FC20024A1997C009AE094 /* TimeStepperView */ = {
+			isa = PBXGroup;
+			children = (
+				CFA0E03724982EAF0095680B /* TimeStepperView.swift */,
+				CF8FC20124A19995009AE094 /* TimeStepperView_DateModification.swift */,
+			);
+			path = TimeStepperView;
+			sourceTree = "<group>";
+		};
+		CF8FC20324A19ABF009AE094 /* DateStepperView */ = {
+			isa = PBXGroup;
+			children = (
+				CFAE0FF924932B3E00B52BF1 /* DateStepperView.swift */,
+				CF8FC20424A19AD8009AE094 /* DateStepperView_DateModification.swift */,
+			);
+			path = DateStepperView;
 			sourceTree = "<group>";
 		};
 		CFAE0FED24931E0900B52BF1 /* UIApplication */ = {
@@ -498,15 +521,14 @@
 				CFAE0FD52493067300B52BF1 /* BabyIconView.swift */,
 				CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */,
 				CFAE0FD32493064700B52BF1 /* BabyLogTabView.swift */,
+				CF8FC1ED24A06213009AE094 /* ConflictResolution */,
 				CF40236C249EEFBF00739641 /* CircleViews.swift */,
+				CF8FC1F824A065F8009AE094 /* DateSteppers */,
 				CF8FC1EA24A0601F009AE094 /* DocumentsView */,
 				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
-				CF125D6A249270BA00E2908C /* ConflictResolutionView.swift */,
-				CF8FC1ED24A06213009AE094 /* ConflictResolution */,
-				CF8FC1FD24A18400009AE094 /* LogView */,
-				CF8FC1F824A065F8009AE094 /* DateSteppers */,
-				CF8FC1FE24A184B3009AE094 /* SummaryViews */,
 				CF8FC1FF24A18842009AE094 /* MeasurementStepperViews */,
+				CF8FC1FD24A18400009AE094 /* LogView */,
+				CF8FC1FE24A184B3009AE094 /* SummaryViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -741,6 +763,7 @@
 				CF8FC1F524A063A7009AE094 /* FileVersionList.swift in Sources */,
 				CF6A327B249F12B30046F370 /* DocumentAction.swift in Sources */,
 				CF125D6B249270BA00E2908C /* ConflictResolutionView.swift in Sources */,
+				CF8FC20224A19995009AE094 /* TimeStepperView_DateModification.swift in Sources */,
 				CFA0E03824982EAF0095680B /* TimeStepperView.swift in Sources */,
 				CF6A3265249F07DB0046F370 /* BBLGSViewController_BabyErrorHandler.swift in Sources */,
 				CF402353249E8E5600739641 /* AppearDisabledModifier.swift in Sources */,
@@ -766,6 +789,7 @@
 				CF402337249E65E900739641 /* BabyLog_Extensions.swift in Sources */,
 				CFD6F421248706A900E7DAAD /* BBLGSViewController.swift in Sources */,
 				CF2B51D9249BDE880035A11F /* MeasuredEventFormView.swift in Sources */,
+				CF8FC20524A19AD8009AE094 /* DateStepperView_DateModification.swift in Sources */,
 				CF6A3279249F124B0046F370 /* BBLGSViewController_DocumentManager.swift in Sources */,
 				CF402346249E6E9200739641 /* PersonNameFormatters.swift in Sources */,
 				CFAE0FE6249315E700B52BF1 /* TummyTimeEvent.swift in Sources */,

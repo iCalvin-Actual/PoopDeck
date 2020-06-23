@@ -29,9 +29,9 @@ struct DateStepperView: View {
             
             Button(action: {
                 if self.adjustingMonth {
-                    self.changeDate(DateComponents(calendar: self.calendar, month: -1))
+                    self.adjustmentComponents = DateComponents(calendar: self.calendar, month: -1)
                 } else {
-                    self.changeDate(DateComponents(calendar: self.calendar, day: -1))
+                    self.adjustmentComponents = DateComponents(calendar: self.calendar, day: -1)
                 }
             }) {
                 Image(systemName: "minus.circle")
@@ -69,9 +69,9 @@ struct DateStepperView: View {
                 
                 Button(action: {
                     if self.adjustingMonth {
-                        self.changeDate(DateComponents(calendar: self.calendar, month: 1))
+                        self.adjustmentComponents = DateComponents(calendar: self.calendar, month: 1)
                     } else {
-                        self.changeDate(DateComponents(calendar: self.calendar, day: 1))
+                        self.adjustmentComponents = DateComponents(calendar: self.calendar, day: 1)
                     }
                 }) {
                     Image(systemName: "plus.circle")
@@ -90,27 +90,6 @@ struct DateStepperView: View {
         .onReceive(ticker.currentTimePublisher) { newCurrentTime in
             self.currentDate = newCurrentTime
         }
-    }
-}
-
-    // MARK: - Date Modifications
-extension DateStepperView {
-    func changeDate(_ components: DateComponents) {
-        let newComponents = DateComponents(
-            calendar: .current,
-            month: (adjustmentComponents.month ?? 0) + (components.month ?? 0),
-            day: (adjustmentComponents.day ?? 0) + (components.day ?? 0))
-        adjustmentComponents = newComponents
-    }
-    func updateTargetDate() {
-        targetDate = .init(Date.apply(adjustmentComponents, to: Date()))
-    }
-    
-    func dateIsModified() -> Bool {
-        let dayAdjustment = adjustmentComponents.day ?? 0
-        let monAdjustment = adjustmentComponents.month ?? 0
-        let highestDiff = max(abs(dayAdjustment), abs(monAdjustment))
-        return highestDiff != 0
     }
 }
 

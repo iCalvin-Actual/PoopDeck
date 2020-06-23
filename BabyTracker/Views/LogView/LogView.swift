@@ -11,15 +11,20 @@ import Combine
 
 // MARK: - LogView
 struct LogView: View {
+    
     @ObservedObject var log: BabyLog
     
-    @ObservedObject var keyboardResponder: KeyboardResponder = .init()
+    /// Presents Conflict Resolution view
+    @State var resolvingConflict: Bool = false
     
-    @State private var resolvingConflict: Bool = false
-    @State private var allowChanges: Bool = true
-    @State private var editBaby: Bool = false
+    /// Document in flux state, prevent changes until state change
+    /// Not enforced...
+    @State var allowChanges: Bool = true
     
+    /// Active date to query for in summary views
     @State var targetDate: ObservableDate = .init()
+    
+    /// Date range to perform search within
     var startOfTargetDate: Date {
         let calendar = Calendar.current
         return calendar.startOfDay(for: targetDate.date)
@@ -31,6 +36,7 @@ struct LogView: View {
         return Date.apply(components, to: start)
     }
     
+    /// Send document actions up to the DocumentView
     var onAction: ((DocumentAction) -> Void)?
     
     // MARK: - Views
@@ -206,219 +212,12 @@ struct LogView: View {
             }
     }
     
+    /// For custom events show a new entry form as a separate card
     func newCustomEventView() -> some View {
         CustomEventFormView(
             content: .init(),
             onAction: onEventAction)
     }
-}
-
-// MARK: - Document State Changes
-extension LogView {
-    func handleStateChange(_ notification: Notification) {
-        switch log.documentState {
-        case .editingDisabled:
-            self.allowChanges = false
-            print("Pause changes")
-        case .inConflict:
-            /// Already in conflict mode
-            guard !self.resolvingConflict else { return }
-            self.resolvingConflict = true
-            self.onAction?(.resolve(self.log))
-        case .savingError:
-            print("Error saving")
-        case .closed:
-            print("Do something?")
-        case .progressAvailable:
-            guard let progress = log.progress else {
-                // No progress to handle
-                return
-            }
-            let percentage = progress.completedUnitCount / progress.totalUnitCount
-            print("Show Progress: \(percentage)")
-        case .normal:
-            self.allowChanges = true
-            print("Normal?")
-        default:
-            print("Unknown Value? \(log.documentState)")
-        }
-    }
-}
-
-// MARK: - Event Actions
-enum MeasuredEventAction<E: MeasuredBabyEvent> {
-    case create(_: E, _: Int?)
-    case update(_: E, _: Int?)
-    case remove(_: E)
-    case showDetail(_: [E])
-    case toggleUnit(_: E)
-    case undo
-    case redo
-}
-
-enum MeasuredEventFormAction<E: MeasuredBabyEvent> {
-    case create(_: MeasuredEventFormView<E>.FormContent)
-    case remove(_: UUID)
-}
-
-extension LogView {
-    // MARK: Feed Events
-    func onEventAction(_ action: MeasuredEventFormAction<FeedEvent>) {
-        switch action {
-        case .create(let form):
-            let event = FeedEvent(
-                id: form.id ?? UUID(),
-                date: form.date.date,
-                source: .breast(.both),
-                measurement: form.measurement
-            )
-            self.log.save(event) { (saveResult) in
-                print("💾: Event added to log")
-            }
-        case .remove(let id):
-            self.log.delete(id) { (deleteResult: Result<FeedEvent?, BabyError>) in
-                print("Did Delete?")
-            }
-        }
-    }
-    
-    func onBottleEventAction(_ action: MeasuredEventFormAction<FeedEvent>) {
-        switch action {
-        case .create(let form):
-            let event = FeedEvent(
-                id: form.id ?? UUID(),
-                date: form.date.date,
-                source: .bottle,
-                measurement: form.measurement
-            )
-            self.log.save(event) { (saveResult) in
-                print("💾: Event added to log")
-            }
-        case .remove(let id):
-            self.log.delete(id) { (deleteResult: Result<FeedEvent?, BabyError>) in
-                print("Did Delete?")
-            }
-        }
-    }
-    
-    // MARK: Nap Events
-    func onEventAction(_ action: MeasuredEventFormAction<NapEvent>) {
-        switch action {
-        case .create(let form):
-            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
-            let date = Date.apply(timeComponents, to: startOfTargetDate)
-            let event = NapEvent(
-                id: form.id ?? UUID(),
-                date: date,
-                measurement: form.measurement
-            )
-            self.log.save(event) { (saveResult) in
-                print("💾: Event added to log")
-            }
-        case .remove(let id):
-            self.log.delete(id) { (deleteResult: Result<NapEvent?, BabyError>) in
-                print("Did Delete?")
-            }
-        }
-    }
-    
-    // MARK: Tummy Time Events
-    func onEventAction(_ action: MeasuredEventFormAction<TummyTimeEvent>) {
-        switch action {
-        case .create(let form):
-            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
-            let date = Date.apply(timeComponents, to: startOfTargetDate)
-            let event = TummyTimeEvent(
-                id: form.id ?? UUID(),
-                date: date,
-                measurement: form.measurement
-            )
-            self.log.save(event) { (saveResult) in
-                print("💾: Event added to log")
-            }
-        case .remove(let id):
-            self.log.delete(id) { (deleteResult: Result<TummyTimeEvent?, BabyError>) in
-                print("Did Delete?")
-            }
-        }
-    }
-    
-    // MARK: Weight Events
-    func onEventAction(_ action: MeasuredEventFormAction<WeightEvent>) {
-        switch action {
-        case .create(let form):
-            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: form.date.date)
-            let date = Date.apply(timeComponents, to: startOfTargetDate)
-            let event = WeightEvent(
-                id: form.id ?? UUID(),
-                date: date,
-                measurement: form.measurement
-            )
-            self.log.save(event) { (saveResult) in
-                print("💾: Event added to log")
-            }
-        case .remove(let id):
-            self.log.delete(id) { (deleteResult: Result<WeightEvent?, BabyError>) in
-                print("Did Delete?")
-            }
-        }
-    }
-    
-    // MARK: Diaper Events
-    func onEventAction(_ action: DiaperAction) {
-        switch action {
-        case .create(let form):
-            let event = DiaperEvent(
-                id: form.id ?? UUID(),
-                date: form.date.date,
-                pee: form.pee,
-                poop: form.poo)
-            self.log.save(event) { (savedEvent) in
-                print("Did Save?")
-            }
-        case .remove(let uuid):
-            print("in delete")
-            self.log.delete(uuid) { (deleteResult: Result<DiaperEvent?, BabyError>) in
-                print("Did Delete?")
-            }
-        case .toggleUnit:
-            print("Do nothing")
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
-        }
-    }
-    
-    // MARK: Custom Events
-    func onEventAction(_ action: CustomAction) {
-        switch action {
-        case .create(let form):
-            let event = CustomEvent(
-                id: form.id ?? .init(),
-                date: form.date.date,
-                event: form.title,
-                detail: form.info.isEmpty ? nil : form.info)
-            self.log.save(event) { (savedEvent) in
-                print("Did Save?")
-            }
-        case .remove(let uuid):
-            self.log.delete(uuid) { (_: Result<CustomEvent?, BabyError>) in
-                print("Did Delete?")
-            }
-        case .toggleUnit:
-            print("Do nothing")
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
-        }
-    }
-    
 }
 
 // MARK: Previews

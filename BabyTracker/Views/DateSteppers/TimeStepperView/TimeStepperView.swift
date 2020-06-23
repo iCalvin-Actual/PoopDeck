@@ -39,7 +39,7 @@ struct TimeStepperView: View {
     /// Hides stepper buttons
     @Binding var editing: Bool
     
-    private let calendar: Calendar { return .current }
+    private let calendar: Calendar = .current
     
     var body: some View {
         HStack(alignment: .top) {

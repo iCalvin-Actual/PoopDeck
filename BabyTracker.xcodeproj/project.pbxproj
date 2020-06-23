@@ -64,6 +64,14 @@
 		CF8FC1FC24A18293009AE094 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CF8FC1FB24A18293009AE094 /* .gitignore */; };
 		CF8FC20224A19995009AE094 /* TimeStepperView_DateModification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20124A19995009AE094 /* TimeStepperView_DateModification.swift */; };
 		CF8FC20524A19AD8009AE094 /* DateStepperView_DateModification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20424A19AD8009AE094 /* DateStepperView_DateModification.swift */; };
+		CF8FC20724A19C8E009AE094 /* LogView_CustomAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20624A19C8E009AE094 /* LogView_CustomAction.swift */; };
+		CF8FC20924A19CA2009AE094 /* LogView_FeedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20824A19CA2009AE094 /* LogView_FeedAction.swift */; };
+		CF8FC20B24A19CF6009AE094 /* LogView_NapAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20A24A19CF6009AE094 /* LogView_NapAction.swift */; };
+		CF8FC20D24A19D13009AE094 /* LogView_TummyTimeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20C24A19D13009AE094 /* LogView_TummyTimeAction.swift */; };
+		CF8FC20F24A19D28009AE094 /* LogView_WeightAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC20E24A19D28009AE094 /* LogView_WeightAction.swift */; };
+		CF8FC21124A19D40009AE094 /* LogView_DiaperAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC21024A19D40009AE094 /* LogView_DiaperAction.swift */; };
+		CF8FC21324A19DB8009AE094 /* MeasuredEventFormAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC21224A19DB8009AE094 /* MeasuredEventFormAction.swift */; };
+		CF8FC21624A19F0C009AE094 /* LogView_DocumentChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC21524A19F0C009AE094 /* LogView_DocumentChanges.swift */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
@@ -172,6 +180,14 @@
 		CF8FC1FB24A18293009AE094 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CF8FC20124A19995009AE094 /* TimeStepperView_DateModification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStepperView_DateModification.swift; sourceTree = "<group>"; };
 		CF8FC20424A19AD8009AE094 /* DateStepperView_DateModification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateStepperView_DateModification.swift; sourceTree = "<group>"; };
+		CF8FC20624A19C8E009AE094 /* LogView_CustomAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView_CustomAction.swift; sourceTree = "<group>"; };
+		CF8FC20824A19CA2009AE094 /* LogView_FeedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView_FeedAction.swift; sourceTree = "<group>"; };
+		CF8FC20A24A19CF6009AE094 /* LogView_NapAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView_NapAction.swift; sourceTree = "<group>"; };
+		CF8FC20C24A19D13009AE094 /* LogView_TummyTimeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView_TummyTimeAction.swift; sourceTree = "<group>"; };
+		CF8FC20E24A19D28009AE094 /* LogView_WeightAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView_WeightAction.swift; sourceTree = "<group>"; };
+		CF8FC21024A19D40009AE094 /* LogView_DiaperAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView_DiaperAction.swift; sourceTree = "<group>"; };
+		CF8FC21224A19DB8009AE094 /* MeasuredEventFormAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredEventFormAction.swift; sourceTree = "<group>"; };
+		CF8FC21524A19F0C009AE094 /* LogView_DocumentChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView_DocumentChanges.swift; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
 		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
@@ -337,6 +353,7 @@
 				CF402368249EEA5300739641 /* FeedEventSource.swift */,
 				CF8FC1EB24A06035009AE094 /* LogPickerAction.swift */,
 				CF6A3268249F09550046F370 /* UserActivityType.swift */,
+				CF8FC21224A19DB8009AE094 /* MeasuredEventFormAction.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -452,6 +469,8 @@
 			isa = PBXGroup;
 			children = (
 				CFAE0FD92493076700B52BF1 /* LogView.swift */,
+				CF8FC21524A19F0C009AE094 /* LogView_DocumentChanges.swift */,
+				CF8FC21424A19EF7009AE094 /* Action Handlers */,
 			);
 			path = LogView;
 			sourceTree = "<group>";
@@ -490,6 +509,19 @@
 				CF8FC20424A19AD8009AE094 /* DateStepperView_DateModification.swift */,
 			);
 			path = DateStepperView;
+			sourceTree = "<group>";
+		};
+		CF8FC21424A19EF7009AE094 /* Action Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				CF8FC20624A19C8E009AE094 /* LogView_CustomAction.swift */,
+				CF8FC20824A19CA2009AE094 /* LogView_FeedAction.swift */,
+				CF8FC20A24A19CF6009AE094 /* LogView_NapAction.swift */,
+				CF8FC20C24A19D13009AE094 /* LogView_TummyTimeAction.swift */,
+				CF8FC20E24A19D28009AE094 /* LogView_WeightAction.swift */,
+				CF8FC21024A19D40009AE094 /* LogView_DiaperAction.swift */,
+			);
+			path = "Action Handlers";
 			sourceTree = "<group>";
 		};
 		CFAE0FED24931E0900B52BF1 /* UIApplication */ = {
@@ -742,6 +774,7 @@
 				CF6A325C249F059C0046F370 /* BabyEventStore.swift in Sources */,
 				CFAE0FEA2493198800B52BF1 /* Ticker.swift in Sources */,
 				CFA0E03A2498752F0095680B /* KeyboardResponder.swift in Sources */,
+				CF8FC20D24A19D13009AE094 /* LogView_TummyTimeAction.swift in Sources */,
 				CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */,
 				CF40234B249E8CB000739641 /* HavNavBarModifier.swift in Sources */,
 				CF6A3270249F10790046F370 /* BBLGSViewController_DocumentBrowser.swift in Sources */,
@@ -755,10 +788,12 @@
 				CFAE0FD42493064700B52BF1 /* BabyLogTabView.swift in Sources */,
 				CF8FC1E924A06005009AE094 /* DocumentsView_LogPickerAction.swift in Sources */,
 				CFA0E036249807B90095680B /* CustomEventFormView.swift in Sources */,
+				CF8FC20724A19C8E009AE094 /* LogView_CustomAction.swift in Sources */,
 				CF8FC1EF24A06225009AE094 /* BabyLogConflict.swift in Sources */,
 				CF8FC1F124A0624C009AE094 /* BBLGSViewController_Conflict.swift in Sources */,
 				CF40236D249EEFBF00739641 /* CircleViews.swift in Sources */,
 				CFC1800E245E18B1007C756A /* SceneDelegate.swift in Sources */,
+				CF8FC21624A19F0C009AE094 /* LogView_DocumentChanges.swift in Sources */,
 				CF6A3276249F11BD0046F370 /* BBLGSViewController_LogPresenter.swift in Sources */,
 				CF8FC1F524A063A7009AE094 /* FileVersionList.swift in Sources */,
 				CF6A327B249F12B30046F370 /* DocumentAction.swift in Sources */,
@@ -771,6 +806,7 @@
 				CF402355249E8EE400739641 /* View_Extensions.swift in Sources */,
 				CF402362249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift in Sources */,
 				CF402360249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift in Sources */,
+				CF8FC20F24A19D28009AE094 /* LogView_WeightAction.swift in Sources */,
 				CF402351249E8D8100739641 /* FloatingModifier.swift in Sources */,
 				CF402369249EEA5300739641 /* FeedEventSource.swift in Sources */,
 				CF6A3280249FD5D30046F370 /* BabyFormView_FormContent.swift in Sources */,
@@ -784,6 +820,7 @@
 				CF2B51DB249C5D6F0035A11F /* MeasurementStepperView.swift in Sources */,
 				CF402342249E6E7900739641 /* DateFormatters.swift in Sources */,
 				CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */,
+				CF8FC21324A19DB8009AE094 /* MeasuredEventFormAction.swift in Sources */,
 				CFAE0FFA24932B3E00B52BF1 /* DateStepperView.swift in Sources */,
 				CF40233D249E669900739641 /* FileVersion_Extensions.swift in Sources */,
 				CF402337249E65E900739641 /* BabyLog_Extensions.swift in Sources */,
@@ -795,6 +832,7 @@
 				CFAE0FE6249315E700B52BF1 /* TummyTimeEvent.swift in Sources */,
 				CF40233B249E664F00739641 /* Codable_Extensions.swift in Sources */,
 				CF8FC1E624A05C43009AE094 /* BabyFormView_Validation.swift in Sources */,
+				CF8FC20B24A19CF6009AE094 /* LogView_NapAction.swift in Sources */,
 				CFD6F41F2487068200E7DAAD /* NewWindowView.swift in Sources */,
 				CF40234D249E8CBF00739641 /* ForcedGroupStyleModifier.swift in Sources */,
 				CF40234F249E8CD000739641 /* ShadowModifier.swift in Sources */,
@@ -811,6 +849,7 @@
 				CFAE0FE2249315D300B52BF1 /* WeightEvent.swift in Sources */,
 				CF6A326E249F0EE20046F370 /* BBLGSViewController_Restoration.swift in Sources */,
 				CF8FC1F324A06329009AE094 /* FileVersionGroupSummary.swift in Sources */,
+				CF8FC21124A19D40009AE094 /* LogView_DiaperAction.swift in Sources */,
 				CF8FC1EC24A06035009AE094 /* LogPickerAction.swift in Sources */,
 				CFD6F42324870E6C00E7DAAD /* DocumentsView.swift in Sources */,
 				CFAE0FCE2492C93400B52BF1 /* ThemeColor.swift in Sources */,
@@ -821,6 +860,7 @@
 				CFAE0FD8249306B400B52BF1 /* AgeView.swift in Sources */,
 				CF40236F249EF11600739641 /* ThemeColor_Options.swift in Sources */,
 				CF6A3269249F09550046F370 /* UserActivityType.swift in Sources */,
+				CF8FC20924A19CA2009AE094 /* LogView_FeedAction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

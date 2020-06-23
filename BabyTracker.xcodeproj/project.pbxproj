@@ -61,6 +61,7 @@
 		CF8FC1F324A06329009AE094 /* FileVersionGroupSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC1F224A06329009AE094 /* FileVersionGroupSummary.swift */; };
 		CF8FC1F524A063A7009AE094 /* FileVersionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC1F424A063A7009AE094 /* FileVersionList.swift */; };
 		CF8FC1F724A063E1009AE094 /* FileVersionInfoStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC1F624A063E1009AE094 /* FileVersionInfoStack.swift */; };
+		CF8FC1FC24A18293009AE094 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CF8FC1FB24A18293009AE094 /* .gitignore */; };
 		CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */; };
 		CF9015102486ABF100343F5C /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
 		CF9015122486AC0300343F5C /* MyBabyLog.bblg in Resources */ = {isa = PBXBuildFile; fileRef = CF9015112486AC0300343F5C /* MyBabyLog.bblg */; };
@@ -71,7 +72,7 @@
 		CFAE0FCE2492C93400B52BF1 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCD2492C93400B52BF1 /* ThemeColor.swift */; };
 		CFAE0FD02492CC2600B52BF1 /* Baby.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCF2492CC2600B52BF1 /* Baby.swift */; };
 		CFAE0FD22493016100B52BF1 /* ObservableDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD12493016100B52BF1 /* ObservableDate.swift */; };
-		CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */; };
+		CFAE0FD42493064700B52BF1 /* BabyLogTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD32493064700B52BF1 /* BabyLogTabView.swift */; };
 		CFAE0FD62493067300B52BF1 /* BabyIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD52493067300B52BF1 /* BabyIconView.swift */; };
 		CFAE0FD8249306B400B52BF1 /* AgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD7249306B400B52BF1 /* AgeView.swift */; };
 		CFAE0FDA2493076700B52BF1 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD92493076700B52BF1 /* LogView.swift */; };
@@ -166,6 +167,7 @@
 		CF8FC1F224A06329009AE094 /* FileVersionGroupSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileVersionGroupSummary.swift; sourceTree = "<group>"; };
 		CF8FC1F424A063A7009AE094 /* FileVersionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileVersionList.swift; sourceTree = "<group>"; };
 		CF8FC1F624A063E1009AE094 /* FileVersionInfoStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileVersionInfoStack.swift; sourceTree = "<group>"; };
+		CF8FC1FB24A18293009AE094 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CF90150D2486AADE00343F5C /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		CF90150F2486ABF000343F5C /* BabyLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BabyLog.swift; sourceTree = "<group>"; };
 		CF9015112486AC0300343F5C /* MyBabyLog.bblg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MyBabyLog.bblg; sourceTree = "<group>"; };
@@ -176,7 +178,7 @@
 		CFAE0FCD2492C93400B52BF1 /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		CFAE0FCF2492CC2600B52BF1 /* Baby.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Baby.swift; sourceTree = "<group>"; };
 		CFAE0FD12493016100B52BF1 /* ObservableDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableDate.swift; sourceTree = "<group>"; };
-		CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyPickerView.swift; sourceTree = "<group>"; };
+		CFAE0FD32493064700B52BF1 /* BabyLogTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyLogTabView.swift; sourceTree = "<group>"; };
 		CFAE0FD52493067300B52BF1 /* BabyIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyIconView.swift; sourceTree = "<group>"; };
 		CFAE0FD7249306B400B52BF1 /* AgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeView.swift; sourceTree = "<group>"; };
 		CFAE0FD92493076700B52BF1 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
@@ -441,6 +443,32 @@
 			path = DateSteppers;
 			sourceTree = "<group>";
 		};
+		CF8FC1FD24A18400009AE094 /* LogView */ = {
+			isa = PBXGroup;
+			children = (
+				CFAE0FD92493076700B52BF1 /* LogView.swift */,
+			);
+			path = LogView;
+			sourceTree = "<group>";
+		};
+		CF8FC1FE24A184B3009AE094 /* SummaryViews */ = {
+			isa = PBXGroup;
+			children = (
+				CFAE0FFD249332DC00B52BF1 /* DiaperSummaryView.swift */,
+				CF2B51D8249BDE880035A11F /* MeasuredEventFormView.swift */,
+				CFA0E035249807B90095680B /* CustomEventFormView.swift */,
+			);
+			path = SummaryViews;
+			sourceTree = "<group>";
+		};
+		CF8FC1FF24A18842009AE094 /* MeasurementStepperViews */ = {
+			isa = PBXGroup;
+			children = (
+				CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */,
+			);
+			path = MeasurementStepperViews;
+			sourceTree = "<group>";
+		};
 		CFAE0FED24931E0900B52BF1 /* UIApplication */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,19 +496,17 @@
 				CFAE0FD7249306B400B52BF1 /* AgeView.swift */,
 				CF6A3281249FD5D80046F370 /* BabyFormView */,
 				CFAE0FD52493067300B52BF1 /* BabyIconView.swift */,
-				CFAE0FD32493064700B52BF1 /* BabyPickerView.swift */,
+				CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */,
+				CFAE0FD32493064700B52BF1 /* BabyLogTabView.swift */,
 				CF40236C249EEFBF00739641 /* CircleViews.swift */,
 				CF8FC1EA24A0601F009AE094 /* DocumentsView */,
 				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
 				CF125D6A249270BA00E2908C /* ConflictResolutionView.swift */,
 				CF8FC1ED24A06213009AE094 /* ConflictResolution */,
-				CFAE0FD92493076700B52BF1 /* LogView.swift */,
+				CF8FC1FD24A18400009AE094 /* LogView */,
 				CF8FC1F824A065F8009AE094 /* DateSteppers */,
-				CFAE0FFD249332DC00B52BF1 /* DiaperSummaryView.swift */,
-				CFAE0FFF249336A800B52BF1 /* BabyInfoView.swift */,
-				CF2B51D8249BDE880035A11F /* MeasuredEventFormView.swift */,
-				CFA0E035249807B90095680B /* CustomEventFormView.swift */,
-				CF2B51DA249C5D6F0035A11F /* MeasurementStepperView.swift */,
+				CF8FC1FE24A184B3009AE094 /* SummaryViews */,
+				CF8FC1FF24A18842009AE094 /* MeasurementStepperViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -526,6 +552,7 @@
 		CFC17FFF245E18B0007C756A = {
 			isa = PBXGroup;
 			children = (
+				CF8FC1FB24A18293009AE094 /* .gitignore */,
 				CFCF4FEA2484653A0027CB98 /* readme.md */,
 				CFAE0FF62493201C00B52BF1 /* ProjectAssets */,
 				CFC1800A245E18B1007C756A /* BabyTracker */,
@@ -663,6 +690,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF8FC1FC24A18293009AE094 /* .gitignore in Resources */,
 				CF9015162486ACED00343F5C /* bblg_icon.png in Resources */,
 				CFC18018245E18B3007C756A /* LaunchScreen.storyboard in Resources */,
 				CFC18015245E18B3007C756A /* Preview Assets.xcassets in Resources */,
@@ -702,7 +730,7 @@
 				CFAE0FD62493067300B52BF1 /* BabyIconView.swift in Sources */,
 				CF90150E2486AADE00343F5C /* DocumentBrowserViewController.swift in Sources */,
 				CF6A325E249F05F10046F370 /* BabyLog_EventStoreActions.swift in Sources */,
-				CFAE0FD42493064700B52BF1 /* BabyPickerView.swift in Sources */,
+				CFAE0FD42493064700B52BF1 /* BabyLogTabView.swift in Sources */,
 				CF8FC1E924A06005009AE094 /* DocumentsView_LogPickerAction.swift in Sources */,
 				CFA0E036249807B90095680B /* CustomEventFormView.swift in Sources */,
 				CF8FC1EF24A06225009AE094 /* BabyLogConflict.swift in Sources */,

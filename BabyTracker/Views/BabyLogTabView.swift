@@ -1,5 +1,5 @@
 //
-//  BabyPickerView.swift
+//  BabyLogTabView.swift
 //  BabyTracker
 //
 //  Created by Calvin Chestnut on 6/11/20.
@@ -8,8 +8,7 @@
 
 import SwiftUI
 
-// MARK: - Baby Picker
-struct BabyPickerView: View {
+struct BabyLogTabView: View {
     
     /// Open and available baby log documents
     var logs: [BabyLog] = []
@@ -157,7 +156,7 @@ struct BabyPickerView_Previews: PreviewProvider {
     }
     static var previews: some View {
         VStack {
-            BabyPickerView(logs: [babyLog, babyLog], selected: babyLog, onAction: nil)
+            BabyLogTabView(logs: [babyLog, babyLog], selected: babyLog, onAction: nil)
             Spacer()
         }
         .background(Color(.secondarySystemBackground))

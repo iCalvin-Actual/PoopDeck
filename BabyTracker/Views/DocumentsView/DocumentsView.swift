@@ -20,7 +20,7 @@ struct DocumentsView: View {
     var body: some View {
         VStack(spacing: 4) {
             /// Shows open docs and allows new document creation or switching between docs
-            BabyPickerView(
+            BabyLogTabView(
                 logs: logs,
                 selected: selected ?? .dummy,
                 onAction: onBabyAction)

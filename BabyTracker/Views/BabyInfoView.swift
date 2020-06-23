@@ -8,14 +8,20 @@
 
 import SwiftUI
 
-// MARK: - BabyInfoView
+/// Summary view for identifiable information at the top of the LogView
 struct BabyInfoView: View {
+    
+    /// The active document containing the baby
     @ObservedObject var log: BabyLog
+    
+    /// Toggles presentation of baby form
     @State var editBaby: Bool = false
     
+    /// Sends color change up to top level to update other subviews
     var onColorUpdate: ((_: BabyLog, _: ThemeColor) -> Void)?
     
-    @State private var targetDrop: Bool = true
+    /// Binding boolean to pass to drop handler
+    @State private var targetDrop: Bool = false
     
     // MARK: - Views
     var body: some View {
@@ -28,13 +34,14 @@ struct BabyInfoView: View {
             
             if log.baby.birthday != nil {
                 AgeView(birthday: log.baby.birthday)
-                    .floatingPlease(padding: 8)
             }
         }
         .padding()
         .background(Color(.systemBackground))
-        .cornerRadius(22)
+        .floatingPlease()
         .padding(.horizontal)
+        
+        // Handles drop events for custom colors
         .onDrop(of: ["com.apple.uikit.color"], isTargeted: $targetDrop, perform: { (items) in
             guard let item = items.first else { return false }
             _ = item.loadObject(ofClass: UIColor.self) { color, _ in

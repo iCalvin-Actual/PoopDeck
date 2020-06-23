@@ -25,14 +25,6 @@ extension LogView {
             self.log.delete(uuid) { (deleteResult: Result<DiaperEvent?, BabyError>) in
                 print("Did Delete?")
             }
-        case .toggleUnit:
-            print("Do nothing")
-        case .showDetail:
-            print("Present list of items")
-        case .undo:
-            self.log.undoManager.undo()
-        case .redo:
-            self.log.undoManager.redo()
         }
     }
 }

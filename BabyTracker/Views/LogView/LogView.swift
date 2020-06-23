@@ -110,7 +110,7 @@ struct LogView: View {
     
     // MARK: Diapers
     func diaperSummaryView() -> some View {
-        DiaperSummaryView(
+        DiaperFormView(
             log: log,
             date: targetDate,
             onAction: onEventAction,

@@ -9,42 +9,28 @@
 import Combine
 import SwiftUI
 
-enum DiaperAction {
-    case create(_: DiaperSummaryView.FormContent)
-    case remove(_: UUID)
-    case showDetail(_: [DiaperEvent])
-    case toggleUnit(_: DiaperEvent)
-    case undo
-    case redo
-}
-
-struct DiaperSummaryView: View {
-    struct FormContent {
-        var date: ObservableDate = .init()
-        
-        var id: UUID?
-        var pee: Bool = false
-        var poo: Bool = false
-    }
+struct DiaperFormView: View {
     
-    private enum DeleteState {
-        case discard
-        case delete
-    }
-    
+    /// Show Alert Controller to confirm delete action
     @State private var confirmDelete: Bool = false
-    @State private var deleteState: DeleteState = .discard
+    /// Delete type to use. Default to non-destructive
+    @State private var deleteState: FormDeleteStyle = .discard
     
-    // MARK: - Variables
     @ObservedObject var log: BabyLog
+    
+    /// Updated current date
     @State var date: ObservableDate
     
+    /// Fallback template to use when no events exist to template from
     @State var newEventTemplate: DiaperEvent = .new
     
     var onAction: ((DiaperAction) -> Void)?
     
-    @State private var isLoading: Bool = true
-    @State private var editing: Bool = false {
+    /// If true after first frame render will trigger a remote fetch
+    @State var isLoading: Bool = true
+    
+    /// When changing the editing state make sure to update events (in case a new event was added) or reset to initial state
+    @State var editing: Bool = false {
         didSet {
             if editing != oldValue, !editing {
                 self.updateEvents()
@@ -59,11 +45,20 @@ struct DiaperSummaryView: View {
             }
         }
     }
-    @State private var items: [UUID: DiaperEvent] = [:]
     
+    /// Items to be included in this summary view
+    @State var items: [UUID: DiaperEvent] = [:]
+    
+    /// Fallback filter to use if nil
     var filter: ((DiaperEvent) -> Bool)? = { diaper in
         return true
     }
+    
+    /// Active form content view to use and edit
+    @State var content: FormContent = .init()
+    
+    /// If filtered results have more than one item, enable stepping through events
+    @State private var activeIndex: Int = 0
     
     // MARK: Computed Properties
     
@@ -78,7 +73,6 @@ struct DiaperSummaryView: View {
         return filteredEvents.sorted(by: { $0.date < $1.date })
     }
     
-    @State var content: FormContent = .init()
     var restoreContent: [FormContent] {
         return sortedEvents.reversed().map(({
             FormContent(
@@ -87,25 +81,10 @@ struct DiaperSummaryView: View {
                 pee: $0.pee,
                 poo: $0.poop) }))
     }
-    @State private var activeIndex: Int = 0
     
     var activeEvent: DiaperEvent {
-//        return lastEvent ?? newEventTemplate
         guard sortedEvents.count > activeIndex else { return newEventTemplate }
         return sortedEvents[activeIndex]
-    }
-    
-    func updateEvents() {
-        self.log.groupOfType(completion: { (result: Result<[UUID: DiaperEvent], BabyError>) in
-            if case let .success(groupDict) = result, groupDict != items {
-                
-                self.items = groupDict
-                
-                
-                
-                self.isLoading = false
-            }
-        })
     }
     
     var lastEvent: DiaperEvent? {
@@ -330,15 +309,7 @@ struct DiaperSummaryView: View {
     }
 }
 
-// MARK: - Diaper Actions
-extension DiaperSummaryView {
-    func removeLast() {
-        guard let id = content.id else { return }
-        self.onAction?(.remove(id))
-        self.editing = false
-    }
-}
-
+// MARK: - Previews
 struct DiaperSummaryView_Previews: PreviewProvider {
     static var babyLog: BabyLog {
         let log = BabyLog(fileURL: Bundle.main.url(forResource: "MyBabyLog", withExtension: "bblg")!)
@@ -363,6 +334,6 @@ struct DiaperSummaryView_Previews: PreviewProvider {
         return baby
     }
     static var previews: some View {
-        DiaperSummaryView(log: babyLog, date: .init())
+        DiaperFormView(log: babyLog, date: .init())
     }
 }

@@ -9,41 +9,20 @@
 import Combine
 import SwiftUI
 
-enum CustomAction {
-    case create(_: CustomEventFormView.FormContent)
-    case remove(_: UUID)
-    case showDetail(_: [UUID])
-    case toggleUnit(_: UUID)
-    case undo
-    case redo
-}
-
 struct CustomEventFormView: View {
-    
-    struct FormContent {
-        var date: ObservableDate = .init()
-        
-        var id: UUID?
-        var title: String = ""
-        var info: String = ""
-    }
     
     @State var content: FormContent = .init()
     @State var restoreContent: [FormContent] = [.init()]
-    @State private var activeOffset: Int = 0
     
-    // MARK: - Variables
+    /// Allow stepping through multiple items
+    @State var activeOffset: Int = 0
+    
     @State var editing: Bool = false
     
-    var onAction: ((CustomAction) -> Void)?
-    
-    private enum DeleteState {
-        case discard
-        case delete
-    }
+    var onAction: ((CustomEventFormAction) -> Void)?
     
     @State private var confirmDelete: Bool = false
-    @State private var deleteState: DeleteState = .discard
+    @State private var deleteState: FormDeleteStyle = .discard
     
     private var showForm: Bool {
         return editing || content.id != nil
@@ -255,26 +234,6 @@ struct CustomEventFormView: View {
         .floatingPlease()
     }
 }
-
-extension CustomEventFormView {
-    private var isEmpty: Bool {
-        return content.title.isEmpty && content.info.isEmpty
-    }
-    
-    private var isValid: Bool {
-        return !content.title.isEmpty
-    }
-    
-    private var isEdited: Bool {
-        let restore =  restoreContent.sorted(by: { $0.date.date > $1.date.date })[activeOffset]
-        
-        return
-            content.title != restore.title ||
-            content.info != restore.info ||
-            content.date.date != restore.date.date
-    }
-}
-
 
 struct CustomEventFormView_Previews: PreviewProvider {
     static var previews: some View {

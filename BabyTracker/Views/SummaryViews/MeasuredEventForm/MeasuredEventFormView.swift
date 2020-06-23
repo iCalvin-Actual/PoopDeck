@@ -11,28 +11,18 @@ import SwiftUI
 
 struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
     
-    struct FormContent {
-        var date: ObservableDate = .init()
-        
-        var id: UUID?
-        var measurement: Measurement<Unit>?
-    }
-    
-    private enum DeleteState {
-        case discard
-        case delete
-    }
-    
     @State private var confirmDelete: Bool = false
-    @State private var deleteState: DeleteState = .discard
+    @State private var deleteState: FormDeleteStyle = .discard
     
     @ObservedObject var log: BabyLog
     @State var date: ObservableDate
     
+    /// Allows the view to accept the title and image as parameters, allowing overrides when we can't just depend on the event type
+    /// Specifically, Bottle events and Breast Feeding events should show separate tiles with different titles and colors
     var displayTitle: String
     var imageName: String
     
-    @State private var editing: Bool = false {
+    @State var editing: Bool = false {
         didSet {
             if editing != oldValue, !editing {
                 self.updateEvents()
@@ -47,11 +37,13 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
             }
         }
     }
-    @State private var items: [UUID: E] = [:]
     
+    /// Active events to display within the summary view
+    @State var items: [UUID: E] = [:]
+    
+    /// Item data managment so we properly filter and sort updated events
     var filter: ((_ event: E) -> Bool)?
     var sort: ((_ lhs: E, _ rhs: E) -> Bool) = { $0.date < $1.date }
-    var onAction: ((MeasuredEventFormAction<E>) -> Void)?
     
     var filteredEvents: [E] {
         guard let filter = self.filter else {
@@ -63,6 +55,10 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
         return filteredEvents.sorted(by: { $0.date < $1.date })
     }
     
+    /// Send actions to the Log View
+    var onAction: ((MeasuredEventFormAction<E>) -> Void)?
+    
+    /// Form content to edit in the view, and computed variable to restore the the last sequential event
     @State var content: FormContent = .init()
     var restoreContent: [FormContent] {
         return sortedEvents.reversed().map(({
@@ -71,11 +67,18 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
                 id: $0.id,
                 measurement: $0.measurement) }))
     }
-    @State private var activeIndex: Int = 0
+    
+    /// Allow stepping through multiple items
+    @State var activeIndex: Int = 0
+    
+    /// By default the measurement vaue provides the value to increment for steppers (0.25 for each 'step' when working with Fluid Ounces)
+    /// Allow this override for areas where the default doesn't make sense (Tummy Time)
     var overrideIncrement: Double?
     
-    @State private var collectMeasurement: Bool = false
+    /// Whether measurement value is nil
+    @State var collectMeasurement: Bool = false
     
+    // MARK: - Views
     var body: some View {
         VStack {
             headerRow()
@@ -251,24 +254,7 @@ struct MeasuredEventFormView<E: MeasuredBabyEvent>: View {
     }
 }
 
-// MARK: - Functions
-extension MeasuredEventFormView {
-    func updateEvents() {
-        self.log.groupOfType(completion: { (result: Result<[UUID: E], BabyError>) in
-            if case let .success(groupDict) = result, groupDict != items {
-                self.items = groupDict
-                guard self.activeIndex < self.restoreContent.count else {
-                    self.content = .init()
-                    self.collectMeasurement = false
-                    return
-                }
-                self.content = self.restoreContent[self.activeIndex]
-                self.collectMeasurement = self.content.measurement != nil
-            }
-        })
-    }
-}
-
+// MARK: - Previews
 struct MeasuredEventFormView_Previews: PreviewProvider {
     static var babyLog: BabyLog {
         let log = BabyLog(fileURL: Bundle.main.url(forResource: "MyBabyLog", withExtension: "bblg")!)

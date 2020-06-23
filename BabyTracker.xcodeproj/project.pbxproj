@@ -604,7 +604,7 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
-		CFAE0FEF24931E2500B52BF1 /* Views */ = {
+		CFAE0FEF24931E2500B52BF1 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
 				CFAE0FD7249306B400B52BF1 /* AgeView.swift */,
@@ -616,12 +616,12 @@
 				CF40236C249EEFBF00739641 /* CircleViews.swift */,
 				CF8FC1F824A065F8009AE094 /* DateSteppers */,
 				CF8FC1EA24A0601F009AE094 /* DocumentsView */,
-				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
-				CF8FC1FF24A18842009AE094 /* MeasurementStepperViews */,
 				CF8FC1FD24A18400009AE094 /* LogView */,
+				CF8FC1FF24A18842009AE094 /* MeasurementStepperViews */,
+				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
 				CF8FC1FE24A184B3009AE094 /* SummaryViews */,
 			);
-			path = Views;
+			path = SwiftUI;
 			sourceTree = "<group>";
 		};
 		CFAE0FF024931E3000B52BF1 /* Models */ = {
@@ -691,7 +691,7 @@
 				CFAE0FF024931E3000B52BF1 /* Models */,
 				CFAE0FED24931E0900B52BF1 /* UIApplication */,
 				CFAE0FEE24931E1A00B52BF1 /* UIKit */,
-				CFAE0FEF24931E2500B52BF1 /* Views */,
+				CFAE0FEF24931E2500B52BF1 /* SwiftUI */,
 				CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */,
 				CFAE0FF524931FED00B52BF1 /* Templates */,
 				CFC18013245E18B3007C756A /* Preview Content */,

@@ -12,6 +12,8 @@ struct FileVersionInfoStack: View {
     var version: NSFileVersion
     var showName: Bool = true
     
+    @State private var previewLog: Bool = false
+    
     var body: some View {
         HStack {
             if showName {
@@ -23,6 +25,26 @@ struct FileVersionInfoStack: View {
             }
             Spacer()
             Text(DateFormatter.shortDateTime.string(from: version.modificationDate ?? Date()))
+        }
+        .onAppear(perform: {
+            self.loadVersion()
+        })
+        .onLongPressGesture {
+            self.previewLog = true
+        }
+        .sheet(isPresented: $previewLog, content: {
+            Text("Preview")
+//            LogView(log: self.conflict.babyLog)
+        })
+    }
+}
+
+extension FileVersionInfoStack {
+    func loadVersion() {
+        let document = BabyLog(fileURL: version.url)
+        document.open { (success) in
+            print("Version Document Loaded")
+            /// Toggle new state with BabyLog to preview
         }
     }
 }

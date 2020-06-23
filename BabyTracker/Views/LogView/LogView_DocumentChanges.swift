@@ -26,7 +26,7 @@ extension LogView {
         case .closed:
             self.allowChanges = false
         case .progressAvailable:
-            guard let progress = log.progress else {
+            guard log.progress != nil else {
                 // No progress to handle
                 return
             }

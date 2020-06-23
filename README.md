@@ -1,6 +1,6 @@
 # PoopDeck { Working Title }
 
-Baby activity data tracking and visualization. HealthKit for Babies, free with a premium tier @ $0.99/m|$9.99/yr. Timeline of baby events and milestones, visualize averages, predict nap times. 
+Baby activity data tracking and visualization. HealthKit for Babies. Timeline of baby events and milestones, visualize averages, predict nap times + feedings
 
 <details>
 <summary>PoopDeck on iPhone 11</summary>
@@ -58,6 +58,8 @@ Currently it seems I've not scoped the file access permissions correctly, becaus
 
 **REMINDER: WWDC**
 
+Have a reservation request for a siri intents lab
+
 </details>
 
 ## Current State
@@ -68,6 +70,7 @@ Currently it seems I've not scoped the file access permissions correctly, becaus
 - Syncing + Conflict Resolution
 - State restoration
 - Multi-window support
+- View all events in summary
 
 
 ### TODO
@@ -75,7 +78,6 @@ Currently it seems I've not scoped the file access permissions correctly, becaus
 ##### MVP
 
 - Design pass using proper assets
-- Events List Presentation
 - About Screen
 
 ##### Known Bugs

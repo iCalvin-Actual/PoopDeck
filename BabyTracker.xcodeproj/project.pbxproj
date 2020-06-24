@@ -35,6 +35,47 @@
 		CF40236B249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236A249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift */; };
 		CF40236D249EEFBF00739641 /* CircleViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236C249EEFBF00739641 /* CircleViews.swift */; };
 		CF40236F249EF11600739641 /* ThemeColor_Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236E249EF11600739641 /* ThemeColor_Options.swift */; };
+		CF40362424A3942400C237C6 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40362324A3942400C237C6 /* IntentHandler.swift */; };
+		CF40362824A3942400C237C6 /* BabyTrackerIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF40362124A3942400C237C6 /* BabyTrackerIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CF40362E24A3944800C237C6 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = CF40362D24A3944800C237C6 /* Intents.intentdefinition */; };
+		CF40362F24A3944800C237C6 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = CF40362D24A3944800C237C6 /* Intents.intentdefinition */; };
+		CF40363024A394B500C237C6 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCD2492C93400B52BF1 /* ThemeColor.swift */; };
+		CF40363624A394D100C237C6 /* BabyLogArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3259249F03B80046F370 /* BabyLogArchive.swift */; };
+		CF40363724A394D100C237C6 /* BabyEventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A325B249F059C0046F370 /* BabyEventStore.swift */; };
+		CF40363824A394D100C237C6 /* BabyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF90150F2486ABF000343F5C /* BabyLog.swift */; };
+		CF40363A24A394D100C237C6 /* BabyLog_EventStoreActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A325D249F05F10046F370 /* BabyLog_EventStoreActions.swift */; };
+		CF40363B24A394E800C237C6 /* BabyLogConflict.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC1EE24A06225009AE094 /* BabyLogConflict.swift */; };
+		CF40363E24A394FB00C237C6 /* LogPickerAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC1EB24A06035009AE094 /* LogPickerAction.swift */; };
+		CF40364024A394FB00C237C6 /* FormDeleteStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8FC21F24A1A268009AE094 /* FormDeleteStyle.swift */; };
+		CF40364124A394FB00C237C6 /* UserActivityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3268249F09550046F370 /* UserActivityType.swift */; };
+		CF40364224A394FB00C237C6 /* FeedEventSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402368249EEA5300739641 /* FeedEventSource.swift */; };
+		CF40364424A3955A00C237C6 /* Date_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402338249E663200739641 /* Date_Extensions.swift */; };
+		CF40364524A3955A00C237C6 /* MeasuredBabyEvent_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402361249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift */; };
+		CF40364624A3955A00C237C6 /* Unit_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40233E249E66A500739641 /* Unit_Extensions.swift */; };
+		CF40364724A3955A00C237C6 /* Codable_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40233A249E664F00739641 /* Codable_Extensions.swift */; };
+		CF40364824A3955A00C237C6 /* Baby_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3257249F023E0046F370 /* Baby_Extensions.swift */; };
+		CF40364924A3955A00C237C6 /* FileVersion_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40233C249E669900739641 /* FileVersion_Extensions.swift */; };
+		CF40364B24A3955A00C237C6 /* MeasuredBabyEvent_Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236A249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift */; };
+		CF40364C24A3955A00C237C6 /* ThemeColor_Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF40236E249EF11600739641 /* ThemeColor_Options.swift */; };
+		CF40364D24A3955A00C237C6 /* BabyLog_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402336249E65E900739641 /* BabyLog_Extensions.swift */; };
+		CF40364E24A3955F00C237C6 /* DateFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402341249E6E7900739641 /* DateFormatters.swift */; };
+		CF40364F24A3955F00C237C6 /* MeasurementFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402347249E6EA100739641 /* MeasurementFormatters.swift */; };
+		CF40365024A3955F00C237C6 /* PersonNameFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402345249E6E9200739641 /* PersonNameFormatters.swift */; };
+		CF40365124A3956200C237C6 /* ObservableDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FD12493016100B52BF1 /* ObservableDate.swift */; };
+		CF40365224A3956200C237C6 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA0E0392498752F0095680B /* KeyboardResponder.swift */; };
+		CF40365324A3956200C237C6 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE92493198800B52BF1 /* Ticker.swift */; };
+		CF40365424A3956700C237C6 /* BabyErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3261249F077E0046F370 /* BabyErrorHandler.swift */; };
+		CF40365624A3956B00C237C6 /* DiaperEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FDD249315BE00B52BF1 /* DiaperEvent.swift */; };
+		CF40365724A3956B00C237C6 /* BabyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18032245E224E007C756A /* BabyEvent.swift */; };
+		CF40365824A3956B00C237C6 /* CustomEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE72493178800B52BF1 /* CustomEvent.swift */; };
+		CF40365924A3957200C237C6 /* MeasuredBabyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402359249EB46200739641 /* MeasuredBabyEvent.swift */; };
+		CF40365A24A3957200C237C6 /* NapEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FDF249315C900B52BF1 /* NapEvent.swift */; };
+		CF40365B24A3957200C237C6 /* TummyTimeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE5249315E700B52BF1 /* TummyTimeEvent.swift */; };
+		CF40365C24A3957200C237C6 /* WeightEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FE1249315D300B52BF1 /* WeightEvent.swift */; };
+		CF40365D24A3957200C237C6 /* FeedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FDB2493159000B52BF1 /* FeedEvent.swift */; };
+		CF40365E24A3958D00C237C6 /* BabyEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF402357249EB36F00739641 /* BabyEventType.swift */; };
+		CF40365F24A3959500C237C6 /* BabyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A325F249F075E0046F370 /* BabyError.swift */; };
+		CF40366024A3959D00C237C6 /* Baby.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAE0FCF2492CC2600B52BF1 /* Baby.swift */; };
 		CF6A3258249F023E0046F370 /* Baby_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3257249F023E0046F370 /* Baby_Extensions.swift */; };
 		CF6A325A249F03B80046F370 /* BabyLogArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A3259249F03B80046F370 /* BabyLogArchive.swift */; };
 		CF6A325C249F059C0046F370 /* BabyEventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6A325B249F059C0046F370 /* BabyEventStore.swift */; };
@@ -121,6 +162,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		CF40362624A3942400C237C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CFC18000245E18B0007C756A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CF40362024A3942400C237C6;
+			remoteInfo = BabyTrackerIntentExtension;
+		};
 		CFC1801F245E18B3007C756A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CFC18000245E18B0007C756A /* Project object */;
@@ -129,6 +177,20 @@
 			remoteInfo = BabyTracker;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CF40362924A3942400C237C6 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CF40362824A3942400C237C6 /* BabyTrackerIntentExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CF125D64249246B800E2908C /* BabyFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyFormView.swift; sourceTree = "<group>"; };
@@ -160,6 +222,11 @@
 		CF40236A249EEC0100739641 /* MeasuredBabyEvent_Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasuredBabyEvent_Defaults.swift; sourceTree = "<group>"; };
 		CF40236C249EEFBF00739641 /* CircleViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleViews.swift; sourceTree = "<group>"; };
 		CF40236E249EF11600739641 /* ThemeColor_Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor_Options.swift; sourceTree = "<group>"; };
+		CF40362124A3942400C237C6 /* BabyTrackerIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BabyTrackerIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF40362324A3942400C237C6 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		CF40362524A3942400C237C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF40362D24A3944800C237C6 /* Intents.intentdefinition */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
+		CF40366424A39A8E00C237C6 /* BabyTrackerIntentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BabyTrackerIntentExtension.entitlements; sourceTree = "<group>"; };
 		CF6A3257249F023E0046F370 /* Baby_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Baby_Extensions.swift; sourceTree = "<group>"; };
 		CF6A3259249F03B80046F370 /* BabyLogArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyLogArchive.swift; sourceTree = "<group>"; };
 		CF6A325B249F059C0046F370 /* BabyEventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyEventStore.swift; sourceTree = "<group>"; };
@@ -249,6 +316,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CF40361E24A3942400C237C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CFC18005245E18B1007C756A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -375,6 +449,16 @@
 				CF6A3268249F09550046F370 /* UserActivityType.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		CF40362224A3942400C237C6 /* BabyTrackerIntentExtension */ = {
+			isa = PBXGroup;
+			children = (
+				CF40366424A39A8E00C237C6 /* BabyTrackerIntentExtension.entitlements */,
+				CF40362324A3942400C237C6 /* IntentHandler.swift */,
+				CF40362524A3942400C237C6 /* Info.plist */,
+			);
+			path = BabyTrackerIntentExtension;
 			sourceTree = "<group>";
 		};
 		CF6A3263249F07830046F370 /* BabyErrorHandler */ = {
@@ -670,6 +754,7 @@
 				CFAE0FF62493201C00B52BF1 /* ProjectAssets */,
 				CFC1800A245E18B1007C756A /* BabyTracker */,
 				CFC18021245E18B3007C756A /* BabyTrackerTests */,
+				CF40362224A3942400C237C6 /* BabyTrackerIntentExtension */,
 				CFC18009245E18B1007C756A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -679,6 +764,7 @@
 			children = (
 				CFC18008245E18B1007C756A /* PoopDeck.app */,
 				CFC1801E245E18B3007C756A /* BabyTrackerTests.xctest */,
+				CF40362124A3942400C237C6 /* BabyTrackerIntentExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -687,6 +773,7 @@
 			isa = PBXGroup;
 			children = (
 				CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */,
+				CF40362D24A3944800C237C6 /* Intents.intentdefinition */,
 				CFAE0FF124931EB900B52BF1 /* Helpers */,
 				CFAE0FF024931E3000B52BF1 /* Models */,
 				CFAE0FEF24931E2500B52BF1 /* SwiftUI */,
@@ -719,6 +806,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CF40362024A3942400C237C6 /* BabyTrackerIntentExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CF40362C24A3942400C237C6 /* Build configuration list for PBXNativeTarget "BabyTrackerIntentExtension" */;
+			buildPhases = (
+				CF40361D24A3942400C237C6 /* Sources */,
+				CF40361E24A3942400C237C6 /* Frameworks */,
+				CF40361F24A3942400C237C6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BabyTrackerIntentExtension;
+			productName = BabyTrackerIntentExtension;
+			productReference = CF40362124A3942400C237C6 /* BabyTrackerIntentExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		CFC18007245E18B1007C756A /* BabyTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CFC18027245E18B3007C756A /* Build configuration list for PBXNativeTarget "BabyTracker" */;
@@ -726,10 +830,12 @@
 				CFC18004245E18B1007C756A /* Sources */,
 				CFC18005245E18B1007C756A /* Frameworks */,
 				CFC18006245E18B1007C756A /* Resources */,
+				CF40362924A3942400C237C6 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CF40362724A3942400C237C6 /* PBXTargetDependency */,
 			);
 			name = BabyTracker;
 			packageProductDependencies = (
@@ -763,10 +869,13 @@
 		CFC18000245E18B0007C756A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Calvin Chestnut";
 				TargetAttributes = {
+					CF40362024A3942400C237C6 = {
+						CreatedOnToolsVersion = 12.0;
+					};
 					CFC18007245E18B1007C756A = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -794,11 +903,19 @@
 			targets = (
 				CFC18007245E18B1007C756A /* BabyTracker */,
 				CFC1801D245E18B3007C756A /* BabyTrackerTests */,
+				CF40362024A3942400C237C6 /* BabyTrackerIntentExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CF40361F24A3942400C237C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CFC18006245E18B1007C756A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -824,6 +941,52 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CF40361D24A3942400C237C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF40364B24A3955A00C237C6 /* MeasuredBabyEvent_Defaults.swift in Sources */,
+				CF40364424A3955A00C237C6 /* Date_Extensions.swift in Sources */,
+				CF40364E24A3955F00C237C6 /* DateFormatters.swift in Sources */,
+				CF40364924A3955A00C237C6 /* FileVersion_Extensions.swift in Sources */,
+				CF40363724A394D100C237C6 /* BabyEventStore.swift in Sources */,
+				CF40363E24A394FB00C237C6 /* LogPickerAction.swift in Sources */,
+				CF40365024A3955F00C237C6 /* PersonNameFormatters.swift in Sources */,
+				CF40365D24A3957200C237C6 /* FeedEvent.swift in Sources */,
+				CF40364F24A3955F00C237C6 /* MeasurementFormatters.swift in Sources */,
+				CF40365324A3956200C237C6 /* Ticker.swift in Sources */,
+				CF40365924A3957200C237C6 /* MeasuredBabyEvent.swift in Sources */,
+				CF40363A24A394D100C237C6 /* BabyLog_EventStoreActions.swift in Sources */,
+				CF40366024A3959D00C237C6 /* Baby.swift in Sources */,
+				CF40365B24A3957200C237C6 /* TummyTimeEvent.swift in Sources */,
+				CF40364824A3955A00C237C6 /* Baby_Extensions.swift in Sources */,
+				CF40365C24A3957200C237C6 /* WeightEvent.swift in Sources */,
+				CF40363B24A394E800C237C6 /* BabyLogConflict.swift in Sources */,
+				CF40365F24A3959500C237C6 /* BabyError.swift in Sources */,
+				CF40365124A3956200C237C6 /* ObservableDate.swift in Sources */,
+				CF40364624A3955A00C237C6 /* Unit_Extensions.swift in Sources */,
+				CF40364D24A3955A00C237C6 /* BabyLog_Extensions.swift in Sources */,
+				CF40365A24A3957200C237C6 /* NapEvent.swift in Sources */,
+				CF40365424A3956700C237C6 /* BabyErrorHandler.swift in Sources */,
+				CF40364724A3955A00C237C6 /* Codable_Extensions.swift in Sources */,
+				CF40364C24A3955A00C237C6 /* ThemeColor_Options.swift in Sources */,
+				CF40364524A3955A00C237C6 /* MeasuredBabyEvent_Extensions.swift in Sources */,
+				CF40362F24A3944800C237C6 /* Intents.intentdefinition in Sources */,
+				CF40363624A394D100C237C6 /* BabyLogArchive.swift in Sources */,
+				CF40362424A3942400C237C6 /* IntentHandler.swift in Sources */,
+				CF40365824A3956B00C237C6 /* CustomEvent.swift in Sources */,
+				CF40365624A3956B00C237C6 /* DiaperEvent.swift in Sources */,
+				CF40364224A394FB00C237C6 /* FeedEventSource.swift in Sources */,
+				CF40364024A394FB00C237C6 /* FormDeleteStyle.swift in Sources */,
+				CF40365724A3956B00C237C6 /* BabyEvent.swift in Sources */,
+				CF40364124A394FB00C237C6 /* UserActivityType.swift in Sources */,
+				CF40365224A3956200C237C6 /* KeyboardResponder.swift in Sources */,
+				CF40363824A394D100C237C6 /* BabyLog.swift in Sources */,
+				CF40365E24A3958D00C237C6 /* BabyEventType.swift in Sources */,
+				CF40363024A394B500C237C6 /* ThemeColor.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CFC18004245E18B1007C756A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -864,6 +1027,7 @@
 				CF402353249E8E5600739641 /* AppearDisabledModifier.swift in Sources */,
 				CF402358249EB36F00739641 /* BabyEventType.swift in Sources */,
 				CF402355249E8EE400739641 /* View_Extensions.swift in Sources */,
+				CF40362E24A3944800C237C6 /* Intents.intentdefinition in Sources */,
 				CF402362249EC79B00739641 /* MeasuredBabyEvent_Extensions.swift in Sources */,
 				CF402360249EC74100739641 /* FeedEventSource_CardHeaderProvider.swift in Sources */,
 				CF8FC20F24A19D28009AE094 /* LogView_WeightAction.swift in Sources */,
@@ -943,6 +1107,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		CF40362724A3942400C237C6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CF40362024A3942400C237C6 /* BabyTrackerIntentExtension */;
+			targetProxy = CF40362624A3942400C237C6 /* PBXContainerItemProxy */;
+		};
 		CFC18020245E18B3007C756A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CFC18007245E18B1007C756A /* BabyTracker */;
@@ -962,6 +1131,52 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CF40362A24A3942400C237C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BabyTrackerIntentExtension/BabyTrackerIntentExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6SEG2H9AQV;
+				INFOPLIST_FILE = BabyTrackerIntentExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.chestnut.BabyTracker.BabyTrackerIntentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CF40362B24A3942400C237C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BabyTrackerIntentExtension/BabyTrackerIntentExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6SEG2H9AQV;
+				INFOPLIST_FILE = BabyTrackerIntentExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.chestnut.BabyTracker.BabyTrackerIntentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		CFC18025245E18B3007C756A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1081,6 +1296,7 @@
 		CFC18028245E18B3007C756A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BabyTracker/BabyTracker.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -1108,6 +1324,7 @@
 		CFC18029245E18B3007C756A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BabyTracker/BabyTracker.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -1179,6 +1396,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CF40362C24A3942400C237C6 /* Build configuration list for PBXNativeTarget "BabyTrackerIntentExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF40362A24A3942400C237C6 /* Debug */,
+				CF40362B24A3942400C237C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CFC18003245E18B0007C756A /* Build configuration list for PBXProject "BabyTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

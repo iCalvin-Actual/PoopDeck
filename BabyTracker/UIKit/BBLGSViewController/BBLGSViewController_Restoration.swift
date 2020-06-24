@@ -10,6 +10,11 @@ import Foundation
 
 // MARK: - Saving State
 extension BBLGSViewController {
+    
+    private var groupDefaults: UserDefaults {
+        return UserDefaults(suiteName: "group.com.chestnut.BabyTracker") ?? .standard
+    }
+    
     func updateCurrentActivity() {
         guard let window = view.window else { return }
         let currentActivity =
@@ -42,6 +47,12 @@ extension BBLGSViewController {
             } catch {
                 print("Error creating bookmark: \(error.localizedDescription)")
             }
+        }
+        do {
+            self.groupDefaults.setValue(try JSONEncoder().encode(urlData), forKey: "RecentURLBookmarks")
+            self.groupDefaults.synchronize()
+        } catch {
+            print("STOP")
         }
         let activity = NSUserActivity(activityType: ActivityType.viewLogs)
         activity.userInfo?["URLBookmarks"] = urlData

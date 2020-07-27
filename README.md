@@ -22,7 +22,7 @@ Baby activity data tracking and visualization. HealthKit for Babies. Timeline of
 
 The design system I built out for this app is summarized here in a [Figma Document](https://www.figma.com/file/DFehJGP23akjAsEZMBZwxB/PoopDeck-Design-System?node-id=0%3A1)
 
-This was built iafter WWDC with the intention of rebuilding the UI for an iOS 14 minimum. Most of the current code was written before WWDC for iOS 13.
+This was built after WWDC with the intention of rebuilding the UI for an iOS 14 minimum. Most of the current code was written before WWDC for iOS 13.
 
 ## Build
 

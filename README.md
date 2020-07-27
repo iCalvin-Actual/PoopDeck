@@ -9,8 +9,6 @@ Baby activity data tracking and visualization. HealthKit for Babies. Timeline of
 
 </details>
 
-<details>
-
 ### Design System
 
 The design system I built out for this app is summarized here in a [Figma Document](https://www.figma.com/file/DFehJGP23akjAsEZMBZwxB/PoopDeck-Design-System?node-id=0%3A1)

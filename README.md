@@ -3,13 +3,20 @@
 Baby activity data tracking and visualization. HealthKit for Babies. Timeline of baby events and milestones, visualize averages, predict nap times + feedings
 
 <details>
-<summary>Main</summary>
+<summary>`main`</summary>
 
+![]()
 <img src="iPhone11Screenshot.png" alt="iPhone 11 Screenshot" width="457.14" height="800">
 
 </details>
 
+<details>
+<summary>Figma Design Goal</summary>
 
+![]()
+<img src="iPhoneXFigma.png" alt="iPhone X Figma Mirror" width="457.14" height="800">
+
+</details>
 
 ### Design System
 

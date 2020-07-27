@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -112,7 +112,6 @@
 		CFC18015245E18B3007C756A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFC18014245E18B3007C756A /* Preview Assets.xcassets */; };
 		CFC18018245E18B3007C756A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFC18016245E18B3007C756A /* LaunchScreen.storyboard */; };
 		CFC18023245E18B3007C756A /* BabyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18022245E18B3007C756A /* BabyTrackerTests.swift */; };
-		CFC18031245E1EFF007C756A /* BabyModule in Frameworks */ = {isa = PBXBuildFile; productRef = CFC18030245E1EFF007C756A /* BabyModule */; };
 		CFC18033245E224E007C756A /* BabyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC18032245E224E007C756A /* BabyEvent.swift */; };
 		CFCF4FEB2484653A0027CB98 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = CFCF4FEA2484653A0027CB98 /* readme.md */; };
 		CFD6F41F2487068200E7DAAD /* NewWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD6F41E2487068200E7DAAD /* NewWindowView.swift */; };
@@ -253,7 +252,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFC18031245E1EFF007C756A /* BabyModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,7 +602,7 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
-		CFAE0FEF24931E2500B52BF1 /* Views */ = {
+		CFAE0FEF24931E2500B52BF1 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
 				CFAE0FD7249306B400B52BF1 /* AgeView.swift */,
@@ -616,12 +614,12 @@
 				CF40236C249EEFBF00739641 /* CircleViews.swift */,
 				CF8FC1F824A065F8009AE094 /* DateSteppers */,
 				CF8FC1EA24A0601F009AE094 /* DocumentsView */,
-				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
-				CF8FC1FF24A18842009AE094 /* MeasurementStepperViews */,
 				CF8FC1FD24A18400009AE094 /* LogView */,
+				CF8FC1FF24A18842009AE094 /* MeasurementStepperViews */,
+				CFD6F41E2487068200E7DAAD /* NewWindowView.swift */,
 				CF8FC1FE24A184B3009AE094 /* SummaryViews */,
 			);
-			path = Views;
+			path = SwiftUI;
 			sourceTree = "<group>";
 		};
 		CFAE0FF024931E3000B52BF1 /* Models */ = {
@@ -689,11 +687,11 @@
 				CF38D2542467608D00EF6FC9 /* BabyTracker.entitlements */,
 				CFAE0FF124931EB900B52BF1 /* Helpers */,
 				CFAE0FF024931E3000B52BF1 /* Models */,
+				CFAE0FEF24931E2500B52BF1 /* SwiftUI */,
+				CFAE0FF524931FED00B52BF1 /* Templates */,
 				CFAE0FED24931E0900B52BF1 /* UIApplication */,
 				CFAE0FEE24931E1A00B52BF1 /* UIKit */,
-				CFAE0FEF24931E2500B52BF1 /* Views */,
 				CFAE0FF324931FD200B52BF1 /* SharedAssets.xcassets */,
-				CFAE0FF524931FED00B52BF1 /* Templates */,
 				CFC18013245E18B3007C756A /* Preview Content */,
 			);
 			path = BabyTracker;
@@ -733,7 +731,6 @@
 			);
 			name = BabyTracker;
 			packageProductDependencies = (
-				CFC18030245E1EFF007C756A /* BabyModule */,
 			);
 			productName = BabyTracker;
 			productReference = CFC18008245E18B1007C756A /* PoopDeck.app */;
@@ -764,7 +761,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Calvin Chestnut";
 				TargetAttributes = {
 					CFC18007245E18B1007C756A = {
@@ -786,7 +783,6 @@
 			);
 			mainGroup = CFC17FFF245E18B0007C756A;
 			packageReferences = (
-				CFC1802F245E1EFF007C756A /* XCRemoteSwiftPackageReference "BabyChestnut" */,
 			);
 			productRefGroup = CFC18009245E18B1007C756A /* Products */;
 			projectDirPath = "";
@@ -988,6 +984,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1048,6 +1045,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1205,25 +1203,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		CFC1802F245E1EFF007C756A /* XCRemoteSwiftPackageReference "BabyChestnut" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/calvinchestnut/BabyChestnut.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		CFC18030245E1EFF007C756A /* BabyModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CFC1802F245E1EFF007C756A /* XCRemoteSwiftPackageReference "BabyChestnut" */;
-			productName = BabyModule;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CFC18000245E18B0007C756A /* Project object */;
 }

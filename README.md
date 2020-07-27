@@ -1,6 +1,6 @@
 # PoopDeck { Working Title }
 
-Baby activity data tracking and visualization. HealthKit for Babies, free with a premium tier @ $0.99/m|$9.99/yr. Timeline of baby events and milestones, visualize averages, predict nap times. 
+Baby activity data tracking and visualization. HealthKit for Babies. Timeline of baby events and milestones, visualize averages, predict nap times + feedings
 
 <details>
 <summary>PoopDeck on iPhone 11</summary>
@@ -9,11 +9,15 @@ Baby activity data tracking and visualization. HealthKit for Babies, free with a
 
 </details>
 
-## Getting Started
+<details>
 
-### Prerequisites
+### Design System
 
-Xcode 11.5
+The design system I built out for this app is summarized here in a [Figma Document](https://www.figma.com/file/DFehJGP23akjAsEZMBZwxB/PoopDeck-Design-System?node-id=0%3A1)
+
+This was built iafter WWDC with the intention of rebuilding the UI for an iOS 14 minimum. Most of the current code was written before WWDC for iOS 13.
+
+## Build
 
 ### Installing
 
@@ -25,38 +29,34 @@ If not a registered iOS developer, make sure to select a simulator in the Target
 
 ## UIDocument
 
-PoopDeck reads and writes BabyLogs, custom files that use the `.bblg` extension. As such, PoopDeck requires no accounts, but with iCloud Drive supports document collaboration with basic
+PoopDeck reads and writes BabyLogs, custom files that use the `.bblg` extension. As such, PoopDeck requires no accounts, but with iCloud Drive supports document collaboration, mostly offsetting syncing needs other than conflict resolution, which [to be fair](https://www.youtube.com/watch?v=G19B7lTgwCE) is rather large.
 
 <details>
 
 <summary>Bugs</summary>
 
-- In early implementations conflict resolution resulted in lost data when a `BBLG` was open on two devices at the same time. Conflict resolution and file update receiver have both been refactored since then, but this bug hasn't been tested since then in favor of focusing on a 'single user' experience at a time. For now avoid opening 'prime' data on multiple devices
+- In early implementations conflict resolution resulted in lost data when a `BBLG` was open on two devices at the same time. Conflict resolution and file update receiver have both been refactored since then, but this bug hasn't been tested since then in favor of focusing on a 'single user' experience at a time. For now avoid opening 'prime' data on multiple devices.
 
 </details>
 
-## Siri/Shortcuts
+## Intents
 
-`branch: siri`
+`branch: intents`
 
-PoopDeck would be a perfect Shourtcuts app. Letting an automation log a nap or a feeding would make the app fully useful and accessible without ever opening it on any device.
+PoopDeck will expose read and write events for all events through Intents. This will allow read intents to be displayed in Widgets, allow Siri and Shortcuts to read and write events, and would generally make the app fully useful and accessible without ever opening it on any device.
 
-An ideal implementation would allow read/write queries on the event store, so the following phrases perform as intended:
+Example phrases/implementations:
 
 - "Hey Siri, when was Sophia's last nap?"
 - "Hey Siri, log three minutes of Tummy Time?"
 - "Hey Siri, when was her last nap longer then an hour?"
 
-The queries should/would be available in Shortcuts as well, usually returning the date of the last event as a result value.
-
 <details>
 <sumary>Current State</summary>
 
-Have an Intent Extension and an initial `Get Last Diaper Change` intent. Accepted inputs are the Date to filter by (defaults to now), and the `state` of the Diaper (wet, poopy, etc). It shows up correctly in Shortcuts and works with Siri, and my Intent is triggered. I was able to pass the file URL Bookmark Data, which is how I've been restoring application state, so the intent is to have the Intent (heh) open the correct Document (or accept it as input if needed)
+Have an Intent Extension and an initial `Get Last Diaper Change` intent. Accepted inputs are the Date to filter by (defaults to now), and the `state` of the Diaper (wet, poopy, etc). It shows up correctly in Shortcuts and works with Siri, and my Intent is triggered. I expose the available baby log documents to the user. It works fine with Siri and Shortcuts, hopefully it translates to Widgets easily. The bigger task will just be managing all those intent definitions...
 
-Currently it seems I've not scoped the file access permissions correctly, because the Intent Extension shows an error when trying to decode the bookmark that doesn't apper in the iOS App Target. I need to revisit UIDocument access from extensions
-
-**REMINDER: WWDC**
+I also need to design a general 'baby summary' payload and have that as a distinct intent
 
 </details>
 
@@ -67,25 +67,25 @@ Currently it seems I've not scoped the file access permissions correctly, becaus
 - Mult-Baby support
 - Syncing + Conflict Resolution
 - State restoration
-- Multi-window support
+- Basic Multi-window support
+- View all events in summary
 
 
 ### TODO
 
 ##### MVP
 
-- Design pass using proper assets
-- Events List Presentation
-- About Screen
+- Build Design Components into SwiftUI components
+- Rebuild UI with new components
+- Menu
 
 ##### Known Bugs
 
 - Creating new document creates `MyBabyLog.bblg`, and after setting baby info it saves with the new baby name as the filename. But `MyBabyLog.bblg` remains. Delete the old file, or move rather than create
 - Saving document should update the name as well
-- If 'use emoji' is selected in Baby Info the BabyName is lost
 
 ##### Follow on
 
 - Siri shortcuts integration
-- Mac and iPad Support 
-- WatchOS App
+- Mac and iPad Support
+- Better Multi-window support

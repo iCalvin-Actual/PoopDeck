@@ -93,6 +93,8 @@ I also need to design a general 'baby summary' payload and have that as a distin
 
 ##### Follow on
 
-- Siri shortcuts integration
-- Mac and iPad Support
+- Finish building read intents
+- iPad Sidebar
+- Start building write intents
+- Build summary intent
 - Better Multi-window support

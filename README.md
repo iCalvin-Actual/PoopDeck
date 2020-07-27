@@ -3,11 +3,13 @@
 Baby activity data tracking and visualization. HealthKit for Babies. Timeline of baby events and milestones, visualize averages, predict nap times + feedings
 
 <details>
-<summary>PoopDeck on iPhone 11</summary>
+<summary>Main</summary>
 
-![iPhone 11 Screenshot](iPhone11Screenshot.png)
+<img src="iPhone11Screenshot.png" alt="iPhone 11 Screenshot" width="457.14" height="800">
 
 </details>
+
+
 
 ### Design System
 
